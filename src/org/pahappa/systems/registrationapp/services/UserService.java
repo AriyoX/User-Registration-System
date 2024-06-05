@@ -10,13 +10,21 @@ import java.util.Optional;
 public class UserService {
     List<User> users = new ArrayList<>();
 
-    public void registerUser(String username, String firstName, String lastName, Date dateOfBirth) {
-        User user = new User();
-        user.setUsername(username);
-        user.setFirstname(firstName);
-        user.setLastname(lastName);
-        user.setDateOfBirth(dateOfBirth);
-        users.add(user);
+    public boolean registerUser(String username, String firstName, String lastName, Date dateOfBirth) {
+        Optional<User> optionalUser = users.stream().
+                filter(user -> user.getUsername().equals(username)).
+                findAny();
+        if (optionalUser.isPresent()) {
+            return false;
+        } else {
+            User newUser = new User();
+            newUser.setUsername(username);
+            newUser.setFirstname(firstName);
+            newUser.setLastname(lastName);
+            newUser.setDateOfBirth(dateOfBirth);
+            users.add(newUser);
+            return true;
+        }
     }
 
     public List<User> getAllUsers() {
