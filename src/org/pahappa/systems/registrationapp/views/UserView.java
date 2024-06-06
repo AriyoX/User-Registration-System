@@ -14,12 +14,12 @@ public class UserView {
     private final Scanner scanner;
     private final UserService userService;
     private final String pattern = "dd-MM-yyyy";
-    private final SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
     public UserView(){
         this.scanner = new Scanner(System.in);
         this.userService = new UserService();
-        this.sdf.setLenient(false);
+        this.simpleDateFormat.setLenient(false);
     }
 
 
@@ -90,7 +90,7 @@ public class UserView {
         String dobInput = scanner.nextLine();
 
         try {
-            Date dateOfBirth = sdf.parse(dobInput);
+            Date dateOfBirth = simpleDateFormat.parse(dobInput);
             boolean success = userService.registerUser(username, firstName, lastName, dateOfBirth);
             if (success) {
                 System.out.println("User registered successfully.");
@@ -110,7 +110,7 @@ public class UserView {
             System.out.println("All Users:");
             System.out.println("************************************************************");
             for (User user : users) {
-                System.out.println("Username: " + user + "\nDetails " + "\nName: " + user.getFirstname() + " " + user.getLastname() + "\nDate of Birth: " + sdf.format(user.getDateOfBirth()));
+                System.out.println("Username: " + user + "\nDetails " + "\nName: " + user.getFirstname() + " " + user.getLastname() + "\nDate of Birth: " + simpleDateFormat.format(user.getDateOfBirth()));
                 System.out.println("************************************************************");
             }
         } else
@@ -126,7 +126,7 @@ public class UserView {
         }
         User user = userService.getUser(username);
         if(!(user == null)) {
-            System.out.println("User: " + user + "\nDetails " + "\nName: " + user.getFirstname() + " " + user.getLastname() + "\nDate of Birth: " + sdf.format(user.getDateOfBirth()));
+            System.out.println("User: " + user + "\nDetails " + "\nName: " + user.getFirstname() + " " + user.getLastname() + "\nDate of Birth: " + simpleDateFormat.format(user.getDateOfBirth()));
         } else
             System.out.println("No user found.");
     }
@@ -150,7 +150,7 @@ public class UserView {
         String dobInput = scanner.nextLine();
 
         try {
-            Date dateOfBirth = sdf.parse(dobInput);
+            Date dateOfBirth = simpleDateFormat.parse(dobInput);
             boolean success = userService.updateUser(username, firstName, lastName, dateOfBirth);
             if (success) {
                 System.out.println("User updated successfully.");
