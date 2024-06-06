@@ -74,10 +74,18 @@ public class UserView {
     private void registerUser() {
         System.out.println("Please enter your username: ");
         String username = scanner.nextLine();
+        if (username.isBlank()){
+            System.out.println("Username cannot be blank. Please try again.");
+            return;
+        }
         System.out.println("Please enter your first name: ");
         String firstName = scanner.nextLine();
         System.out.println("Please enter your last name: ");
         String lastName = scanner.nextLine();
+        if (firstName.isBlank() && lastName.isBlank() ) {
+            System.out.println("Both names cannot be blank. Please try again.");
+            return;
+        }
         System.out.println("Please enter your date of birth (DD-MM-YYYY): ");
         String dobInput = scanner.nextLine();
 
@@ -122,10 +130,18 @@ public class UserView {
     private void updateUserOfUsername() {
         System.out.println("Please enter username: ");
         String username = scanner.nextLine();
+        if (username.isBlank()){
+            System.out.println("Username cannot be blank. Please try again.");
+            return;
+        }
         System.out.println("Please enter your first name: ");
         String firstName = scanner.nextLine();
         System.out.println("Please enter your last name: ");
         String lastName = scanner.nextLine();
+        if (firstName.isBlank() && lastName.isBlank() ) {
+            System.out.println("Both names cannot be blank. Please try again.");
+            return;
+        }
         System.out.println("Please enter your date of birth (DD-MM-YYYY): ");
         String dobInput = scanner.nextLine();
 
