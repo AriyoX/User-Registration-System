@@ -120,6 +120,10 @@ public class UserView {
     private void getUserOfUsername() {
         System.out.println("Please enter username: ");
         String username = scanner.nextLine();
+        if (username.isBlank()){
+            System.out.println("Username cannot be blank. Please try again.");
+            return;
+        }
         User user = userService.getUser(username);
         if(!(user == null)) {
             System.out.println("User: " + user + "\nDetails " + "\nName: " + user.getFirstname() + " " + user.getLastname() + "\nDate of Birth: " + sdf.format(user.getDateOfBirth()));
