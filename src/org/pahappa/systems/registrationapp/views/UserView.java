@@ -177,8 +177,15 @@ public class UserView {
     private void deleteAllUsers() {
         List<User> users = userService.getAllUsers();
         if (!users.isEmpty()) {
-            userService.deleteAllUsers();
-            System.out.println("All users deleted successfully.");
+            System.out.println("Are you sure you want to delete all users? Enter 'Y' to continue");
+            String flag = scanner.nextLine();
+            flag = flag.toLowerCase();
+            if (flag.equals("y")){
+                userService.deleteAllUsers();
+                System.out.println("All users deleted successfully.");
+            } else {
+                System.out.println("Not a valid input. Delete all users function cancelled.");
+            }
         } else
             System.out.println("No users have been registered.");
     }
