@@ -134,15 +134,15 @@ public class UserView {
             System.out.println("Username cannot be blank. Please try again.");
             return;
         }
-        System.out.println("Please enter your first name: ");
+        System.out.println("Please enter new first name: ");
         String firstName = scanner.nextLine();
-        System.out.println("Please enter your last name: ");
+        System.out.println("Please enter new last name: ");
         String lastName = scanner.nextLine();
         if (firstName.isBlank() && lastName.isBlank() ) {
             System.out.println("Both names cannot be blank. Please try again.");
             return;
         }
-        System.out.println("Please enter your date of birth (DD-MM-YYYY): ");
+        System.out.println("Please enter new date of birth (DD-MM-YYYY): ");
         String dobInput = scanner.nextLine();
 
         try {
