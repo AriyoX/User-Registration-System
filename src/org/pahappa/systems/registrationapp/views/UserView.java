@@ -13,12 +13,12 @@ public class UserView {
 
     private final Scanner scanner;
     private final UserService userService;
-    private final String pattern = "dd-MM-yyyy";
-    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+    private final SimpleDateFormat simpleDateFormat;
 
     public UserView(){
         this.scanner = new Scanner(System.in);
         this.userService = new UserService();
+        this.simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         this.simpleDateFormat.setLenient(false);
     }
 
