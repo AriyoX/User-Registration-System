@@ -118,7 +118,7 @@ public class UserView {
                 else if (isNumeric(firstName)){
                     System.out.println("First name cannot be numeric. Please try again.");
                 }
-                else if (!firstName.matches("[a-zA-Z]*")){
+                else if (!firstName.matches("[a-zA-Z ]*")){
                     System.out.println("Invalid first name. Only alphabetical characters are allowed. Please try again.");
                 }else if (firstName.length() > 32){
                     System.out.println("First name cannot be more than 32 characters. Please try again.");
@@ -138,7 +138,7 @@ public class UserView {
                 else if (isNumeric(lastName)){
                     System.out.println("Last name cannot be numeric. Please try again.");
                 }
-                else if (!lastName.matches("[a-zA-Z]*")){
+                else if (!lastName.matches("[a-zA-Z ]*")){
                     System.out.println("Invalid last name. Only alphabetical characters are allowed. Please try again.");
                 } else if (lastName.length() > 32){
                     System.out.println("Last name cannot be more than 32 characters. Please try again.");
@@ -246,6 +246,12 @@ public class UserView {
         while(true){
             while (true){
                 System.out.println("Please enter new first name: ");
+                String finalUsername = username;
+                Optional<User> optionalUser = users.stream().
+                        filter(user -> user.getUsername().equals(finalUsername)).
+                        findFirst();
+                String oldFirstname = optionalUser.get().getFirstname();
+                System.out.println("Old first name: " + oldFirstname);
                 firstName = scanner.nextLine();
                 if(cancelled(firstName)){
                     System.out.println("Operation cancelled.");
@@ -254,7 +260,7 @@ public class UserView {
                 else if (isNumeric(firstName)){
                     System.out.println("First name cannot be numeric. Please try again.");
                 }
-                else if (!firstName.matches("[a-zA-Z]*")){
+                else if (!firstName.matches("[a-zA-Z ]*")){
                     System.out.println("Invalid first name. Only alphabetical characters are allowed. Please try again.");
                 } else if (firstName.length() > 32){
                     System.out.println("First name cannot be more than 32 characters. Please try again.");
@@ -266,6 +272,12 @@ public class UserView {
 
             while (true){
                 System.out.println("Please enter new last name: ");
+                String finalUsername = username;
+                Optional<User> optionalUser = users.stream().
+                        filter(user -> user.getUsername().equals(finalUsername)).
+                        findFirst();
+                String oldLastname = optionalUser.get().getLastname();
+                System.out.println("Old first name: " + oldLastname);
                 lastName = scanner.nextLine();
                 if(cancelled(lastName)){
                     System.out.println("Operation cancelled.");
@@ -274,7 +286,7 @@ public class UserView {
                 else if (isNumeric(lastName)){
                     System.out.println("Last name cannot be numeric. Please try again.");
                 }
-                else if (!lastName.matches("[a-zA-Z]*")){
+                else if (!lastName.matches("[a-zA-Z ]*")){
                     System.out.println("Invalid last name. Only alphabetical characters are allowed. Please try again.");
                 } else if (lastName.length() > 32){
                     System.out.println("Last name cannot be more than 32 characters. Please try again.");
@@ -291,6 +303,12 @@ public class UserView {
 
         while(true){
             System.out.println("Please enter new date of birth (DD-MM-YYYY): ");
+            String finalUsername = username;
+            Optional<User> optionalUser = users.stream().
+                    filter(user -> user.getUsername().equals(finalUsername)).
+                    findFirst();
+            String oldDateOfBirth = simpleDateFormat.format(optionalUser.get().getDateOfBirth());
+            System.out.println("Old date of birth: " + oldDateOfBirth);
             dobInput = scanner.nextLine();
             if(cancelled(dobInput)){
                 System.out.println("Operation cancelled.");
