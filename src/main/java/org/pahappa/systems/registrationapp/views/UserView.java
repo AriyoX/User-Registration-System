@@ -277,7 +277,7 @@ public class UserView {
                         filter(user -> user.getUsername().equals(finalUsername)).
                         findFirst();
                 String oldLastname = optionalUser.get().getLastname();
-                System.out.println("Old first name: " + oldLastname);
+                System.out.println("Old last name: " + oldLastname);
                 lastName = scanner.nextLine();
                 if(cancelled(lastName)){
                     System.out.println("Operation cancelled.");
