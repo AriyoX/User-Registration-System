@@ -1,13 +1,12 @@
 package org.pahappa.systems.registrationapp.views;
 
+import org.pahappa.systems.registrationapp.exception.ExitException;
 import org.pahappa.systems.registrationapp.services.UserService;
 import org.pahappa.systems.registrationapp.models.User;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 
 public class UserView {
@@ -23,10 +22,13 @@ public class UserView {
         this.simpleDateFormat.setLenient(false);
     }
 
-
     public void displayMenu() {
         System.out.println("********* User Registration System *********");
         boolean running = true;
+        if (!userService.isDatabaseConnected()){
+            System.out.println("Database is not connected. Please connect to database and restart the program.");
+            running = false;
+        }
 
         while (running) {
             System.out.println("\nChoose an operation:");
@@ -77,144 +79,126 @@ public class UserView {
         String firstName;
         String lastName;
         String dobInput;
-        List<User> users = userService.getAllUsers();
-
+        Date dateOfBirth;
+        User newUser = new User();
         while(true){
             System.out.println("Please enter your username: ");
             username = scanner.nextLine();
-            String finalUsername = username;
-            Optional<User> optionalUser = users.stream().
-                    filter(user -> user.getUsername().equals(finalUsername)).
-                    findFirst();
-            if(cancelled(username)){
-                System.out.println("Operation cancelled.");
-                return;
-            }
-            if (username.length() <= 3){
-                System.out.println("Username cannot be less than 4 characters. Please try again.");
-            }
-            else if (!username.matches("[a-zA-Z0-9_]*") || username.matches("\\.+") || username.matches("_+") || username.matches("\\d+")){
-                System.out.println("Invalid username. Please try again.");
-            }
-            else if (username.length() > 16){
-                System.out.println("Username cannot be more than 16 characters. Please try again.");
-            }
-            else if (username.isBlank()){
-                System.out.println("Username cannot be blank. Please try again.");
-            } else if (optionalUser.isPresent()) {
-                System.out.println("Username is already in use. Please try again.");
-            } else
+            try {
+                userService.isFunctionExited(username);
+                userService.validateNewUsername(username);
+                newUser.setUsername(username);
                 break;
-        }
+            } catch (ExitException e) {
+                System.out.println(e.getMessage());
+                return;
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+            }
 
+        }
         while(true){
             while (true){
                 System.out.println("Please enter your first name: ");
                 firstName = scanner.nextLine();
-                if(cancelled(firstName)){
-                    System.out.println("Operation cancelled.");
-                    return;
-                }
-                else if (isNumeric(firstName)){
-                    System.out.println("First name cannot be numeric. Please try again.");
-                }
-                else if (!firstName.matches("[a-zA-Z ]*")){
-                    System.out.println("Invalid first name. Only alphabetical characters are allowed. Please try again.");
-                }else if (firstName.length() > 32){
-                    System.out.println("First name cannot be more than 32 characters. Please try again.");
-                } else if (firstName.length() < 2) {
-                    System.out.println("Last name cannot be less than 2 characters. Please try again.");
-                } else
+                try {
+                    userService.isFunctionExited(firstName);
+                    userService.validateFirstName(firstName);
+                    newUser.setFirstname(firstName);
                     break;
+                } catch (ExitException e) {
+                    System.out.println(e.getMessage());
+                    return;
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
-
             while (true){
                 System.out.println("Please enter your last name: ");
                 lastName = scanner.nextLine();
-                if(cancelled(lastName)){
-                    System.out.println("Operation cancelled.");
-                    return;
-                }
-                else if (isNumeric(lastName)){
-                    System.out.println("Last name cannot be numeric. Please try again.");
-                }
-                else if (!lastName.matches("[a-zA-Z ]*")){
-                    System.out.println("Invalid last name. Only alphabetical characters are allowed. Please try again.");
-                } else if (lastName.length() > 32){
-                    System.out.println("Last name cannot be more than 32 characters. Please try again.");
-                } else if (lastName.length() < 2) {
-                    System.out.println("Last name cannot be less than 2 characters. Please try again.");
-                } else
+                try {
+                    userService.isFunctionExited(lastName);
+                    userService.validateLastName(lastName);
+                    newUser.setLastname(lastName);
                     break;
+                } catch (ExitException e) {
+                    System.out.println(e.getMessage());
+                    return;
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
-            if (firstName.isBlank() && lastName.isBlank() ) {
-                System.out.println("Both names cannot be blank. Please try again.");
-            } else
+            try {
+                userService.validateBothNames(firstName, lastName);
                 break;
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }
-
         while(true){
             System.out.println("Please enter your date of birth (DD-MM-YYYY): ");
             dobInput = scanner.nextLine();
-            if(cancelled(dobInput)){
-                System.out.println("Operation cancelled.");
-                return;
-            }
             try {
-                Date dateOfBirth = simpleDateFormat.parse(dobInput);
-                Date currentDate = new Date();
-                if (dateOfBirth.after(currentDate)){
-                    System.out.println("Date of birth cannot be after current date. Please try again.");
-                }
-                else {
-                    boolean success = userService.registerUser(username, firstName, lastName, dateOfBirth);
-                    if (success) {
-                        System.out.println("User registered successfully.");
-                        break;
-                    } else {
-                        System.out.println("Username already exists. Registration failed.");
-                    }
-                }
-            } catch (ParseException e) {
-                System.out.println("Invalid date format.");
+                userService.isFunctionExited(dobInput);
+                userService.validateDateOfBirth(dobInput);
+                dateOfBirth = simpleDateFormat.parse(dobInput);
+                newUser.setDateOfBirth(dateOfBirth);
+                break;
+            } catch (ExitException e) {
+                System.out.println(e.getMessage());
+                return;
+            } catch (Exception e){
+                System.out.println(e.getMessage());
             }
         }
+        try{
+            userService.registerUser(newUser);
+            System.out.println("User: " + newUser.getUsername() + " created successfully.");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
+    }
 
     private void displayAllUsers() {
-        List<User> users =  userService.getAllUsers();
-        if (!users.isEmpty()) {
+        try {
+            userService.anyUsersRegistered();
+            List<User> users = userService.getAllUsers();
             System.out.println("All Users:");
             System.out.println("************************************************************");
             for (User user : users) {
                 System.out.println("Username: " + user + "\nDetails " + "\nName: " + user.getFirstname() + " " + user.getLastname() + "\nDate of Birth: " + simpleDateFormat.format(user.getDateOfBirth()));
                 System.out.println("************************************************************");
             }
-        } else
-            System.out.println("No users found.");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     private void getUserOfUsername() {
         String username;
-
-        while(true){
-            System.out.println("Please enter username: ");
-            username = scanner.nextLine();
-            if (username.isBlank()){
-                System.out.println("Username cannot be blank. Please try again.");
+        User user;
+        try {
+            userService.anyUsersRegistered();
+            while(true){
+                System.out.println("Please enter username: ");
+                username = scanner.nextLine();
+                try {
+                    userService.isFunctionExited(username);
+                    userService.validateUsername(username);
+                    break;
+                } catch (ExitException e) {
+                    System.out.println(e.getMessage());
+                    return;
+                } catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
             }
-            else if (cancelled(username)) {
-                System.out.println("Operation cancelled.");
-                return;
-            } else
-                break;
-        }
-
-        User user = userService.getUser(username);
-        if(!(user == null)) {
+            user = userService.getUser(username);
             System.out.println("User: " + user + "\nDetails " + "\nName: " + user.getFirstname() + " " + user.getLastname() + "\nDate of Birth: " + simpleDateFormat.format(user.getDateOfBirth()));
-        } else
-            System.out.println("No user found.");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     private void updateUserOfUsername() {
@@ -222,169 +206,134 @@ public class UserView {
         String firstName;
         String lastName;
         String dobInput;
-        List<User> users = userService.getAllUsers();
-
-        while(true){
-            System.out.println("Please enter username: ");
-            username = scanner.nextLine();
-            String finalUsername = username;
-            Optional<User> optionalUser = users.stream().
-                    filter(user -> user.getUsername().equals(finalUsername)).
-                    findFirst();
-            if(cancelled(username)){
-                System.out.println("Operation cancelled.");
-                return;
-            }
-            else if (username.isBlank()){
-                System.out.println("Username cannot be blank. Please try again.");
-            } else if (optionalUser.isEmpty()) {
-                System.out.println("User does not exist. Please try again.");
-            } else
-                break;
-        }
-
-        while(true){
-            while (true){
-                System.out.println("Please enter new first name: ");
-                String finalUsername = username;
-                Optional<User> optionalUser = users.stream().
-                        filter(user -> user.getUsername().equals(finalUsername)).
-                        findFirst();
-                String oldFirstname = optionalUser.get().getFirstname();
-                System.out.println("Old first name: " + oldFirstname);
-                firstName = scanner.nextLine();
-                if(cancelled(firstName)){
-                    System.out.println("Operation cancelled.");
-                    return;
-                }
-                else if (isNumeric(firstName)){
-                    System.out.println("First name cannot be numeric. Please try again.");
-                }
-                else if (!firstName.matches("[a-zA-Z ]*")){
-                    System.out.println("Invalid first name. Only alphabetical characters are allowed. Please try again.");
-                } else if (firstName.length() > 32){
-                    System.out.println("First name cannot be more than 32 characters. Please try again.");
-                } else if (firstName.length() < 2) {
-                    System.out.println("First name cannot be less than 2 characters. Please try again.");
-                } else
+        Date dateOfBirth;
+        User updatedUser;
+        try {
+            userService.anyUsersRegistered();
+            while(true){
+                System.out.println("Please enter username: ");
+                username = scanner.nextLine();
+                try {
+                    userService.isFunctionExited(username);
+                    userService.validateUsername(username);
+                    updatedUser = userService.getUser(username);
                     break;
-            }
-
-            while (true){
-                System.out.println("Please enter new last name: ");
-                String finalUsername = username;
-                Optional<User> optionalUser = users.stream().
-                        filter(user -> user.getUsername().equals(finalUsername)).
-                        findFirst();
-                String oldLastname = optionalUser.get().getLastname();
-                System.out.println("Old last name: " + oldLastname);
-                lastName = scanner.nextLine();
-                if(cancelled(lastName)){
-                    System.out.println("Operation cancelled.");
+                } catch (ExitException e) {
+                    System.out.println(e.getMessage());
                     return;
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
-                else if (isNumeric(lastName)){
-                    System.out.println("Last name cannot be numeric. Please try again.");
-                }
-                else if (!lastName.matches("[a-zA-Z ]*")){
-                    System.out.println("Invalid last name. Only alphabetical characters are allowed. Please try again.");
-                } else if (lastName.length() > 32){
-                    System.out.println("Last name cannot be more than 32 characters. Please try again.");
-                } else if (lastName.length() < 2) {
-                    System.out.println("Last name cannot be less than 2 characters. Please try again.");
-                } else
-                    break;
             }
-            if (firstName.isBlank() && lastName.isBlank() ) {
-                System.out.println("Both names cannot be blank. Please try again.");
-            } else
-                break;
-        }
-
-        while(true){
-            System.out.println("Please enter new date of birth (DD-MM-YYYY): ");
-            String finalUsername = username;
-            Optional<User> optionalUser = users.stream().
-                    filter(user -> user.getUsername().equals(finalUsername)).
-                    findFirst();
-            String oldDateOfBirth = simpleDateFormat.format(optionalUser.get().getDateOfBirth());
-            System.out.println("Old date of birth: " + oldDateOfBirth);
-            dobInput = scanner.nextLine();
-            if(cancelled(dobInput)){
-                System.out.println("Operation cancelled.");
-                return;
+            while(true){
+                while (true){
+                    System.out.println("Please enter new first name: ");
+                    String oldFirstname = updatedUser.getFirstname();
+                    System.out.println("Old first name: " + oldFirstname);
+                    firstName = scanner.nextLine();
+                    try{
+                        userService.isFunctionExited(firstName);
+                        userService.validateFirstName(firstName);
+                        break;
+                    } catch (ExitException e) {
+                        System.out.println(e.getMessage());
+                        return;
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+                while (true){
+                    System.out.println("Please enter new last name: ");
+                    String oldLastname = updatedUser.getLastname();
+                    System.out.println("Old last name: " + oldLastname);
+                    lastName = scanner.nextLine();
+                    try{
+                        userService.isFunctionExited(lastName);
+                        userService.validateLastName(lastName);
+                        break;
+                    } catch (ExitException e) {
+                        System.out.println(e.getMessage());
+                        return;
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+                try {
+                    userService.validateBothNames(firstName, lastName);
+                    updatedUser.setFirstname(firstName);
+                    updatedUser.setLastname(lastName);
+                    break;
+                } catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+            }
+            while(true){
+                System.out.println("Please enter new date of birth (DD-MM-YYYY): ");
+                String oldDateOfBirth = simpleDateFormat.format(updatedUser.getDateOfBirth());
+                System.out.println("Old date of birth: " + oldDateOfBirth);
+                dobInput = scanner.nextLine();
+                try {
+                    userService.isFunctionExited(dobInput);
+                    userService.validateDateOfBirth(dobInput);
+                    dateOfBirth = simpleDateFormat.parse(dobInput);
+                    updatedUser.setDateOfBirth(dateOfBirth);
+                    break;
+                } catch (ExitException e) {
+                    System.out.println(e.getMessage());
+                    return;
+                } catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
             }
             try {
-                Date dateOfBirth = simpleDateFormat.parse(dobInput);
-                Date currentDate = new Date();
-                if (dateOfBirth.after(currentDate)){
-                    System.out.println("Date of birth cannot be after current date. Please try again.");
-                }
-                else {
-                    boolean success = userService.updateUser(username, firstName, lastName, dateOfBirth);
-                    if (success) {
-                        System.out.println("User updated successfully.");
-                    } else {
-                        System.out.println("Username does not exist. Update failed.");
-                    }
-                    break;
-                }
-            } catch (ParseException e) {
-                System.out.println("Invalid date format.");
+                userService.updateUser(updatedUser);
+                System.out.println("User: " + updatedUser.getUsername() + " updated successfully.");
+            } catch (Exception e){
+                System.out.println(e.getMessage());
             }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
     private void deleteUserOfUsername() {
         String username;
-
-        while (true){
-            System.out.println("Please enter username: ");
-            username = scanner.nextLine();
-            if (username.isBlank()){
-                System.out.println("Username cannot be blank. Please try again.");
-            } else
-                break;
+        User deletedUser;
+        try {
+            userService.anyUsersRegistered();
+            while(true){
+                System.out.println("Please enter username of user to delete: ");
+                username = scanner.nextLine();
+                try {
+                    userService.isFunctionExited(username);
+                    userService.validateUsername(username);
+                    deletedUser = userService.getUser(username);
+                    userService.deleteUser(deletedUser);
+                    System.out.println("User " + deletedUser.getUsername() + " deleted successfully.");
+                    break;
+                } catch (ExitException e) {
+                    System.out.println(e.getMessage());
+                    return;
+                } catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
-
-        boolean success = userService.deleteUser(username);
-        if (success) {
-            System.out.println("User deleted successfully.");
-        } else
-            System.out.println("Cannot delete a user that does not exist.");
     }
 
     private void deleteAllUsers() {
-        List<User> users = userService.getAllUsers();
-        if (!users.isEmpty()) {
-            System.out.println("Are you sure you want to delete all users? Enter 'Y' to continue");
-            String flag = scanner.nextLine();
-            flag = flag.toLowerCase();
-            if (flag.equals("y")){
+        try {
+            userService.anyUsersRegistered();
+            System.out.println("Are you sure you want to delete all users?. Press 'Y' to confirm deletion.");
+            if (scanner.nextLine().equalsIgnoreCase("Y")){
                 userService.deleteAllUsers();
                 System.out.println("All users deleted successfully.");
-            } else if (cancelled(flag)) {
-                System.out.println("Operation cancelled.");
-            } else {
-                System.out.println("Not a valid input. Delete all users function cancelled.");
-            }
-        } else
-            System.out.println("No users have been registered.");
-    }
-
-    private static boolean isNumeric(String str){
-        try {
-            double d = Double.parseDouble(str);
-            int i = Integer.parseInt(str);
-        } catch (NumberFormatException e) {
-            return false;
+            } else
+                System.out.println("Operation Cancelled");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
-        return true;
     }
-
-    private static boolean cancelled(String str){
-        str = str.toLowerCase();
-        return str.equals("q");
-    }
-
 }
