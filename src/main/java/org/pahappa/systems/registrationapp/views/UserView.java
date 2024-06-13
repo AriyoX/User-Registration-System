@@ -15,7 +15,7 @@ public class UserView {
     private final UserService userService;
     private final SimpleDateFormat simpleDateFormat;
 
-    public UserView(){
+    public UserView() {
         this.scanner = new Scanner(System.in);
         this.userService = new UserService();
         this.simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -25,7 +25,7 @@ public class UserView {
     public void displayMenu() {
         System.out.println("********* User Registration System *********");
         boolean running = true;
-        if (!userService.isDatabaseConnected()){
+        if (!userService.isDatabaseConnected()) {
             System.out.println("Database is not connected. Please connect to database and restart the program.");
             running = false;
         }
@@ -39,7 +39,7 @@ public class UserView {
             System.out.println("5. Delete User of username");
             System.out.println("6. Delete all users");
             System.out.println("7. Exit");
-            try{
+            try {
                 int choice = scanner.nextInt();
                 scanner.nextLine(); // Consume the newline character
                 switch (choice) {
@@ -67,273 +67,275 @@ public class UserView {
                     default:
                         System.out.println("Invalid choice. Please try again.");
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println("Invalid choice. Please try again.");
                 scanner.nextLine(); // Consume the newline character
             }
         }
     }
-
+    //1
     private void registerUser() {
-        String username;
-        String firstName;
-        String lastName;
-        String dobInput;
-        Date dateOfBirth;
         User newUser = new User();
-        while(true){
+        if (!promptNewValidateDetails(newUser)) return;
+        try {
+            userService.registerUser(newUser);
+            System.out.println("User: " + newUser.getUsername() + " created successfully.");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private String newUsernamePrompt() {
+        String username;
+        while (true) {
             System.out.println("Please enter your username: ");
             username = scanner.nextLine();
             try {
                 userService.isFunctionExited(username);
                 userService.validateNewUsername(username);
-                newUser.setUsername(username);
-                break;
+                return username;
             } catch (ExitException e) {
                 System.out.println(e.getMessage());
-                return;
-            } catch (Exception e){
+                return null;
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
+        }
+    }
 
-        }
-        while(true){
-            while (true){
-                System.out.println("Please enter your first name: ");
-                firstName = scanner.nextLine();
-                try {
-                    userService.isFunctionExited(firstName);
-                    userService.validateFirstName(firstName);
-                    newUser.setFirstname(firstName);
-                    break;
-                } catch (ExitException e) {
-                    System.out.println(e.getMessage());
-                    return;
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-            while (true){
-                System.out.println("Please enter your last name: ");
-                lastName = scanner.nextLine();
-                try {
-                    userService.isFunctionExited(lastName);
-                    userService.validateLastName(lastName);
-                    newUser.setLastname(lastName);
-                    break;
-                } catch (ExitException e) {
-                    System.out.println(e.getMessage());
-                    return;
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            }
+    private String firstNamePrompt() {
+        String firstName;
+        while (true) {
+            System.out.println("Please enter your first name: ");
+            firstName = scanner.nextLine();
             try {
-                userService.validateBothNames(firstName, lastName);
-                break;
-            }
-            catch (Exception e){
+                userService.isFunctionExited(firstName);
+                userService.validateFirstName(firstName);
+                return firstName;
+            } catch (ExitException e) {
+                System.out.println(e.getMessage());
+                return null;
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
-        while(true){
+    }
+
+    private String lastNamePrompt() {
+        String lastName;
+        while (true) {
+            System.out.println("Please enter your last name: ");
+            lastName = scanner.nextLine();
+            try {
+                userService.isFunctionExited(lastName);
+                userService.validateLastName(lastName);
+                return lastName;
+            } catch (ExitException e) {
+                System.out.println(e.getMessage());
+                return null;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private Date dateOfBirthPrompt() {
+        while (true) {
             System.out.println("Please enter your date of birth (DD-MM-YYYY): ");
-            dobInput = scanner.nextLine();
+            String dobInput = scanner.nextLine();
             try {
                 userService.isFunctionExited(dobInput);
                 userService.validateDateOfBirth(dobInput);
-                dateOfBirth = simpleDateFormat.parse(dobInput);
-                newUser.setDateOfBirth(dateOfBirth);
-                break;
+                return simpleDateFormat.parse(dobInput);
             } catch (ExitException e) {
                 System.out.println(e.getMessage());
-                return;
-            } catch (Exception e){
+                return null;
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
-        try{
-            userService.registerUser(newUser);
-            System.out.println("User: " + newUser.getUsername() + " created successfully.");
-        } catch (Exception e){
+    }
+
+    private boolean promptNewValidateDetails(User user) {
+        while (true) {
+            try {
+                String username = newUsernamePrompt();
+                if (username == null) return false;
+                user.setUsername(username);
+                while (true) {
+                    try {
+                        String firstName = firstNamePrompt();
+                        if (firstName == null) return false;
+                        user.setFirstname(firstName);
+                        String lastName = lastNamePrompt();
+                        if (lastName == null) return false;
+                        user.setLastname(lastName);
+                        userService.validateBothNames(firstName, lastName);
+                        Date dateOfBirth = dateOfBirthPrompt();
+                        if (dateOfBirth == null) return false;
+                        user.setDateOfBirth(dateOfBirth);
+                        return true;
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    //2
+    private void displayAllUsers() {
+        try {
+            userService.anyUsersRegistered();
+            listAllUsers();
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private void displayAllUsers() {
-        try {
-            userService.anyUsersRegistered();
-            List<User> users = userService.getAllUsers();
+    private void listAllUsers() {
+        List<User> users = userService.getAllUsers();
+        if (!users.isEmpty()) {
             System.out.println("All Users:");
             System.out.println("************************************************************");
             for (User user : users) {
                 System.out.println("Username: " + user + "\nDetails " + "\nName: " + user.getFirstname() + " " + user.getLastname() + "\nDate of Birth: " + simpleDateFormat.format(user.getDateOfBirth()));
                 System.out.println("************************************************************");
             }
-        } catch (Exception e){
-            System.out.println(e.getMessage());
         }
     }
-
+    //3
     private void getUserOfUsername() {
-        String username;
-        User user;
         try {
             userService.anyUsersRegistered();
-            while(true){
-                System.out.println("Please enter username: ");
-                username = scanner.nextLine();
-                try {
-                    userService.isFunctionExited(username);
-                    userService.validateUsername(username);
-                    break;
-                } catch (ExitException e) {
-                    System.out.println(e.getMessage());
-                    return;
-                } catch (Exception e){
-                    System.out.println(e.getMessage());
-                }
-            }
-            user = userService.getUser(username);
-            System.out.println("User: " + user + "\nDetails " + "\nName: " + user.getFirstname() + " " + user.getLastname() + "\nDate of Birth: " + simpleDateFormat.format(user.getDateOfBirth()));
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private void updateUserOfUsername() {
-        String username;
-        String firstName;
-        String lastName;
-        String dobInput;
-        Date dateOfBirth;
-        User updatedUser;
-        try {
-            userService.anyUsersRegistered();
-            while(true){
-                System.out.println("Please enter username: ");
-                username = scanner.nextLine();
-                try {
-                    userService.isFunctionExited(username);
-                    userService.validateUsername(username);
-                    updatedUser = userService.getUser(username);
-                    break;
-                } catch (ExitException e) {
-                    System.out.println(e.getMessage());
-                    return;
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-            while(true){
-                while (true){
-                    System.out.println("Please enter new first name: ");
-                    String oldFirstname = updatedUser.getFirstname();
-                    System.out.println("Old first name: " + oldFirstname);
-                    firstName = scanner.nextLine();
-                    try{
-                        userService.isFunctionExited(firstName);
-                        userService.validateFirstName(firstName);
-                        break;
-                    } catch (ExitException e) {
-                        System.out.println(e.getMessage());
-                        return;
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
-                while (true){
-                    System.out.println("Please enter new last name: ");
-                    String oldLastname = updatedUser.getLastname();
-                    System.out.println("Old last name: " + oldLastname);
-                    lastName = scanner.nextLine();
-                    try{
-                        userService.isFunctionExited(lastName);
-                        userService.validateLastName(lastName);
-                        break;
-                    } catch (ExitException e) {
-                        System.out.println(e.getMessage());
-                        return;
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
-                try {
-                    userService.validateBothNames(firstName, lastName);
-                    updatedUser.setFirstname(firstName);
-                    updatedUser.setLastname(lastName);
-                    break;
-                } catch (Exception e){
-                    System.out.println(e.getMessage());
-                }
-            }
-            while(true){
-                System.out.println("Please enter new date of birth (DD-MM-YYYY): ");
-                String oldDateOfBirth = simpleDateFormat.format(updatedUser.getDateOfBirth());
-                System.out.println("Old date of birth: " + oldDateOfBirth);
-                dobInput = scanner.nextLine();
-                try {
-                    userService.isFunctionExited(dobInput);
-                    userService.validateDateOfBirth(dobInput);
-                    dateOfBirth = simpleDateFormat.parse(dobInput);
-                    updatedUser.setDateOfBirth(dateOfBirth);
-                    break;
-                } catch (ExitException e) {
-                    System.out.println(e.getMessage());
-                    return;
-                } catch (Exception e){
-                    System.out.println(e.getMessage());
-                }
-            }
-            try {
-                userService.updateUser(updatedUser);
-                System.out.println("User: " + updatedUser.getUsername() + " updated successfully.");
-            } catch (Exception e){
-                System.out.println(e.getMessage());
-            }
+            String username = existingUsernamePrompt();
+            User user = userService.getUser(username);
+            listUserDetails(user);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private void deleteUserOfUsername() {
-        String username;
-        User deletedUser;
-        try {
-            userService.anyUsersRegistered();
-            while(true){
-                System.out.println("Please enter username of user to delete: ");
-                username = scanner.nextLine();
-                try {
-                    userService.isFunctionExited(username);
-                    userService.validateUsername(username);
-                    deletedUser = userService.getUser(username);
-                    userService.deleteUser(deletedUser);
-                    System.out.println("User " + deletedUser.getUsername() + " deleted successfully.");
-                    break;
-                } catch (ExitException e) {
-                    System.out.println(e.getMessage());
-                    return;
-                } catch (Exception e){
-                    System.out.println(e.getMessage());
-                }
+    private String existingUsernamePrompt() {
+        while (true) {
+            System.out.println("Please enter username: ");
+            String username = scanner.nextLine();
+            try {
+                userService.isFunctionExited(username);
+                userService.validateExistingUsername(username);
+                return username;
+            } catch (ExitException e) {
+                System.out.println(e.getMessage());
+                return null;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
-        } catch (Exception e){
+        }
+    }
+
+    private void listUserDetails(User user) {
+        if (user != null) {
+            System.out.println("User: " + user + "\nDetails " +
+                    "\nName: " + user.getFirstname() + " " + user.getLastname() +
+                    "\nDate of Birth: " + simpleDateFormat.format(user.getDateOfBirth()));
+        }
+    }
+    //4
+    private void updateUserOfUsername() {
+        User updatedUser = getUserForUpdate();
+        if (!promptValidateDetails(updatedUser)) return;
+        try {
+            userService.updateUser(updatedUser);
+            System.out.println("User: " + updatedUser.getUsername() + " updated successfully.");
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private void deleteAllUsers() {
+    private User getUserForUpdate() {
+        String username;
+        while (true) {
+            try {
+                System.out.println("Please enter username: ");
+                username = scanner.nextLine();
+                userService.isFunctionExited(username);
+                userService.validateExistingUsername(username);
+                return userService.getUser(username);
+            } catch (ExitException e) {
+                System.out.println(e.getMessage());
+                return null;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private boolean promptValidateDetails(User user) {
+        while (true) {
+            try {
+                System.out.println("Old first name: " + user.getFirstname());
+                String firstName = firstNamePrompt();
+                if (firstName == null) return false;
+                user.setFirstname(firstName);
+                System.out.println("Old last name: " + user.getLastname());
+                String lastName = lastNamePrompt();
+                if (lastName == null) return false;
+                user.setLastname(lastName);
+                userService.validateBothNames(firstName, lastName);
+                System.out.println("Old date of birth: " + simpleDateFormat.format(user.getDateOfBirth()));
+                Date dateOfBirth = dateOfBirthPrompt();
+                if (dateOfBirth == null) return false;
+                user.setDateOfBirth(dateOfBirth);
+                return true;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    //5
+    private void deleteUserOfUsername() {
         try {
             userService.anyUsersRegistered();
-            System.out.println("Are you sure you want to delete all users?. Press 'Y' to confirm deletion.");
-            if (scanner.nextLine().equalsIgnoreCase("Y")){
-                userService.deleteAllUsers();
-                System.out.println("All users deleted successfully.");
-            } else
-                System.out.println("Operation Cancelled");
-        } catch (Exception e){
+            String username = deleteUserPrompt();
+            User deletedUser = userService.getUser(username);
+            userService.deleteUser(deletedUser);
+            System.out.println("User " + deletedUser.getUsername() + " deleted successfully.");
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
+
+    private String deleteUserPrompt() {
+        while (true) {
+            System.out.println("Please enter username of user to delete: ");
+            String username = scanner.nextLine();
+            try {
+                userService.isFunctionExited(username);
+                userService.validateExistingUsername(username);
+                return username;
+            } catch (ExitException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    //6
+    private void deleteAllUsers() {
+        try {
+            userService.anyUsersRegistered();
+            deleteAllUsersPrompt();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void deleteAllUsersPrompt() {
+        System.out.println("Are you sure you want to delete all users?. Press 'Y' to confirm deletion.");
+        if (scanner.nextLine().equalsIgnoreCase("Y")) {
+            userService.deleteAllUsers();
+            System.out.println("All users deleted successfully.");
+        } else
+            System.out.println("Operation cancelled.");
+    }
+
 }

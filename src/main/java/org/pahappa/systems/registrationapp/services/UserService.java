@@ -46,6 +46,9 @@ public class UserService {
         User existingUser = userDAO.getUserByUsername(user.getUsername());
         try{
             validateUser(user);
+            existingUser.setFirstname(user.getFirstname());
+            existingUser.setLastname(user.getLastname());
+            existingUser.setDateOfBirth(user.getDateOfBirth());
             userDAO.update(existingUser);
         } catch (WrongValidationException e) {
             e.printStackTrace();
@@ -88,10 +91,10 @@ public class UserService {
     }
 
     // for existing username
-    public void validateUsername(String username) throws WrongValidationException {
+    public void validateExistingUsername(String username) throws WrongValidationException {
         List<User> users = getAllUsers();
         if (users.isEmpty()){
-            throw new WrongValidationException("No users registered. Please 'Q' to quit.");
+            throw new WrongValidationException("No users registered.");
         }
         Optional<User> optionalUser = users.stream().filter(user -> user.getUsername().equals(username)).findFirst();
         if (username.isBlank()){
@@ -148,7 +151,7 @@ public class UserService {
     public void anyUsersRegistered() throws WrongValidationException {
         List<User> users = getAllUsers();
         if (users.isEmpty()){
-            throw new WrongValidationException("No users registered.");
+            throw new WrongValidationException("No users registered..");
         }
     }
 
@@ -170,7 +173,7 @@ public class UserService {
 
     public void validateUser(User user) throws WrongValidationException {
         try{
-            validateUsername(user.getUsername());
+            validateExistingUsername(user.getUsername());
             validateFirstName(user.getFirstname());
             validateLastName(user.getLastname());
             validateBothNames(user.getFirstname(), user.getLastname());
