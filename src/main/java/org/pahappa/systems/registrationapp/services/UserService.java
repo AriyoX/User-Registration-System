@@ -45,7 +45,7 @@ public class UserService {
     public void updateUser(User user) {
         User existingUser = userDAO.getUserByUsername(user.getUsername());
         try{
-            validateUser(user);
+            validateUser(existingUser);
             existingUser.setFirstname(user.getFirstname());
             existingUser.setLastname(user.getLastname());
             existingUser.setDateOfBirth(user.getDateOfBirth());
