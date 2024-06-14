@@ -32,6 +32,10 @@ public class UserDAO {
                 transaction.rollback();
             }
             return false;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 

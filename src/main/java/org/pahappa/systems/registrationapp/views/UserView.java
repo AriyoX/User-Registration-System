@@ -89,7 +89,7 @@ public class UserView {
     private String newUsernamePrompt() {
         String username;
         while (true) {
-            System.out.println("Please enter your username: ");
+            System.out.println("Please enter your username: (Press 'Q' to cancel operation)");
             username = scanner.nextLine();
             try {
                 userService.isFunctionExited(username);
@@ -107,7 +107,7 @@ public class UserView {
     private String firstNamePrompt() {
         String firstName;
         while (true) {
-            System.out.println("Please enter your first name: ");
+            System.out.println("Please enter your first name: (Press 'Q' to cancel operation)");
             firstName = scanner.nextLine();
             try {
                 userService.isFunctionExited(firstName);
@@ -125,7 +125,7 @@ public class UserView {
     private String lastNamePrompt() {
         String lastName;
         while (true) {
-            System.out.println("Please enter your last name: ");
+            System.out.println("Please enter your last name: (Press 'Q' to cancel operation)");
             lastName = scanner.nextLine();
             try {
                 userService.isFunctionExited(lastName);
@@ -142,7 +142,7 @@ public class UserView {
 
     private Date dateOfBirthPrompt() {
         while (true) {
-            System.out.println("Please enter your date of birth (DD-MM-YYYY): ");
+            System.out.println("Please enter your date of birth (DD-MM-YYYY): (Press 'Q' to cancel operation)");
             String dobInput = scanner.nextLine();
             try {
                 userService.isFunctionExited(dobInput);
@@ -222,7 +222,7 @@ public class UserView {
 
     private String existingUsernamePrompt() {
         while (true) {
-            System.out.println("Please enter username: ");
+            System.out.println("Please enter username: (Press 'Q' to cancel operation)");
             String username = scanner.nextLine();
             try {
                 userService.isFunctionExited(username);
@@ -249,6 +249,7 @@ public class UserView {
     private void updateUserOfUsername(){
         User existingUser = getUserToUpdate();
         if (existingUser == null) return;
+        System.out.println("To keep existing details, click 'ENTER'.");
         if (!promptToValidateAndUpdateDetails(existingUser)) return;
         try {
             userService.updateUser(existingUser);
@@ -269,20 +270,48 @@ public class UserView {
         }
     }
 
+    private Date updateDateOfBirthPrompt(User user) {
+        while (true) {
+            System.out.println("Please enter your date of birth (DD-MM-YYYY): (Press 'Q' to cancel operation)");
+            String dobInput = scanner.nextLine();
+            try {
+                if (dobInput.isEmpty()){
+                    return user.getDateOfBirth();
+                }
+                userService.isFunctionExited(dobInput);
+                userService.validateDateOfBirth(dobInput);
+                return simpleDateFormat.parse(dobInput);
+            } catch (ExitException e) {
+                System.out.println(e.getMessage());
+                return null;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     private boolean promptToValidateAndUpdateDetails(User user) {
+        String oldFirstName = user.getFirstname();
+        String oldLastName = user.getLastname();
         while (true) {
             try {
-                System.out.println("Old first name: " + user.getFirstname());
+                System.out.println("Old first name: " + oldFirstName);
                 String firstName = firstNamePrompt();
                 if (firstName == null) return false;
-                user.setFirstname(firstName);
-                System.out.println("Old last name: " + user.getLastname());
+                if (firstName.isEmpty()){
+                    user.setFirstname(oldFirstName);
+                } else
+                    user.setFirstname(firstName);
+                System.out.println("Old last name: " + oldLastName);
                 String lastName = lastNamePrompt();
                 if (lastName == null) return false;
-                user.setLastname(lastName);
-                userService.validateBothNames(firstName, lastName);
+                if (lastName.isEmpty()){
+                    user.setLastname(oldLastName);
+                } else
+                    user.setLastname(lastName);
+                userService.validateBothNames(user.getFirstname(), user.getLastname());
                 System.out.println("Old date of birth: " + simpleDateFormat.format(user.getDateOfBirth()));
-                Date dateOfBirth = dateOfBirthPrompt();
+                Date dateOfBirth = updateDateOfBirthPrompt(user);
                 if (dateOfBirth == null) return false;
                 user.setDateOfBirth(dateOfBirth);
                 return true;
@@ -308,7 +337,7 @@ public class UserView {
 
     private String deleteUserPrompt() {
         while (true) {
-            System.out.println("Please enter username of user to delete: ");
+            System.out.println("Please enter username of user to delete: (Press 'Q' to cancel operation)");
             String username = scanner.nextLine();
             try {
                 userService.isFunctionExited(username);
