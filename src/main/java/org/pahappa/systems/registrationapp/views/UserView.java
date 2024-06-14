@@ -297,6 +297,7 @@ public class UserView {
         try {
             userService.anyUsersRegistered();
             String username = deleteUserPrompt();
+            if (username == null) return;
             User deletedUser = userService.getUser(username);
             userService.deleteUser(deletedUser);
             System.out.println("User " + deletedUser.getUsername() + " deleted successfully.");
@@ -314,6 +315,9 @@ public class UserView {
                 userService.validateExistingUsername(username);
                 return username;
             } catch (ExitException e) {
+                System.out.println(e.getMessage());
+                return null;
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
