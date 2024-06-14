@@ -258,6 +258,7 @@ public class UserView {
         }
 
     }
+
     private User getUserToUpdate(){
         try{
             userService.anyUsersRegistered();

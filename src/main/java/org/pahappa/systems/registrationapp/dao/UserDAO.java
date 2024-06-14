@@ -96,14 +96,20 @@ public class UserDAO {
     }
 
     public User getUserByUsername(String username) {
+        Transaction transaction = null;
         Session session = null;
         User user = null;
         try {
             session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
             user = (User) session.createQuery("FROM User WHERE username = :username")
                     .setParameter("username", username)
                     .uniqueResult();
+            transaction.commit();
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
         } finally {
             if (session != null) {
