@@ -249,7 +249,6 @@ public class UserView {
     private void updateUserOfUsername(){
         User existingUser = getUserToUpdate();
         if (existingUser == null) return;
-        System.out.println("To keep existing details, click 'ENTER'.");
         if (!promptToValidateAndUpdateDetails(existingUser)) return;
         try {
             userService.updateUser(existingUser);
@@ -295,14 +294,14 @@ public class UserView {
         String oldLastName = user.getLastname();
         while (true) {
             try {
-                System.out.println("Old first name: " + oldFirstName);
+                System.out.println("Old first name: " + oldFirstName + ". Press Enter to skip.");
                 String firstName = firstNamePrompt();
                 if (firstName == null) return false;
                 if (firstName.isEmpty()){
                     user.setFirstname(oldFirstName);
                 } else
                     user.setFirstname(firstName);
-                System.out.println("Old last name: " + oldLastName);
+                System.out.println("Old last name: " + oldLastName + ". Press Enter to skip.");
                 String lastName = lastNamePrompt();
                 if (lastName == null) return false;
                 if (lastName.isEmpty()){
@@ -310,7 +309,7 @@ public class UserView {
                 } else
                     user.setLastname(lastName);
                 userService.validateBothNames(user.getFirstname(), user.getLastname());
-                System.out.println("Old date of birth: " + simpleDateFormat.format(user.getDateOfBirth()));
+                System.out.println("Old date of birth: " + simpleDateFormat.format(user.getDateOfBirth()) + ". Press Enter to skip.");
                 Date dateOfBirth = updateDateOfBirthPrompt(user);
                 if (dateOfBirth == null) return false;
                 user.setDateOfBirth(dateOfBirth);
