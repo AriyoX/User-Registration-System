@@ -73,6 +73,7 @@ public class UserView {
             }
         }
     }
+
     //1
     private void registerUser() {
         User newUser = new User();
@@ -184,6 +185,7 @@ public class UserView {
             }
         }
     }
+
     //2
     private void displayAllUsers() {
         try {
@@ -205,6 +207,7 @@ public class UserView {
             }
         }
     }
+
     //3
     private void getUserOfUsername() {
         try {
@@ -241,33 +244,27 @@ public class UserView {
                     "\nDate of Birth: " + simpleDateFormat.format(user.getDateOfBirth()));
         }
     }
+
     //4
-    private void updateUserOfUsername() {
-        User updatedUser = getUserForUpdate();
-        if (!promptValidateDetails(updatedUser)) return;
+    private void updateUserOfUsername(){
+        User existingUser = getUserToUpdate();
+        if (existingUser == null) return;
+        if (!promptValidateDetails(existingUser)) return;
         try {
-            userService.updateUser(updatedUser);
-            System.out.println("User: " + updatedUser.getUsername() + " updated successfully.");
+            userService.updateUser(existingUser);
+            System.out.println("User: " + existingUser.getUsername() + " updated successfully.");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-    }
 
-    private User getUserForUpdate() {
-        String username;
-        while (true) {
-            try {
-                System.out.println("Please enter username: ");
-                username = scanner.nextLine();
-                userService.isFunctionExited(username);
-                userService.validateExistingUsername(username);
-                return userService.getUser(username);
-            } catch (ExitException e) {
-                System.out.println(e.getMessage());
-                return null;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+    }
+    private User getUserToUpdate(){
+        try{
+            userService.anyUsersRegistered();
+            return userService.getUser(existingUsernamePrompt());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
         }
     }
 
@@ -293,6 +290,7 @@ public class UserView {
             }
         }
     }
+
     //5
     private void deleteUserOfUsername() {
         try {
@@ -319,6 +317,7 @@ public class UserView {
             }
         }
     }
+
     //6
     private void deleteAllUsers() {
         try {
