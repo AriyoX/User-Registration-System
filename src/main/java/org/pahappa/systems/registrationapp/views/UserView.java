@@ -74,10 +74,10 @@ public class UserView {
         }
     }
 
-    //1
+    // 1
     private void registerUser() {
         User newUser = new User();
-        if (!promptNewValidateDetails(newUser)) return;
+        if (!promptToValidateAndSetNewDetails(newUser)) return;
         try {
             userService.registerUser(newUser);
             System.out.println("User: " + newUser.getUsername() + " created successfully.");
@@ -157,7 +157,7 @@ public class UserView {
         }
     }
 
-    private boolean promptNewValidateDetails(User user) {
+    private boolean promptToValidateAndSetNewDetails(User user) {
         while (true) {
             try {
                 String username = newUsernamePrompt();
@@ -186,7 +186,7 @@ public class UserView {
         }
     }
 
-    //2
+    // 2
     private void displayAllUsers() {
         try {
             userService.anyUsersRegistered();
@@ -208,7 +208,7 @@ public class UserView {
         }
     }
 
-    //3
+    // 3
     private void getUserOfUsername() {
         try {
             userService.anyUsersRegistered();
@@ -245,11 +245,11 @@ public class UserView {
         }
     }
 
-    //4
+    // 4
     private void updateUserOfUsername(){
         User existingUser = getUserToUpdate();
         if (existingUser == null) return;
-        if (!promptValidateDetails(existingUser)) return;
+        if (!promptToValidateAndUpdateDetails(existingUser)) return;
         try {
             userService.updateUser(existingUser);
             System.out.println("User: " + existingUser.getUsername() + " updated successfully.");
@@ -269,7 +269,7 @@ public class UserView {
         }
     }
 
-    private boolean promptValidateDetails(User user) {
+    private boolean promptToValidateAndUpdateDetails(User user) {
         while (true) {
             try {
                 System.out.println("Old first name: " + user.getFirstname());
@@ -292,7 +292,7 @@ public class UserView {
         }
     }
 
-    //5
+    // 5
     private void deleteUserOfUsername() {
         try {
             userService.anyUsersRegistered();
@@ -323,7 +323,7 @@ public class UserView {
         }
     }
 
-    //6
+    // 6
     private void deleteAllUsers() {
         try {
             userService.anyUsersRegistered();

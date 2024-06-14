@@ -28,7 +28,7 @@ public class UserService {
             try{
                 validateNewUser(user);
                 userDAO.add(user);
-            } catch (WrongValidationException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -45,12 +45,12 @@ public class UserService {
     public void updateUser(User user) {
         User existingUser = userDAO.getUserByUsername(user.getUsername());
         try{
-            validateUser(existingUser);
+            validateExistingUser(existingUser);
             existingUser.setFirstname(user.getFirstname());
             existingUser.setLastname(user.getLastname());
             existingUser.setDateOfBirth(user.getDateOfBirth());
             userDAO.update(existingUser);
-        } catch (WrongValidationException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -58,15 +58,15 @@ public class UserService {
     public void deleteUser(User user) {
         User existingUser = userDAO.getUserByUsername(user.getUsername());
         try{
-            validateUser(user);
+            validateExistingUser(user);
             userDAO.delete(existingUser);
-        } catch (WrongValidationException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void deleteAllUsers(){
-       userDAO.deleteAllUsers();
+        userDAO.deleteAllUsers();
     }
 
     // for new username
@@ -151,7 +151,7 @@ public class UserService {
     public void anyUsersRegistered() throws WrongValidationException {
         List<User> users = getAllUsers();
         if (users.isEmpty()){
-            throw new WrongValidationException("No users registered..");
+            throw new WrongValidationException("No users registered.");
         }
     }
 
@@ -160,27 +160,19 @@ public class UserService {
     }
 
     public void validateNewUser(User user) throws WrongValidationException {
-        try{
-            validateNewUsername(user.getUsername());
-            validateFirstName(user.getFirstname());
-            validateLastName(user.getLastname());
-            validateBothNames(user.getFirstname(), user.getLastname());
-            validateDateOfBirth(simpleDateFormat.format(user.getDateOfBirth()));
-        } catch (WrongValidationException e){
-            System.out.println(e.getMessage());
-        }
+        validateNewUsername(user.getUsername());
+        validateFirstName(user.getFirstname());
+        validateLastName(user.getLastname());
+        validateBothNames(user.getFirstname(), user.getLastname());
+        validateDateOfBirth(simpleDateFormat.format(user.getDateOfBirth()));
     }
 
-    public void validateUser(User user) throws WrongValidationException {
-        try{
-            validateExistingUsername(user.getUsername());
-            validateFirstName(user.getFirstname());
-            validateLastName(user.getLastname());
-            validateBothNames(user.getFirstname(), user.getLastname());
-            validateDateOfBirth(simpleDateFormat.format(user.getDateOfBirth()));
-        } catch (WrongValidationException e){
-            System.out.println(e.getMessage());
-        }
+    public void validateExistingUser(User user) throws WrongValidationException {
+        validateExistingUsername(user.getUsername());
+        validateFirstName(user.getFirstname());
+        validateLastName(user.getLastname());
+        validateBothNames(user.getFirstname(), user.getLastname());
+        validateDateOfBirth(simpleDateFormat.format(user.getDateOfBirth()));
     }
 
     public void isFunctionExited(String str) throws ExitException {
