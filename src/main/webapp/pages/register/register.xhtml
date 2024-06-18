@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<head>
+    <title>User Registration System</title>
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(90deg, #5a026b, #2c0136);
+            padding: 30px;
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: xx-large;
+        }
+
+        .headerclass {
+            all: unset;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="date"] {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .error {
+            color: red;
+            font-size: small;
+            margin-bottom: 10px;
+        }
+
+        button[type="submit"] {
+            padding: 10px;
+            background-color: #5a026b;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #7a0289;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1><a class="headerclass" href="index.xhtml">User Registration System</a></h1>
+</header>
+<div class="container">
+    <h2>Register User</h2>
+    <h:form id="registrationForm">
+        <h:outputLabel for="username">Username:</h:outputLabel>
+        <h:inputText id="username" value="#{userBean.user.username}" required="true">
+            <f:validateRegex pattern="[a-zA-Z0-9_]*" />
+            <f:validateLength minimum="3" maximum="16" />
+        </h:inputText>
+        <h:message for="username" styleClass="error" />
+
+        <h:outputLabel for="firstname">First Name:</h:outputLabel>
+        <h:inputText id="firstname" value="#{userBean.user.firstname}" required="true">
+            <f:validateRegex pattern="[a-zA-Z ]*" />
+            <f:validateLength maximum="32" />
+        </h:inputText>
+        <h:message for="firstname" styleClass="error" />
+
+        <h:outputLabel for="lastname">Last Name:</h:outputLabel>
+        <h:inputText id="lastname" value="#{userBean.user.lastname}" required="true">
+            <f:validateRegex pattern="[a-zA-Z ]*" />
+            <f:validateLength maximum="32" />
+        </h:inputText>
+        <h:message for="lastname" styleClass="error" />
+
+        <h:outputLabel for="dateOfBirth">Date of Birth:</h:outputLabel>
+        <p:calendar id="dateOfBirth" value="#{userBean.user.dateOfBirth}"
+                    pattern="dd-MM-yyyy"
+                    showOnFocus="true"
+                    inline="false"
+                    showTime="false" timeInput="false"
+                    maxdate="#{calendarBean.currentDate}"/>
+        <h:message for="dateOfBirth" styleClass="error" />
+
+        <h:commandButton value="Register" action="#{userBean.registerUser}" />
+    </h:form>
+</div>
+</body>
+</html>

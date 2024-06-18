@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                         http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+    <managed-bean>
+        <managed-bean-name>MenuBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.MenuBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>CalendarBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.CalenderBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>UserBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.UserBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+    <navigation-rule>
+        <from-view-id>/pages/index/index.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>index</from-outcome>
+            <to-view-id>/pages/index/index.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>register</from-outcome>
+            <to-view-id>/pages/register/register.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>display</from-outcome>
+            <to-view-id>/pages/display/display.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>update</from-outcome>
+            <to-view-id>/pages/update/update.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>search</from-outcome>
+            <to-view-id>/pages/search/search.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>delete-all</from-outcome>
+            <to-view-id>/pages/deleteall/delete-all.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>delete-specific</from-outcome>
+            <to-view-id>/pages/deletespecific/delete-specific.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+</faces-config>

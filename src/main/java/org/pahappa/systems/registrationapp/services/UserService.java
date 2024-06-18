@@ -26,7 +26,7 @@ public class UserService {
         User existingUser = userDAO.getUserByUsername(user.getUsername());
         if (existingUser == null) {
             try{
-                validateNewUser(user);
+                // validateNewUser(user);
                 userDAO.add(user);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -84,7 +84,7 @@ public class UserService {
         if (optionalUser.isPresent()) {
             throw new WrongValidationException("Username is already taken. Please use a different username.");
         }
-        if (username.length() < 3){
+        if (username.length() < 3 || username == null){
             throw new WrongValidationException("Username must be at least 3 characters. Please try again.");
         }
         if (username.length() > 16){
