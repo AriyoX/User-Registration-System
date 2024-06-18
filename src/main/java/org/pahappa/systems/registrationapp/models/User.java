@@ -2,26 +2,15 @@ package org.pahappa.systems.registrationapp.models;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class User {
+@Table(name = "users")
+public class User extends Person{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
-    @Column(name = "username", unique = true, nullable = false)
-    private String username;
-
-    @Column(name = "first_name")
-    private String firstname;
-
-    @Column(name = "last_name")
-    private String lastname;
-
-    @Column(name = "date_of_birth")
-    private Date dateOfBirth;
+    @OneToMany(mappedBy = "user")
+    private List<Dependant> dependants;
 
     public User(){
 
@@ -34,36 +23,12 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getUsername() {
-        return username;
+    public List<Dependant> getDependants() {
+        return dependants;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setDependants(List<Dependant> dependants) {
+        this.dependants = dependants;
     }
 
     @Override
@@ -86,6 +51,5 @@ public class User {
     public int hashCode() {
         return Objects.hash(username, firstname, lastname, dateOfBirth);
     }
-
 
 }

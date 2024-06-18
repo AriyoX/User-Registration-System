@@ -1,6 +1,7 @@
 package org.pahappa.systems.registrationapp.views;
 
 import org.pahappa.systems.registrationapp.exception.ExitException;
+import org.pahappa.systems.registrationapp.services.DependantService;
 import org.pahappa.systems.registrationapp.services.UserService;
 import org.pahappa.systems.registrationapp.models.User;
 
@@ -13,11 +14,13 @@ public class UserView {
 
     private final Scanner scanner;
     private final UserService userService;
+    private final DependantService dependantService;
     private final SimpleDateFormat simpleDateFormat;
 
     public UserView() {
         this.scanner = new Scanner(System.in);
         this.userService = new UserService();
+        this.dependantService = new DependantService();
         this.simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         this.simpleDateFormat.setLenient(false);
     }
@@ -25,7 +28,7 @@ public class UserView {
     public void displayMenu() {
         System.out.println("********* User Registration System *********");
         boolean running = true;
-        if (!userService.isDatabaseConnected()) {
+        if (!userService.isDatabaseConnected() || !dependantService.isDatabaseConnected()) {
             System.out.println("Database is not connected. Please connect to database and restart the program.");
             running = false;
         }

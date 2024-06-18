@@ -1,27 +1,30 @@
 package org.pahappa.systems.registrationapp.dao;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.transform.Transformers;
 import org.pahappa.systems.registrationapp.config.SessionConfiguration;
+import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.User;
 
 import java.util.List;
 
-public class UserDAO {
+public class DependantDAO {
     private final SessionFactory sessionFactory;
 
-    public UserDAO() {
+    public DependantDAO() {
         this.sessionFactory = SessionConfiguration.getSessionFactory();
     }
 
-    public boolean isDatabaseConnected() {
+    public boolean isDatabaseConnected(){
         Transaction transaction = null;
         Session session = null;
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            session.createSQLQuery("SELECT 1 FROM Users").uniqueResult();
+            session.createSQLQuery("SELECT 1 FROM Dependants").uniqueResult();
             transaction.commit();
             return true;
         } catch (Exception e) {
@@ -36,13 +39,18 @@ public class UserDAO {
         }
     }
 
-    public void add(User user) {
+    public void addDependantToUser(User user, Dependant dependant){
         Transaction transaction = null;
         Session session = null;
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            session.save(user);
+            User existingUser = (User) session.get(User.class, user.getId());
+            if (existingUser == null){
+               throw new IllegalArgumentException("User does not exist");
+            }
+            dependant.setUser(user);
+            session.save(dependant);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -56,13 +64,36 @@ public class UserDAO {
         }
     }
 
-    public void update(User user) {
+    public List<Dependant> getUserDependants(User user){
+        Transaction transaction = null;
+        Session session = null;
+        List<Dependant> dependants = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            dependants = (List<Dependant>) session.createQuery("FROM Dependant WHERE user.id = :userId")
+                    .setParameter("userId", user.getId())
+                    .list();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return dependants;
+    }
+
+    public void delete(Dependant dependant){
         Transaction transaction = null;
         Session session = null;
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            session.update(user);
+            session.delete(dependant);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -76,13 +107,14 @@ public class UserDAO {
         }
     }
 
-    public void delete(User user) {
+    public List<Dependant> getAllDependants(){
         Transaction transaction = null;
         Session session = null;
+        List<Dependant> dependants = null;
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            session.delete(user);
+            dependants = (List<Dependant>) session.createQuery("FROM Dependant").list();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -94,71 +126,7 @@ public class UserDAO {
                 session.close();
             }
         }
+        return dependants;
     }
 
-    public User getUserByUsername(String username) {
-        Transaction transaction = null;
-        Session session = null;
-        User user = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            user = (User) session.createQuery("FROM User WHERE username = :username")
-                    .setParameter("username", username)
-                    .uniqueResult();
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return user;
-    }
-
-    public List<User> getAllUsers() {
-        Transaction transaction = null;
-        Session session = null;
-        List<User> users = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            users = session.createQuery("from User").list();
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return users;
-    }
-
-    public void deleteAllUsers() {
-        Transaction transaction = null;
-        Session session = null;
-        try{
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            session.createQuery("delete from User").executeUpdate();
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-    }
 }
