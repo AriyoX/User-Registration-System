@@ -6,3 +6,6 @@ bin/
 *.class
 .vscode/
 target/
+META-INF/
+*.war
+*.jar

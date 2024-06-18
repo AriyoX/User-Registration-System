@@ -1,12 +1,11 @@
 package org.pahappa.systems.registrationapp.dao;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.transform.Transformers;
 import org.pahappa.systems.registrationapp.config.SessionConfiguration;
 import org.pahappa.systems.registrationapp.models.Dependant;
+import org.pahappa.systems.registrationapp.models.Dependant.Gender;
 import org.pahappa.systems.registrationapp.models.User;
 
 import java.util.List;
@@ -127,6 +126,102 @@ public class DependantDAO {
             }
         }
         return dependants;
+    }
+
+    public Dependant getDependantByUsername(String username){
+        Transaction transaction = null;
+        Session session = null;
+        Dependant dependant = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            dependant = (Dependant) session.createQuery("FROM Dependant WHERE username = :username")
+                    .setParameter("username", username)
+                    .uniqueResult();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return dependant;
+    }
+
+    public Dependant getDependantByGender(Gender gender){
+        Transaction transaction = null;
+        Session session = null;
+        Dependant dependant = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            dependant = (Dependant) session.createQuery("FROM Dependant WHERE gender = :gender")
+                    .setParameter("gender", gender)
+                    .uniqueResult();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return dependant;
+    }
+
+    public Dependant getDependantByFirstName(String firstname){
+        Transaction transaction = null;
+        Session session = null;
+        Dependant dependant = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            dependant = (Dependant) session.createQuery("FROM Dependant WHERE firstname = :firstname")
+                    .setParameter("firstname", firstname)
+                    .uniqueResult();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return dependant;
+    }
+
+    public Dependant getDependantByLastName(String lastname){
+        Transaction transaction = null;
+        Session session = null;
+        Dependant dependant = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            dependant = (Dependant) session.createQuery("FROM Dependant WHERE lastname = :lastname")
+                    .setParameter("lastname", lastname)
+                    .uniqueResult();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return dependant;
     }
 
 }

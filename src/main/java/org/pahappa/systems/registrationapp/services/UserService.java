@@ -42,6 +42,14 @@ public class UserService {
         return userDAO.getUserByUsername(username);
     }
 
+    public User getUserByFirstName(String firstName) {
+        return userDAO.getUserByFirstName(firstName);
+    }
+
+    public User getUserByLastName(String lastName) {
+        return userDAO.getUserByLastName(lastName);
+    }
+
     public void updateUser(User user) {
         User existingUser = userDAO.getUserByUsername(user.getUsername());
         try{

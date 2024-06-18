@@ -120,6 +120,54 @@ public class UserDAO {
         return user;
     }
 
+    public User getUserByFirstName(String firstname) {
+        Transaction transaction = null;
+        Session session = null;
+        User user = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            user = (User) session.createQuery("FROM User WHERE firstname = :firstname")
+                    .setParameter("firstname", firstname)
+                    .uniqueResult();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return user;
+    }
+
+    public User getUserByLastName(String lastname) {
+        Transaction transaction = null;
+        Session session = null;
+        User user = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            user = (User) session.createQuery("FROM User WHERE lastname = :lastname")
+                    .setParameter("lastname", lastname)
+                    .uniqueResult();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return user;
+    }
+
     public List<User> getAllUsers() {
         Transaction transaction = null;
         Session session = null;
