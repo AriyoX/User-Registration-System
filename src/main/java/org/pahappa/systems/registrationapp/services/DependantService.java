@@ -25,6 +25,10 @@ public class DependantService {
         return dependantDAO.getAllDependants();
     }
 
+    public List<Dependant> getUserDependants(User user){
+        return dependantDAO.getUserDependants(user);
+    }
+
     public Dependant getDependant(String username){
         return dependantDAO.getDependantByUsername(username);
     }

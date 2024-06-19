@@ -23,6 +23,12 @@
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
 
+    <managed-bean>
+        <managed-bean-name>DependantBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.DependantBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
     <navigation-rule>
         <from-view-id>/pages/index/index.xhtml</from-view-id>
         <navigation-case>
@@ -52,6 +58,34 @@
         <navigation-case>
             <from-outcome>delete-specific</from-outcome>
             <to-view-id>/pages/deletespecific/delete-specific.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/pages/register/register.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>register</from-outcome>
+            <to-view-id>/pages/register/register.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>index</from-outcome>
+            <to-view-id>/pages/index/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/pages/display/display.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>index</from-outcome>
+            <to-view-id>/pages/index/index.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>add_dependant</from-outcome>
+            <to-view-id>/pages/dependants/add_dependant.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>view_dependants</from-outcome>
+            <to-view-id>/pages/dependants/view_dependants.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 

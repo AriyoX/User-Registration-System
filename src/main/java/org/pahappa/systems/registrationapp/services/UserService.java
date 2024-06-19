@@ -22,15 +22,16 @@ public class UserService {
         this.simpleDateFormat.setLenient(false);
     }
 
-    public void registerUser(User user) {
+    public void registerUser(User user) throws WrongValidationException{
         User existingUser = userDAO.getUserByUsername(user.getUsername());
-        if (existingUser == null) {
-            try{
-                // validateNewUser(user);
-                userDAO.add(user);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (existingUser != null) {
+            throw new WrongValidationException("Username already exists, please choose another one.");
+        }
+        try {
+            validateNewUser(user);
+            userDAO.add(user);
+        } catch (Exception e) {
+            throw new WrongValidationException("Invalid username. Please try again");
         }
     }
 
@@ -50,8 +51,11 @@ public class UserService {
         return userDAO.getUserByLastName(lastName);
     }
 
-    public void updateUser(User user) {
+    public void updateUser(User user) throws WrongValidationException {
         User existingUser = userDAO.getUserByUsername(user.getUsername());
+        if (existingUser == null) {
+            throw new WrongValidationException("User does not exist. Please try again.");
+        }
         try{
             validateExistingUser(existingUser);
             existingUser.setFirstname(user.getFirstname());
@@ -189,4 +193,7 @@ public class UserService {
         }
     }
 
+    public User getUserById(long userId) {
+        return userDAO.getUserById(userId);
+    }
 }

@@ -88,38 +88,44 @@
 
         <p:layoutUnit position="center">
             <div class="container">
-                <h2>Register User</h2>
-                <h:form id="registrationForm">
+                <h2>Add Dependant to <h:outputText value="#{dependantBean.user.username}"/></h2>
+                <h:form id="dependantForm">
                     <h:outputLabel for="username">Username:</h:outputLabel>
-                    <h:inputText id="username" value="#{userBean.user.username}" required="true">
+                    <h:inputText id="username" value="#{dependantBean.dependant.username}" required="true">
                         <f:validateRegex pattern="[a-zA-Z0-9_]*" />
                         <f:validateLength minimum="3" maximum="16" />
                     </h:inputText>
                     <h:message for="username" styleClass="error" />
 
                     <h:outputLabel for="firstname">First Name:</h:outputLabel>
-                    <h:inputText id="firstname" value="#{userBean.user.firstname}" required="true">
+                    <h:inputText id="firstname" value="#{dependantBean.dependant.firstname}" required="true">
                         <f:validateRegex pattern="[a-zA-Z ]*" />
                         <f:validateLength maximum="32" />
                     </h:inputText>
                     <h:message for="firstname" styleClass="error" />
 
                     <h:outputLabel for="lastname">Last Name:</h:outputLabel>
-                    <h:inputText id="lastname" value="#{userBean.user.lastname}" required="true">
+                    <h:inputText id="lastname" value="#{dependantBean.dependant.lastname}" required="true">
                         <f:validateRegex pattern="[a-zA-Z ]*" />
                         <f:validateLength maximum="32" />
                     </h:inputText>
                     <h:message for="lastname" styleClass="error" />
 
                     <h:outputLabel for="dateOfBirth">Date of Birth:</h:outputLabel>
-                    <p:datePicker id="dateOfBirth" value="#{userBean.user.dateOfBirth}"
+                    <p:datePicker id="dateOfBirth" value="#{dependantBean.dependant.dateOfBirth}"
                                   pattern="dd-MM-yyyy"
                                   showOnFocus="true"
                                   showTime="false" timeInput="false"
                                   maxdate="#{calendarBean.currentDate}"/>
                     <h:message for="dateOfBirth" styleClass="error" />
 
-                    <h:commandButton value="Register" action="#{userBean.registerUser}" styleClass="register-button"/>
+                    <h:outputLabel for="gender">Gender:</h:outputLabel>
+                    <h:selectOneMenu id="gender" value="#{dependantBean.dependant.gender}" required="true">
+                        <f:selectItem itemValue="MALE" itemLabel="Male" />
+                        <f:selectItem itemValue="FEMALE" itemLabel="Female" />
+                    </h:selectOneMenu>
+
+                    <h:commandButton value="Add Dependant" action="#{dependantBean.addDependantToUser}" styleClass="register-button"/>
                 </h:form>
             </div>
         </p:layoutUnit>
