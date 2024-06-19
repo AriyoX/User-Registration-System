@@ -2,22 +2,33 @@ package org.pahappa.systems.registrationapp.views;
 
 import org.pahappa.systems.registrationapp.models.User;
 import org.pahappa.systems.registrationapp.services.UserService;
+import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import java.io.Serializable;
 import java.util.List;
 
 @ManagedBean(name = "userBean")
-@RequestScoped
-public class UserBean {
+@ViewScoped
+public class UserBean implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private User user = new User();
     private final UserService userService = new UserService();
     private List<User> users;
     private String searchQuery;
     private List<User> searchResults;
+    private User selectedUser;
+
+    @PostConstruct
+    public void init() {
+        users = userService.getAllUsers();
+    }
 
     public String getSearchQuery() {
         return searchQuery;
@@ -35,17 +46,12 @@ public class UserBean {
         this.searchResults = searchResults;
     }
 
-    @PostConstruct
-    public void init() {
-        users = userService.getAllUsers();
+    public User getUser() {
+        return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public User getUser() {
-        return user;
     }
 
     public String registerUser() {
@@ -66,8 +72,30 @@ public class UserBean {
         return users;
     }
 
+    public User getSelectedUser() {
+        return selectedUser;
+    }
+
+    public void setSelectedUser(User selectedUser) {
+        this.selectedUser = selectedUser;
+    }
+
     public void searchUser() {
         searchResults = userService.searchUsers(searchQuery);
     }
 
+    public void updateUser() {
+        try {
+            userService.updateUser(selectedUser);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "User updated!"));
+            searchUser();
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
+        }
+    }
+
+    public void selectUser(User user) {
+        this.selectedUser = user;
+        PrimeFaces.current().executeScript("PF('updateUserDialog').show();");
+    }
 }
