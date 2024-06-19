@@ -22,14 +22,15 @@ public class UserBean implements Serializable {
     private final UserService userService = new UserService();
     private List<User> users;
     private String searchQuery;
-    private List<User> searchResults;
     private User selectedUser;
+    private boolean showUpdateDialog = false;
 
     @PostConstruct
     public void init() {
         users = userService.getAllUsers();
     }
 
+    // search query
     public String getSearchQuery() {
         return searchQuery;
     }
@@ -38,14 +39,7 @@ public class UserBean implements Serializable {
         this.searchQuery = searchQuery;
     }
 
-    public List<User> getSearchResults() {
-        return searchResults;
-    }
-
-    public void setSearchResults(List<User> searchResults) {
-        this.searchResults = searchResults;
-    }
-
+    // user
     public User getUser() {
         return user;
     }
@@ -54,6 +48,30 @@ public class UserBean implements Serializable {
         this.user = user;
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    // selected user
+    public User getSelectedUser() {
+        return selectedUser;
+    }
+
+    public void setSelectedUser(User selectedUser) {
+        this.selectedUser = selectedUser;
+    }
+
+    // Add getter and setter for showUpdateDialog
+    public boolean isShowUpdateDialog() {
+        return showUpdateDialog;
+    }
+
+    public void setShowUpdateDialog(boolean showUpdateDialog) {
+        this.showUpdateDialog = showUpdateDialog;
+    }
+
+    // methods
+    // register method
     public String registerUser() {
         try {
             userService.registerUser(user);
@@ -68,34 +86,51 @@ public class UserBean implements Serializable {
         return null;
     }
 
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public User getSelectedUser() {
-        return selectedUser;
-    }
-
-    public void setSelectedUser(User selectedUser) {
-        this.selectedUser = selectedUser;
-    }
-
+    // search method
     public void searchUser() {
-        searchResults = userService.searchUsers(searchQuery);
+        users = userService.searchUsers(searchQuery);
     }
 
+    // update method
     public void updateUser() {
         try {
             userService.updateUser(selectedUser);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "User updated!"));
-            searchUser();
+            showUpdateDialog = false;
+            users = userService.getAllUsers();
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
         }
     }
 
+    // select method
     public void selectUser(User user) {
         this.selectedUser = user;
-        PrimeFaces.current().executeScript("PF('updateUserDialog').show();");
+        this.showUpdateDialog = true; // Show the dialog after setting selectedUser
     }
+
+    // delete method
+    public void confirmDelete(User user) {
+        try {
+            userService.deleteUser(user);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "User deleted!"));
+            users.remove(user);
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Failed to delete user."));
+        }
+    }
+
+    // delete all method
+    public void confirmDeleteAll() {
+        try {
+            userService.deleteAllUsers();
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "All users deleted!"));
+            users = userService.getAllUsers(); // Refresh the user list (now empty)
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Failed to delete all users."));
+        }
+    }
+
 }

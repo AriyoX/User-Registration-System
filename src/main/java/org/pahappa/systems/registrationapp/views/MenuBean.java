@@ -12,15 +12,11 @@ public class MenuBean {
     public List<MenuItem> getMenuItems() {
         List<MenuItem> menuItems = new ArrayList<>();
         menuItems.add(new MenuItem("Register User", "register"));
-        menuItems.add(new MenuItem("Display all users", "display"));
-        menuItems.add(new MenuItem("Update User Details", "update"));
-        menuItems.add(new MenuItem("Search for Users", "search"));
-        menuItems.add(new MenuItem("Delete All Users", "delete-all"));
-        menuItems.add(new MenuItem("Delete a Specific User", "delete-specific"));
+        menuItems.add(new MenuItem("User Management", "user-management"));
+        // menuItems.add(new MenuItem("Delete All Users", "delete-all"));
         return menuItems;
     }
 
-    // Inner class to represent a menu item
     public static class MenuItem {
         private final String label;
         private final String outcome;
