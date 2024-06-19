@@ -7,9 +7,11 @@ import org.pahappa.systems.registrationapp.models.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class UserService {
     private final UserDAO userDAO;
@@ -79,6 +81,22 @@ public class UserService {
 
     public void deleteAllUsers(){
         userDAO.deleteAllUsers();
+    }
+
+    public User getUserById(long userId) {
+        return userDAO.getUserById(userId);
+    }
+
+    public List<User> searchUsers(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<User> users = userDAO.getAllUsers();
+        return users.stream()
+                .filter(user -> user.getUsername().toLowerCase().contains(query.toLowerCase()) ||
+                        user.getFirstname().toLowerCase().contains(query.toLowerCase()) ||
+                        user.getLastname().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
     // for new username
@@ -193,7 +211,4 @@ public class UserService {
         }
     }
 
-    public User getUserById(long userId) {
-        return userDAO.getUserById(userId);
-    }
 }

@@ -16,6 +16,24 @@ public class UserBean {
     private User user = new User();
     private final UserService userService = new UserService();
     private List<User> users;
+    private String searchQuery;
+    private List<User> searchResults;
+
+    public String getSearchQuery() {
+        return searchQuery;
+    }
+
+    public void setSearchQuery(String searchQuery) {
+        this.searchQuery = searchQuery;
+    }
+
+    public List<User> getSearchResults() {
+        return searchResults;
+    }
+
+    public void setSearchResults(List<User> searchResults) {
+        this.searchResults = searchResults;
+    }
 
     @PostConstruct
     public void init() {
@@ -46,6 +64,10 @@ public class UserBean {
 
     public List<User> getUsers() {
         return users;
+    }
+
+    public void searchUser() {
+        searchResults = userService.searchUsers(searchQuery);
     }
 
 }

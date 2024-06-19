@@ -5,7 +5,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <title>User Registration System</title>
+    <title>Add Dependant</title>
     <style type="text/css">
         body {
             font-family: Arial, sans-serif;
@@ -52,7 +52,7 @@
         }
 
         .custom-header {
-            background: linear-gradient(90deg, #5a026b, #2c0136); /* Example gradient */
+            background: linear-gradient(90deg, #5a026b, #2c0136);
             padding: 20px;
             text-align: center;
             text-decoration: none;
@@ -66,17 +66,17 @@
 
         .register-button {
             padding: 12px 20px;
-            background-color: #5a026b; /* Purple */
+            background-color: #5a026b;
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            transition: background-color 0.3s ease; /* Smooth transition */
+            transition: background-color 0.3s ease;
             font-weight: bold;
         }
 
         .register-button:hover {
-            background-color: #7a0289; /* Darker purple on hover */
+            background-color: #7a0289;
         }
     </style>
 </h:head>
@@ -100,32 +100,29 @@
                     <h:outputLabel for="firstname">First Name:</h:outputLabel>
                     <h:inputText id="firstname" value="#{dependantBean.dependant.firstname}" required="true">
                         <f:validateRegex pattern="[a-zA-Z ]*" />
-                        <f:validateLength maximum="32" />
                     </h:inputText>
                     <h:message for="firstname" styleClass="error" />
 
                     <h:outputLabel for="lastname">Last Name:</h:outputLabel>
                     <h:inputText id="lastname" value="#{dependantBean.dependant.lastname}" required="true">
                         <f:validateRegex pattern="[a-zA-Z ]*" />
-                        <f:validateLength maximum="32" />
                     </h:inputText>
                     <h:message for="lastname" styleClass="error" />
 
                     <h:outputLabel for="dateOfBirth">Date of Birth:</h:outputLabel>
-                    <p:datePicker id="dateOfBirth" value="#{dependantBean.dependant.dateOfBirth}"
-                                  pattern="dd-MM-yyyy"
-                                  showOnFocus="true"
-                                  showTime="false" timeInput="false"
-                                  maxdate="#{calendarBean.currentDate}"/>
+                    <h:inputText id="dateOfBirth" value="#{dependantBean.dependant.dateOfBirth}" required="true">
+                        <f:convertDateTime pattern="dd-MM-yyyy" />
+                    </h:inputText>
                     <h:message for="dateOfBirth" styleClass="error" />
 
                     <h:outputLabel for="gender">Gender:</h:outputLabel>
                     <h:selectOneMenu id="gender" value="#{dependantBean.dependant.gender}" required="true">
-                        <f:selectItem itemValue="MALE" itemLabel="Male" />
-                        <f:selectItem itemValue="FEMALE" itemLabel="Female" />
+                        <f:selectItem itemLabel="Select Gender" itemValue="" />
+                        <f:selectItems value="#{dependantBean.genders}" var="gender" itemLabel="#{gender}" itemValue="#{gender}" />
                     </h:selectOneMenu>
+                    <h:message for="gender" styleClass="error" />
 
-                    <h:commandButton value="Add Dependant" action="#{dependantBean.addDependantToUser}" styleClass="register-button"/>
+                    <h:commandButton value="Add Dependant" action="#{dependantBean.addDependant}" styleClass="register-button"/>
                 </h:form>
             </div>
         </p:layoutUnit>
