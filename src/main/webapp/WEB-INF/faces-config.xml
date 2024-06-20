@@ -23,6 +23,12 @@
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
 
+    <managed-bean>
+        <managed-bean-name>DependantBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.DependantBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+
 
     <navigation-rule>
         <from-view-id>/pages/index/index.xhtml</from-view-id>
@@ -33,10 +39,6 @@
         <navigation-case>
             <from-outcome>user-management</from-outcome>
             <to-view-id>/pages/usermanagement/user-management.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-outcome>delete-all</from-outcome>
-            <to-view-id>/pages/delete/delete-all.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 
@@ -58,14 +60,26 @@
             <from-outcome>index</from-outcome>
             <to-view-id>/pages/index/index.xhtml</to-view-id>
         </navigation-case>
-    </navigation-rule>
-
-    <navigation-rule>
-        <from-view-id>/pages/dependants/add_dependant.xhtml</from-view-id>
         <navigation-case>
-            <from-outcome>index</from-outcome>
-            <to-view-id>/pages/index/index.xhtml</to-view-id>
+            <from-outcome>view_dependants</from-outcome>
+            <to-view-id>/pages/dependants/view_dependants.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 
+    <navigation-rule>
+        <from-view-id>/pages/dependants/view_dependants.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>userManagement</from-outcome>
+            <to-view-id>/pages/usermanagement/user-management.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>view_dependants</from-outcome>
+            <to-view-id>/pages/dependants/view_dependants.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
 </faces-config>

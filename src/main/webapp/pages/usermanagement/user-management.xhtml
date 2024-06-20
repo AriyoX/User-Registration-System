@@ -6,84 +6,11 @@
       xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>User Management</title>
-    <style type="text/css">
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background: linear-gradient(90deg, #5a026b, #2c0136);
-            padding: 30px;
-            color: white;
-            text-align: center;
-        }
-
-        h1 {
-            margin: 0;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-
-        h2 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: xx-large;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-bottom: 5px;
-            color: #333;
-        }
-
-        .custom-header {
-            background: linear-gradient(90deg, #5a026b, #2c0136); /* Example gradient */
-            padding: 20px;
-            text-align: center;
-            text-decoration: none;
-        }
-
-        .error {
-            color: red;
-            font-size: small;
-            margin-bottom: 10px;
-        }
-
-        .register-button {
-            padding: 12px 20px;
-            background-color: #5a026b; /* Purple */
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease; /* Smooth transition */
-            font-weight: bold;
-        }
-
-        .register-button:hover {
-            background-color: #7a0289; /* Darker purple on hover */
-        }
-    </style>
 </h:head>
 <h:body>
     <p:layout fullPage="true">
-        <p:layoutUnit position="north" size="100" styleClass="custom-header">
-            <h1><h:link outcome="index">User Registration System</h:link></h1>
+        <p:layoutUnit position="north" size="100">
+            <h1><h:link outcome="index"><h:outputText value="User Registration System"/></h:link></h1>
         </p:layoutUnit>
 
         <p:layoutUnit position="center">
@@ -133,10 +60,9 @@
 
                         <p:column headerText="Dependents">
                             <h:form>
-                                <h:commandLink value="View"
-                                               action="view_dependants">
-                                    <f:param name="userId" value="#{user.id}"/>
-                                </h:commandLink>
+                                <h:link value="View"
+                                               outcome="/pages/dependants/view_dependants.xhtml?id=#{user.id}">
+                                </h:link>
                                 <p:commandButton value="Add"
                                                  actionListener="#{dependantBean.selectUser(user)}"
                                                  update=":addDependantForm"

@@ -5,6 +5,7 @@ import org.pahappa.systems.registrationapp.services.UserService;
 import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -23,7 +24,6 @@ public class UserBean implements Serializable {
     private List<User> users;
     private String searchQuery;
     private User selectedUser;
-    private boolean showUpdateDialog = false;
 
     @PostConstruct
     public void init() {
@@ -87,7 +87,6 @@ public class UserBean implements Serializable {
         try {
             userService.updateUser(selectedUser);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "User updated!"));
-            showUpdateDialog = false;
             users = userService.getAllUsers();
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
@@ -97,7 +96,6 @@ public class UserBean implements Serializable {
     // select method
     public void selectUser(User user) {
         this.selectedUser = user;
-        this.showUpdateDialog = true;
     }
 
     // delete method
@@ -124,4 +122,9 @@ public class UserBean implements Serializable {
         }
     }
 
+    public void viewDependants() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ConfigurableNavigationHandler navigationHandler = (ConfigurableNavigationHandler) facesContext.getApplication().getNavigationHandler();
+        navigationHandler.performNavigation("/pages/dependants/view_dependants.xhtml?id=" + selectedUser.getId());
+    }
 }

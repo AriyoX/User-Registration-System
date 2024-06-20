@@ -9,7 +9,7 @@ import java.util.Objects;
 @Table(name = "users")
 public class User extends Person{
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Dependant> dependants;
 
     public User(){

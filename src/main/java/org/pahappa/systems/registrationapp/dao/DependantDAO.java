@@ -224,4 +224,28 @@ public class DependantDAO {
         return dependant;
     }
 
+    public List<Dependant> getDependantsByUserId(long user_id){
+        Transaction transaction = null;
+        Session session = null;
+        List<Dependant> dependants = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            dependants = (List<Dependant>) session.createQuery("FROM Dependant WHERE user.id = :user_id")
+                    .setParameter("user_id", user_id)
+                    .list();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return dependants;
+    }
+
 }
