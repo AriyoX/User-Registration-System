@@ -107,7 +107,10 @@
                     </f:facet>
                 </h:panelGroup>
             </div>
+            <br/>
+            <p:commandButton value="Back" onclick="history.back()" type="button" styleClass="register-button" />
         </p:layoutUnit>
+
 
         <h:form id="updateForm">
             <p:dialog header="Update User: #{userBean.selectedUser.username}"
