@@ -7,15 +7,133 @@
 
 <h:head>
     <title>User Dependants</title>
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #5a026b, #2c0136);
+            padding: 9px;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .register-button{
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: white;
+            transition-duration: 0.4s;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        .register-button:hover{
+            background-color: blueviolet;
+            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+        }
+
+        .buttons{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .custom-table th,
+        .custom-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .custom-table th {
+            background-color: #f2f2f2;
+            color: black;
+            text-transform: uppercase;
+        }
+
+        .custom-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .custom-table tr:hover {
+            background-color: #ddd;
+        }
+
+        /* Styles for the paginator */
+        .ui-paginator {
+            margin-top: 10px;
+        }
+
+        .ui-paginator .ui-paginator-current {
+            font-weight: bold;
+        }
+
+        .ui-paginator .ui-paginator-pages .ui-paginator-page,
+        .ui-paginator .ui-paginator-first,
+        .ui-paginator .ui-paginator-last,
+        .ui-paginator .ui-paginator-next,
+        .ui-paginator .ui-paginator-prev {
+            padding: 6px 12px;
+            margin: 0 2px;
+            border: 1px solid #ddd;
+            background-color: #f2f2f2;
+            color: black;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-active,
+        .ui-paginator .ui-paginator-first.ui-state-disabled,
+        .ui-paginator .ui-paginator-last.ui-state-disabled,
+        .ui-paginator .ui-paginator-next.ui-state-disabled,
+        .ui-paginator .ui-paginator-prev.ui-state-disabled {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+            cursor: default;
+        }
+
+        .ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-hover,
+        .ui-paginator .ui-paginator-first.ui-state-hover,
+        .ui-paginator .ui-paginator-last.ui-state-hover,
+        .ui-paginator .ui-paginator-next.ui-state-hover,
+        .ui-paginator .ui-paginator-prev.ui-state-hover {
+            background-color: #0056b3;
+            color: white;
+            border-color: #0056b3;
+        }
+
+    </style>
 </h:head>
 <h:body>
-    <h1>Dependants: </h1>
+    <div class="header">
+        <h1>User Registration System</h1>
+    </div>
 
+    <h1>Dependants</h1>
     <f:metadata>
         <f:viewParam name="id" value="#{dependantBean.user_id}"/>
     </f:metadata>
     <h:panelGroup id="dependantsTable">
-    <p:dataTable value="#{dependantBean.selectedUserDependants}" var="dependant">
+    <p:dataTable value="#{dependantBean.selectedUserDependants}" var="dependant" styleClass="custom-table">
         <p:column headerText="Username">
             <h:outputText value="#{dependant.username}" />
         </p:column>
@@ -41,8 +159,12 @@
         </p:column>
     </p:dataTable>
     </h:panelGroup>
-    <br/>
-    <p:commandButton value="Back" onclick="history.back()" type="button" styleClass="register-button" />
+    <h:form>
+        <div class="buttons">
+            <h:commandButton value="Back" onclick="history.back()" type="button" styleClass="register-button" />
+            <h:commandButton value="Menu" action="/pages/index/index.xhtml" styleClass="register-button" />
+        </div>
+    </h:form>
 
 </h:body>
 </html>
