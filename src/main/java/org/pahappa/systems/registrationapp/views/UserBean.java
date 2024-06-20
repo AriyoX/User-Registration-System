@@ -61,15 +61,6 @@ public class UserBean implements Serializable {
         this.selectedUser = selectedUser;
     }
 
-    // Add getter and setter for showUpdateDialog
-    public boolean isShowUpdateDialog() {
-        return showUpdateDialog;
-    }
-
-    public void setShowUpdateDialog(boolean showUpdateDialog) {
-        this.showUpdateDialog = showUpdateDialog;
-    }
-
     // methods
     // register method
     public String registerUser() {
@@ -106,7 +97,7 @@ public class UserBean implements Serializable {
     // select method
     public void selectUser(User user) {
         this.selectedUser = user;
-        this.showUpdateDialog = true; // Show the dialog after setting selectedUser
+        this.showUpdateDialog = true;
     }
 
     // delete method
