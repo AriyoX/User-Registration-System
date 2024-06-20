@@ -13,7 +13,7 @@ public class MenuBean {
         List<MenuItem> menuItems = new ArrayList<>();
         menuItems.add(new MenuItem("Register User", "register"));
         menuItems.add(new MenuItem("User Management", "user-management"));
-        // menuItems.add(new MenuItem("Delete All Users", "delete-all"));
+        menuItems.add(new MenuItem("Dependants", "view-all-dependants"));
         return menuItems;
     }
 

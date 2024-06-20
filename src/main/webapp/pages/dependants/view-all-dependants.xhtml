@@ -1,21 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-
 <h:head>
     <title>User Dependants</title>
 </h:head>
 <h:body>
-    <h1>Dependants: </h1>
-
-    <f:metadata>
-        <f:viewParam name="id" value="#{dependantBean.user_id}"/>
-    </f:metadata>
-    <h:panelGroup id="dependantsTable">
-    <p:dataTable value="#{dependantBean.selectedUserDependants}" var="dependant">
+    <h1>All Dependants: </h1>
+    <div class="card">
+    <h:form>
+    <p:dataTable var="dependant" value="#{dependantBean.dependants}"
+                 rows="10"
+                 paginator="true"
+                 paginatorPosition="both"
+                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                 rowsPerPageTemplate="5,10,{ShowAll|'All'}">
         <p:column headerText="Username">
             <h:outputText value="#{dependant.username}" />
         </p:column>
@@ -33,13 +37,20 @@
         <p:column headerText="Gender">
             <h:outputText value="#{dependant.gender}" />
         </p:column>
-        <p:column>
-            <p:column headerText="Actions"/>
-            <h:form>
-            <h:commandLink action="#{dependantBean.deleteDependant(dependant.username)}" value="Delete"/>
-            </h:form>
+        <p:column headerText="User">
+            <h:outputText value="#{dependant.user.username}"/>
         </p:column>
+
+        <f:facet name="paginatorTopLeft">
+            <p:commandButton type="button" icon="pi pi-refresh"/>
+        </f:facet>
+
+        <f:facet name="paginatorBottomRight">
+            <p:commandButton type="button" icon="pi pi-cloud-upload"/>
+        </f:facet>
+
     </p:dataTable>
-    </h:panelGroup>
+    </h:form>
+    </div>
 </h:body>
 </html>

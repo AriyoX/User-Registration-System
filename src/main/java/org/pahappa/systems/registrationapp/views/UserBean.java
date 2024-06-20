@@ -122,9 +122,4 @@ public class UserBean implements Serializable {
         }
     }
 
-    public void viewDependants() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ConfigurableNavigationHandler navigationHandler = (ConfigurableNavigationHandler) facesContext.getApplication().getNavigationHandler();
-        navigationHandler.performNavigation("/pages/dependants/view_dependants.xhtml?id=" + selectedUser.getId());
-    }
 }

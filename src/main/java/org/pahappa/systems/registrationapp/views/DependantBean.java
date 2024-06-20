@@ -27,6 +27,11 @@ public class DependantBean extends Dependant implements Serializable {
     @PostConstruct
     public void init() {
         genderValues = Dependant.Gender.values();
+        dependants = dependantService.getAllDependants();
+    }
+
+    public List<Dependant> getDependants() {
+        return dependants;
     }
 
     public Dependant.Gender[] getGenderValues() {
@@ -83,8 +88,9 @@ public class DependantBean extends Dependant implements Serializable {
         return dependantService.getDependantsByUserId(user_id);
     }
 
-    public void deleteDependant(Dependant dependant){
+    public void deleteDependant(String username){
         try {
+            dependant = dependantService.getDependant(username);
             dependantService.deleteDependant(dependant);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Dependant deleted!"));
         } catch (Exception e) {
