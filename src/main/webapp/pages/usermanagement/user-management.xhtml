@@ -30,6 +30,12 @@
             border-radius: 8px;
         }
 
+        .search {
+            text-align: center;
+            font-weight: bold;
+            padding-top: 20px;
+        }
+
         .register-button{
             border-radius: 6px;
             font-size: 16px;
@@ -47,7 +53,7 @@
         .buttons{
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin: 20px 50px;
         }
 
         .custom-table {
@@ -120,23 +126,63 @@
             border-color: #0056b3;
         }
 
+        .search-box {
+            width: 800px;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-button {
+            width: 400px;
+            padding: 10px 20px;
+            border-radius: 20px;
+            background-color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .search-button:hover {
+            background-color: blueviolet;
+        }
+
     </style>
+    <script type="text/javascript">
+        function handleSaveCompleteUpdate(xhr, status, args) {
+            if (!args.validationFailed) {
+                PF('updateUserDialog').hide();
+            }
+        }
+        function handleSaveCompleteDependant(xhr, status, args) {
+            if (!args.validationFailed) {
+                PF('addDependantDialog').hide();
+            }
+        }
+    </script>
+
 </h:head>
 <h:body>
     <div class="header">
         <h1>User Registration System</h1>
     </div>
 
-    <div class="container">
-        <h2>User Management</h2>
-
+    <div class="search">
         <h:form id="searchForm">
             <h:outputLabel for="searchInput">Search by Username, First Name, or Last Name:</h:outputLabel>
             <br/>
-            <h:inputText id="searchInput" value="#{userBean.searchQuery}"/>
             <br/>
-            <h:commandButton value="Search" action="#{userBean.searchUser}" styleClass="register-button"/>
+            <h:inputText id="searchInput" value="#{userBean.searchQuery}" styleClass="search-box"/>
+            <br/>
+            <br/>
+            <h:commandButton value="Search" action="#{userBean.searchUser}" styleClass="search-button"/>
         </h:form>
+    </div>
+
+    <div class="container">
+        <h2>User Management</h2>
 
         <h:panelGroup id="userTablePanel">
             <p:dataTable id="userTable"
@@ -177,6 +223,7 @@
                         <h:link value="View"
                                 outcome="/pages/dependants/view_dependants.xhtml?id=#{user.id}">
                         </h:link>
+                        <br/>
                         <p:commandButton value="Add"
                                          actionListener="#{dependantBean.selectUser(user)}"
                                          update=":addDependantForm"
@@ -194,6 +241,7 @@
                                          oncomplete="PF('updateUserDialog').show()"
                                          styleClass="register-button">
                         </p:commandButton>
+                        <br/>
                         <p:commandButton value="Delete"
                                          update=":userTablePanel"
                                          actionListener="#{userBean.confirmDelete(user)}"
@@ -204,7 +252,7 @@
                     </h:form>
                 </p:column>
             </p:dataTable>
-
+            <br/>
             <h:form id="deleteAllForm" rendered="#{not empty userBean.users}">
                 <p:commandButton value="Delete All Users"
                                  actionListener="#{userBean.confirmDeleteAll}"
@@ -236,35 +284,36 @@
                       resizable="false"
                       showEffect="fade"
                       hideEffect="fade"
-                      closable="false"
+                      closable="true"
+                      visible="#{facesContext.validationFailed}"
                       >
 
                 <p:outputPanel id="updatePanel" rendered="#{not empty userBean.selectedUser}">
-                    <h:panelGrid columns="2" cellpadding="5">
-                        <h:outputLabel for="firstname">First Name:</h:outputLabel>
-                        <h:inputText id="firstname" value="#{userBean.selectedUser.firstname}" required="true">
-                            <f:validateRegex pattern="[a-zA-Z ]*" />
-                            <f:validateLength maximum="32" />
-                        </h:inputText>
+                    <p:panelGrid columns="1" cellpadding="5">
+                        <p:outputLabel for="firstname">First Name:</p:outputLabel>
+                        <p:inputText id="firstname" value="#{userBean.selectedUser.firstname}" required="true">
+                            <f:validateRegex pattern="[a-zA-Z]*" />
+                            <f:validateLength minimum="3" maximum="32" />
+                        </p:inputText>
                         <h:message for="firstname" styleClass="error" />
 
-                        <h:outputLabel for="lastname">Last Name:</h:outputLabel>
-                        <h:inputText id="lastname" value="#{userBean.selectedUser.lastname}" required="true">
-                            <f:validateRegex pattern="[a-zA-Z ]*" />
-                            <f:validateLength maximum="32" />
-                        </h:inputText>
+                        <p:outputLabel for="lastname">Last Name:</p:outputLabel>
+                        <p:inputText id="lastname" value="#{userBean.selectedUser.lastname}" required="true">
+                            <f:validateRegex pattern="[a-zA-Z]*" />
+                            <f:validateLength minimum="3" maximum="32" />
+                        </p:inputText>
                         <h:message for="lastname" styleClass="error" />
 
-                        <h:outputLabel for="dateOfBirth">Date of Birth:</h:outputLabel>
+                        <p:outputLabel for="dateOfBirth">Date of Birth:</p:outputLabel>
                         <p:datePicker id="dateOfBirth" value="#{userBean.selectedUser.dateOfBirth}"
                                       pattern="dd-MM-yyyy"
                                       showOnFocus="true"
                                       showTime="false" timeInput="false"
                                       maxdate="#{calendarBean.currentDate}"/>
-                        <h:message for="dateOfBirth" styleClass="error" />
-                    </h:panelGrid>
+                        <p:message for="dateOfBirth" styleClass="error" />
+                    </p:panelGrid>
                     <br/>
-                    <p:commandButton value="Save" update=":searchForm :updateForm:updatePanel :userTablePanel" actionListener="#{userBean.updateUser}" oncomplete="PF('updateUserDialog').hide();" styleClass="register-button"/>
+                    <p:commandButton value="Save" update=":searchForm :updateForm:updatePanel :userTablePanel" actionListener="#{userBean.updateUser}" oncomplete="handleSaveCompleteUpdate(xhr, status, args)" styleClass="register-button"/>
                     <p:commandButton value="Cancel" onclick="PF('updateUserDialog').hide();" styleClass="register-button" />
                 </p:outputPanel>
             </p:dialog>
@@ -277,41 +326,50 @@
                       resizable="false"
                       showEffect="fade"
                       hideEffect="fade"
-                      closable="false"
+                      closable="true"
+                      responsive="true"
+                      visible="#{facesContext.validationFailed}"
             >
 
             <p:outputPanel id="addDependantPanel" rendered="#{not empty dependantBean.selectedUser}">
-            <h:panelGrid columns="2" cellpadding="5">
-                    <h:outputLabel for="dependantUsername">Username: </h:outputLabel>
-                    <h:inputText id="dependantUsername" value="#{dependantBean.dependant.username}" required="true">
+            <p:panelGrid columns="1" cellpadding="5">
+                    <p:outputLabel for="dependantUsername">Username: </p:outputLabel>
+                    <p:inputText id="dependantUsername" value="#{dependantBean.dependant.username}" required="true">
                         <f:validateRegex pattern="[a-zA-Z0-9_]*" />
                         <f:validateLength minimum="3" maximum="16" />
-                    </h:inputText>
-                    <h:outputLabel for="dependantFirstname">First Name: </h:outputLabel>
-                    <h:inputText id="dependantFirstname" value="#{dependantBean.dependant.firstname}" required="true">
-                        <f:validateRegex pattern="[a-zA-Z ]*" />
+                    </p:inputText>
+                    <p:message for="dependantUsername" styleClass="error" />
+
+                    <p:outputLabel for="dependantFirstname">First Name: </p:outputLabel>
+                    <p:inputText id="dependantFirstname" value="#{dependantBean.dependant.firstname}" required="true">
+                        <f:validateRegex pattern="[a-zA-Z]*" />
                         <f:validateLength maximum="32" />
-                    </h:inputText>
-                    <h:outputLabel for="dependantLastname">Last Name: </h:outputLabel>
-                    <h:inputText id="dependantLastname" value="#{dependantBean.dependant.lastname}" required="true">
-                        <f:validateRegex pattern="[a-zA-Z ]*" />
+                    </p:inputText>
+                    <p:message for="dependantFirstname" styleClass="error" />
+
+                    <p:outputLabel for="dependantLastname">Last Name: </p:outputLabel>
+                    <p:inputText id="dependantLastname" value="#{dependantBean.dependant.lastname}" required="true">
+                        <f:validateRegex pattern="[a-zA-Z]*" />
                         <f:validateLength maximum="32" />
-                    </h:inputText>
-                    <h:outputLabel for="dependantDateOfBirth">Date of Birth:</h:outputLabel>
+                    </p:inputText>
+                    <p:message for="dependantLastname" styleClass="error" />
+
+                    <p:outputLabel for="dependantDateOfBirth">Date of Birth:</p:outputLabel>
                     <p:datePicker id="dependantDateOfBirth" value="#{dependantBean.dependant.dateOfBirth}"
                                   pattern="dd-MM-yyyy"
                                   showOnFocus="true"
                                   showTime="false" timeInput="false"
                                   maxdate="#{calendarBean.currentDate}"/>
-                    <h:message for="dateOfBirth" styleClass="error" />
+                    <p:message for="dependantDateOfBirth" styleClass="error" />
+
                 <h:outputLabel for="dependantGender">Gender: </h:outputLabel>
                 <p:selectOneMenu id="dependantGender" value="#{dependantBean.dependant.gender}" required="true">
                     <f:selectItems value="#{dependantBean.genderValues}" var="gender" itemLabel="#{gender}" itemValue="#{gender}"/>
                 </p:selectOneMenu>
                 <h:message for="dependantGender" styleClass="error"/>
-            </h:panelGrid>
+            </p:panelGrid>
             <br/>
-                <p:commandButton value="Save" update=":searchForm :addDependantForm:addDependantPanel :userTablePanel" actionListener="#{dependantBean.addDependant}" oncomplete="PF('addDependantDialog').hide();" styleClass="register-button"/>
+                <p:commandButton value="Save" update=":searchForm :addDependantForm:addDependantPanel :userTablePanel" actionListener="#{dependantBean.addDependant}" oncomplete="handleSaveCompleteDependant(xhr, status, args)" styleClass="register-button"/>
                 <p:commandButton value="Cancel" onclick="PF('addDependantDialog').hide();" styleClass="register-button" />
             </p:outputPanel>
             </p:dialog>

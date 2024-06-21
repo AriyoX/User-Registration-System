@@ -65,7 +65,7 @@ public class DependantService {
                 validateDependant(dependant);
                 dependantDAO.addDependantToUser(user, dependant);
             } catch (WrongValidationException e) {
-                throw new WrongValidationException(e.getMessage());
+                throw new WrongValidationException("Error registering dependant.");
             }
         } else {
             throw new WrongValidationException("Dependant with that username already exists.");

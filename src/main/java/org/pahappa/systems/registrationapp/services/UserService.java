@@ -33,7 +33,7 @@ public class UserService {
             validateNewUser(user);
             userDAO.add(user);
         } catch (Exception e) {
-            throw new WrongValidationException("Invalid username. Please try again");
+            throw new WrongValidationException(e.getMessage());
         }
     }
 
@@ -65,7 +65,7 @@ public class UserService {
             existingUser.setDateOfBirth(user.getDateOfBirth());
             userDAO.update(existingUser);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new WrongValidationException(e.getMessage());
         }
     }
 
@@ -88,10 +88,10 @@ public class UserService {
     }
 
     public List<User> searchUsers(String query) {
-        if (query == null || query.trim().isEmpty()) {
-            return Collections.emptyList();
-        }
         List<User> users = userDAO.getAllUsers();
+        if (query == null || query.trim().isEmpty()) {
+            return users;
+        }
         return users.stream()
                 .filter(user -> user.getUsername().toLowerCase().contains(query.toLowerCase()) ||
                         user.getFirstname().toLowerCase().contains(query.toLowerCase()) ||

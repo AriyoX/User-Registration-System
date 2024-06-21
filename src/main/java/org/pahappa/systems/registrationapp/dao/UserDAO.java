@@ -196,6 +196,7 @@ public class UserDAO {
         try{
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
+            session.createQuery("delete from Dependant").executeUpdate();
             session.createQuery("delete from User").executeUpdate();
             transaction.commit();
         } catch (Exception e) {

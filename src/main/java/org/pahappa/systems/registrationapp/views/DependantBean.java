@@ -3,7 +3,6 @@ package org.pahappa.systems.registrationapp.views;
 import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.User;
 import org.pahappa.systems.registrationapp.services.DependantService;
-import org.pahappa.systems.registrationapp.services.UserService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -15,7 +14,7 @@ import java.util.List;
 
 @ManagedBean(name = "dependantBean")
 @ViewScoped
-public class DependantBean extends Dependant implements Serializable {
+public class DependantBean implements Serializable {
     private static final long serialVersionUID = 1L;
     private long user_id;
     private Dependant dependant = new Dependant();
@@ -54,10 +53,6 @@ public class DependantBean extends Dependant implements Serializable {
         this.selectedUser = selectedUser;
     }
 
-    public void selectUser(User user) {
-        this.selectedUser = user;
-    }
-
     public long getUser_id() {
         return user_id;
     }
@@ -66,7 +61,10 @@ public class DependantBean extends Dependant implements Serializable {
         this.user_id = user_id;
     }
 
-    // Method to add a dependant to a user
+    public void selectUser(User user) {
+        this.selectedUser = user;
+    }
+
     public void addDependant() {
         try {
             if (selectedUser != null) {
@@ -88,13 +86,13 @@ public class DependantBean extends Dependant implements Serializable {
         return dependantService.getDependantsByUserId(user_id);
     }
 
-    public void deleteDependant(String username){
+    public void deleteDependant(String username) {
         try {
             dependant = dependantService.getDependant(username);
             dependantService.deleteDependant(dependant);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Dependant deleted!"));
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Dependant deleted!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Dependant could not be deleted."));
         }
     }
 }
