@@ -8,13 +8,14 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.List;
 
-@ManagedBean(name = "dependantBean")
+@ManagedBean(name = "adminBean")
 @ViewScoped
-public class DependantBean implements Serializable {
+public class AdminBean implements Serializable {
     private static final long serialVersionUID = 1L;
     private long user_id;
     private Dependant dependant = new Dependant();
@@ -22,9 +23,21 @@ public class DependantBean implements Serializable {
     private User selectedUser;
     private Dependant.Gender[] genderValues;
     private List<Dependant> dependants;
+    private User currentUser;
 
     @PostConstruct
     public void init() {
+        currentUser = getCurrentUser();
+        try {
+            if (currentUser == null || !"ADMIN".equals(currentUser.getRole())) {
+                FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+                ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+                externalContext.getSessionMap().put("currentUser", null);
+                externalContext.redirect(externalContext.getRequestContextPath() + "/pages/login/login.xhtml?faces-redirect=true");
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         genderValues = Dependant.Gender.values();
         dependants = dependantService.getAllDependants();
     }
@@ -94,5 +107,11 @@ public class DependantBean implements Serializable {
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Dependant could not be deleted."));
         }
+    }
+
+    public User getCurrentUser() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
+        return (User) externalContext.getSessionMap().get("currentUser");
     }
 }

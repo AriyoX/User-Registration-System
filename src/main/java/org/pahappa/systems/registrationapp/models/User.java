@@ -12,6 +12,8 @@ public class User extends Person{
     @Column(name = "password", nullable = false)
     private String password;
 
+    private String role;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Dependant> dependants;
 
@@ -40,6 +42,14 @@ public class User extends Person{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override

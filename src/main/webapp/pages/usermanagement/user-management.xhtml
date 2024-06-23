@@ -221,7 +221,7 @@
                         </h:link>
                         <br/>
                         <p:commandButton value="Add"
-                                         actionListener="#{dependantBean.selectUser(user)}"
+                                         actionListener="#{adminBean.selectUser(user)}"
                                          update=":addDependantForm"
                                          oncomplete="PF('addDependantDialog').show()"
                                          styleClass="register-button">
@@ -316,7 +316,7 @@
         </h:form>
 
     <h:form id="addDependantForm">
-            <p:dialog header="Add Dependant for: #{dependantBean.selectedUser.username}"
+            <p:dialog header="Add Dependant for: #{adminBean.selectedUser.username}"
                       widgetVar="addDependantDialog"
                       modal="true"
                       resizable="false"
@@ -327,31 +327,31 @@
                       visible="#{facesContext.validationFailed}"
             >
 
-            <p:outputPanel id="addDependantPanel" rendered="#{not empty dependantBean.selectedUser}">
+            <p:outputPanel id="addDependantPanel" rendered="#{not empty adminBean.selectedUser}">
             <p:panelGrid columns="1" cellpadding="5">
                     <p:outputLabel for="dependantUsername">Username: </p:outputLabel>
-                    <p:inputText id="dependantUsername" value="#{dependantBean.dependant.username}" required="true">
+                    <p:inputText id="dependantUsername" value="#{adminBean.dependant.username}" required="true">
                         <f:validateRegex pattern="[a-zA-Z0-9_]*" />
                         <f:validateLength minimum="3" maximum="16" />
                     </p:inputText>
                     <p:message for="dependantUsername" styleClass="error" />
 
                     <p:outputLabel for="dependantFirstname">First Name: </p:outputLabel>
-                    <p:inputText id="dependantFirstname" value="#{dependantBean.dependant.firstname}" required="true">
+                    <p:inputText id="dependantFirstname" value="#{adminBean.dependant.firstname}" required="true">
                         <f:validateRegex pattern="[a-zA-Z]*" />
                         <f:validateLength maximum="32" />
                     </p:inputText>
                     <p:message for="dependantFirstname" styleClass="error" />
 
                     <p:outputLabel for="dependantLastname">Last Name: </p:outputLabel>
-                    <p:inputText id="dependantLastname" value="#{dependantBean.dependant.lastname}" required="true">
+                    <p:inputText id="dependantLastname" value="#{adminBean.dependant.lastname}" required="true">
                         <f:validateRegex pattern="[a-zA-Z]*" />
                         <f:validateLength maximum="32" />
                     </p:inputText>
                     <p:message for="dependantLastname" styleClass="error" />
 
                     <p:outputLabel for="dependantDateOfBirth">Date of Birth:</p:outputLabel>
-                    <p:datePicker id="dependantDateOfBirth" value="#{dependantBean.dependant.dateOfBirth}"
+                    <p:datePicker id="dependantDateOfBirth" value="#{adminBean.dependant.dateOfBirth}"
                                   pattern="dd-MM-yyyy"
                                   showOnFocus="true"
                                   showTime="false" timeInput="false"
@@ -359,13 +359,13 @@
                     <p:message for="dependantDateOfBirth" styleClass="error" />
 
                 <h:outputLabel for="dependantGender">Gender: </h:outputLabel>
-                <p:selectOneMenu id="dependantGender" value="#{dependantBean.dependant.gender}" required="true">
-                    <f:selectItems value="#{dependantBean.genderValues}" var="gender" itemLabel="#{gender}" itemValue="#{gender}"/>
+                <p:selectOneMenu id="dependantGender" value="#{adminBean.dependant.gender}" required="true">
+                    <f:selectItems value="#{adminBean.genderValues}" var="gender" itemLabel="#{gender}" itemValue="#{gender}"/>
                 </p:selectOneMenu>
                 <h:message for="dependantGender" styleClass="error"/>
             </p:panelGrid>
             <br/>
-                <p:commandButton value="Save" update=":searchForm :addDependantForm:addDependantPanel :userTablePanel" actionListener="#{dependantBean.addDependant}" oncomplete="handleSaveCompleteDependant(xhr, status, args)" styleClass="register-button"/>
+                <p:commandButton value="Save" update=":searchForm :addDependantForm:addDependantPanel :userTablePanel" actionListener="#{adminBean.addDependant}" oncomplete="handleSaveCompleteDependant(xhr, status, args)" styleClass="register-button"/>
                 <p:commandButton value="Cancel" onclick="PF('addDependantDialog').hide();" styleClass="register-button" />
             </p:outputPanel>
             </p:dialog>

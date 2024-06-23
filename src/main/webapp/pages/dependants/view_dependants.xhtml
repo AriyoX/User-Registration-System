@@ -130,10 +130,10 @@
 
     <h1>Dependants</h1>
     <f:metadata>
-        <f:viewParam name="id" value="#{dependantBean.user_id}"/>
+        <f:viewParam name="id" value="#{adminBean.user_id}"/>
     </f:metadata>
     <h:panelGroup id="dependantsTable">
-    <p:dataTable value="#{dependantBean.selectedUserDependants}" var="dependant" styleClass="custom-table">
+    <p:dataTable value="#{adminBean.selectedUserDependants}" var="dependant" styleClass="custom-table">
         <p:column headerText="Username">
             <h:outputText value="#{dependant.username}" />
         </p:column>
@@ -154,7 +154,7 @@
         <p:column>
             <p:column headerText="Actions"/>
             <h:form>
-            <h:commandLink action="#{dependantBean.deleteDependant(dependant.username)}" value="Delete"/>
+            <h:commandLink action="#{adminBean.deleteDependant(dependant.username)}" value="Delete"/>
             </h:form>
         </p:column>
     </p:dataTable>

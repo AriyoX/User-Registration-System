@@ -33,19 +33,16 @@ public class LoginBean {
         this.password = password;
     }
 
-    // return "/pages/main/main.xhtml?#{user.id}";
-    // return "/pages/login.xhtml?faces-redirect=true";
-
     public String login() {
-        if (username.equals("admin") && password.equals("admin")) {
-            return "/pages/index/index.xhtml?faces-redirect=true";
-        }
         User user = userService.loginUser(username, password);
         if (user != null) {
             FacesContext context = FacesContext.getCurrentInstance();
             ExternalContext externalContext = context.getExternalContext();
             externalContext.getSessionMap().put("currentUser", user);
-            return "/pages/main/main.xhtml?faces-redirect=true";
+            if ((user.getRole()).equals("ADMIN")){
+                return "/pages/index/index.xhtml?faces-redirect=true";
+            } else
+                return "/pages/main/main.xhtml?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid username or password", null));

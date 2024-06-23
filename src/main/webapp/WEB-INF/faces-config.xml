@@ -24,8 +24,8 @@
     </managed-bean>
 
     <managed-bean>
-        <managed-bean-name>DependantBean</managed-bean-name>
-        <managed-bean-class>org.pahappa.systems.registrationapp.views.DependantBean</managed-bean-class>
+        <managed-bean-name>AdminBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.AdminBean</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
 

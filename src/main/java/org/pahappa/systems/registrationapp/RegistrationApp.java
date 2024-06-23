@@ -14,26 +14,18 @@ public class RegistrationApp {
     public static void main(String[] args) {
         // UserView userView = new UserView();
         // userView.displayMenu();
-
         Date date = new Date();
-        User user = new User();
-        Dependant dependant = new Dependant();
-
-        user.setUsername("Ariyo123");
-        user.setPassword("123456");
-        user.setFirstname("Ariyo");
-        user.setLastname("Ariyo");
-        user.setDateOfBirth(date);
-
-        dependant.setUsername("Ahumuza123");
-        dependant.setFirstname("Ahumuza");
-        dependant.setLastname("Ahumuza");
-        dependant.setDateOfBirth(date);
-        dependant.setGender(Dependant.Gender.MALE);
-
-        DependantService dependantService = new DependantService();
         UserService userService = new UserService();
-        userService.registerUser(user);
-        dependantService.addDependantToUser(user, dependant);
+        User admin = userService.getUser("admin");
+        if (admin == null) {
+            admin = new User();
+            admin.setUsername("admin");
+            admin.setFirstname("admin");
+            admin.setLastname("admin");
+            admin.setDateOfBirth(date);
+            admin.setPassword("admin");
+            admin.setRole("ADMIN");
+            userService.registerUser(admin);
+        }
     }
 }

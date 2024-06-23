@@ -175,7 +175,9 @@ public class UserDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            users = session.createQuery("from User").list();
+            users = session.createQuery("from User u where u.role != :role")
+                    .setParameter("role", "ADMIN")
+                    .list();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

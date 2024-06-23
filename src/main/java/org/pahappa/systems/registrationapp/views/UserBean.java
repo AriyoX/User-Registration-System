@@ -10,6 +10,7 @@ import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.Collections;
@@ -21,16 +22,27 @@ import java.util.stream.Collectors;
 public class UserBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
     private User user = new User();
     private final UserService userService = new UserService();
     private List<User> users;
     private String searchQuery;
     private User selectedUser;
     private long id;
+    private User currentUser;
 
     @PostConstruct
     public void init() {
+        currentUser = getCurrentUser();
+        try {
+            if (currentUser == null || !"ADMIN".equals(currentUser.getRole())) {
+                FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+                ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+                externalContext.getSessionMap().put("currentUser", null);
+                externalContext.redirect(externalContext.getRequestContextPath() + "/pages/login/login.xhtml?faces-redirect=true");
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         users = userService.getAllUsers();
     }
 
@@ -78,6 +90,7 @@ public class UserBean implements Serializable {
     public String registerUser() {
         try {
             user.setPassword(generateCommonLangPassword());
+            user.setRole("USER");
             userService.registerUser(user);
             user = new User();
             FacesContext.getCurrentInstance().addMessage(null,
@@ -139,5 +152,10 @@ public class UserBean implements Serializable {
         return "12345678";
     }
 
+    public User getCurrentUser() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = context.getExternalContext();
+        return (User) externalContext.getSessionMap().get("currentUser");
+    }
 
 }
