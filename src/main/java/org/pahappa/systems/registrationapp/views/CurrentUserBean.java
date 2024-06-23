@@ -2,8 +2,10 @@ package org.pahappa.systems.registrationapp.views;
 
 import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.User;
+import org.pahappa.systems.registrationapp.services.DependantService;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
@@ -16,13 +18,16 @@ import java.util.List;
 public class CurrentUserBean implements Serializable {
     private static final long serialVersionUID = 1L;
     private User currentUser;
-    private Dependant newDependant;
+    private Dependant newDependant = new Dependant();
     private List<Dependant> currentUserDependants;
+    private final DependantService dependantService = new DependantService();
+    private Dependant.Gender[] genderValues;
 
     @PostConstruct
     public void init() {
         currentUser = getCurrentUser();
         currentUserDependants = currentUser.getDependants();
+        genderValues = Dependant.Gender.values();
         try {
             if (currentUser == null) {
                 FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
@@ -33,6 +38,10 @@ public class CurrentUserBean implements Serializable {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public Dependant.Gender[] getGenderValues() {
+        return genderValues;
     }
 
     public User getCurrentUser() {
@@ -61,5 +70,20 @@ public class CurrentUserBean implements Serializable {
         this.newDependant = newDependant;
     }
 
-
+    public void addDependant() {
+        try {
+            if (currentUser != null) {
+                dependantService.addDependantToUser(currentUser, newDependant);
+                newDependant = new Dependant(); // Reset the dependant object
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Dependant added successfully!", null));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "User not selected!", null));
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error adding dependant: " + e.getMessage(), null));
+        }
+    }
 }
