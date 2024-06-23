@@ -20,6 +20,34 @@
             padding: 30px;
             color: white;
             text-align: center;
+            position: relative;
+        }
+
+        .logout-button {
+            background-color: #ff4757;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            position: absolute; /* Position it in the top right corner */
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #e84118; /* Slightly darker red on hover */
+        }
+
+        .logout-button:active {
+            background-color: #c23616; /* Even darker red on active click */
         }
 
         h1 {
@@ -87,11 +115,16 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
+        .
     </style>
 </h:head>
 <h:body>
     <header>
         <h1>User Registration System</h1>
+        <h:form>
+            <h:commandButton value="Logout" action="#{loginBean.logout}" styleClass="logout-button" />
+        </h:form>
     </header>
     <div class="container">
         <h2>Menu</h2>

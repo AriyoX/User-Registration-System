@@ -9,6 +9,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import java.io.IOException;
 
 @ManagedBean(name = "loginBean")
 @RequestScoped
@@ -48,6 +49,13 @@ public class LoginBean {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid username or password", null));
             return "";
         }
+    }
+
+    public void logout() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        externalContext.getSessionMap().put("currentUser", null);
+        externalContext.redirect(externalContext.getRequestContextPath() + "/pages/login/login.xhtml?faces-redirect=true");
     }
 
 }
