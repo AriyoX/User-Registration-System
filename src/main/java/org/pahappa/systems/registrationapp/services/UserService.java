@@ -99,6 +99,17 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public User loginUser(String username, String password) throws WrongValidationException {
+        User existingUser = userDAO.getUserByUsername(username);
+        if (existingUser != null) {
+            String databasePassword = existingUser.getPassword();
+            if (databasePassword.equals(password)) {
+                return existingUser;
+            }
+        }
+        return null;
+    }
+
     // for new username
     public void validateNewUsername(String username) throws WrongValidationException {
         List<User> users = getAllUsers();

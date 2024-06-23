@@ -19,37 +19,21 @@ public class RegistrationApp {
         User user = new User();
         Dependant dependant = new Dependant();
 
-        user.setUsername("Test1");
-        user.setFirstname("Test");
-        user.setLastname("Test");
+        user.setUsername("Ariyo123");
+        user.setPassword("123456");
+        user.setFirstname("Ariyo");
+        user.setLastname("Ariyo");
         user.setDateOfBirth(date);
 
-        dependant.setUsername("Test234");
-        dependant.setFirstname("Test");
-        dependant.setLastname("Test");
+        dependant.setUsername("Ahumuza123");
+        dependant.setFirstname("Ahumuza");
+        dependant.setLastname("Ahumuza");
         dependant.setDateOfBirth(date);
         dependant.setGender(Dependant.Gender.MALE);
 
         DependantService dependantService = new DependantService();
         UserService userService = new UserService();
-
-        user.setUsername("Test1234");
-        user.setFirstname("Test");
-        user.setLastname("Test");
-        user.setDateOfBirth(date);
         userService.registerUser(user);
         dependantService.addDependantToUser(user, dependant);
-        List<Dependant> dependants = dependantService.getUserDependants(user);
-        for (Dependant d : dependants){
-            System.out.println(d);
-        }
-
-        dependantService.deleteDependant(dependant);
-
-        dependants = dependantService.getUserDependants(user);
-        for (Dependant d : dependants){
-            System.out.println(d);
-        }
-
     }
 }

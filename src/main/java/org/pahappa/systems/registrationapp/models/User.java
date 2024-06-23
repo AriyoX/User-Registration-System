@@ -9,7 +9,10 @@ import java.util.Objects;
 @Table(name = "users")
 public class User extends Person{
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Dependant> dependants;
 
     public User(){
@@ -29,6 +32,14 @@ public class User extends Person{
 
     public void setDependants(List<Dependant> dependants) {
         this.dependants = dependants;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

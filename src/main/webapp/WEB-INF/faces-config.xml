@@ -29,6 +29,24 @@
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
 
+    <managed-bean>
+        <managed-bean-name>MainMenuBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.MainMenuBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>LoginBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.LoginBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>CurrentUserBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.CurrentUserBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+
 
     <navigation-rule>
         <from-view-id>/pages/index/index.xhtml</from-view-id>
@@ -78,12 +96,4 @@
         </navigation-case>
     </navigation-rule>
 
-    <navigation-rule>
-        <from-view-id>*</from-view-id>
-        <navigation-case>
-            <from-outcome>index</from-outcome>
-            <to-view-id>/pages/index/index.xhtml</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
 </faces-config>

@@ -63,23 +63,23 @@
 
         .custom-table th,
         .custom-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
+            border: 1px solid #ddd !important;
+            padding: 8px !important;
+            text-align: left !important;
         }
 
         .custom-table th {
-            background-color: #f2f2f2;
-            color: black;
-            text-transform: uppercase;
+            background-color: #f2f2f2 !important;
+            color: black !important;
+            text-transform: uppercase !important;
         }
 
         .custom-table tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: #f9f9f9 !important;
         }
 
         .custom-table tr:hover {
-            background-color: #ddd;
+            background-color: #ddd !important;
         }
 
         /* Styles for the paginator */
@@ -88,7 +88,7 @@
         }
 
         .ui-paginator .ui-paginator-current {
-            font-weight: bold;
+            font-weight: bold !important;
         }
 
         .ui-paginator .ui-paginator-pages .ui-paginator-page,
@@ -96,13 +96,13 @@
         .ui-paginator .ui-paginator-last,
         .ui-paginator .ui-paginator-next,
         .ui-paginator .ui-paginator-prev {
-            padding: 6px 12px;
-            margin: 0 2px;
-            border: 1px solid #ddd;
-            background-color: #f2f2f2;
-            color: black;
-            cursor: pointer;
-            text-decoration: none;
+            padding: 6px 12px !important;
+            margin: 0 2px !important;
+            border: 1px solid #ddd !important;
+            background-color: #f2f2f2 !important;
+            color: black !important;
+            cursor: pointer !important;
+            text-decoration: none !important;
         }
 
         .ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-active,
@@ -110,10 +110,10 @@
         .ui-paginator .ui-paginator-last.ui-state-disabled,
         .ui-paginator .ui-paginator-next.ui-state-disabled,
         .ui-paginator .ui-paginator-prev.ui-state-disabled {
-            background-color: #007bff;
-            color: white;
-            border-color: #007bff;
-            cursor: default;
+            background-color: #007bff !important;
+            color: white !important;
+            border-color: #007bff !important;
+            cursor: default !important;
         }
 
         .ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-hover,
@@ -121,9 +121,9 @@
         .ui-paginator .ui-paginator-last.ui-state-hover,
         .ui-paginator .ui-paginator-next.ui-state-hover,
         .ui-paginator .ui-paginator-prev.ui-state-hover {
-            background-color: #0056b3;
-            color: white;
-            border-color: #0056b3;
+            background-color: #0056b3 !important;
+            color: white !important;
+            border-color: #0056b3 !important;
         }
 
         .search-box {
@@ -188,10 +188,6 @@
             <p:dataTable id="userTable"
                          value="#{userBean.users}"
                          var="user"
-                         border="1"
-                         cellpadding="2"
-                         cellspacing="0"
-                         style="width:100%; border-collapse:collapse;"
                          styleClass="custom-table"
                          rows="10"
                          paginator="true"

@@ -1,5 +1,6 @@
 package org.pahappa.systems.registrationapp.views;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.pahappa.systems.registrationapp.models.User;
 import org.pahappa.systems.registrationapp.services.UserService;
 import org.primefaces.PrimeFaces;
@@ -11,7 +12,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ManagedBean(name = "userBean")
 @ViewScoped
@@ -24,6 +27,7 @@ public class UserBean implements Serializable {
     private List<User> users;
     private String searchQuery;
     private User selectedUser;
+    private long id;
 
     @PostConstruct
     public void init() {
@@ -48,6 +52,14 @@ public class UserBean implements Serializable {
         this.user = user;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public List<User> getUsers() {
         return users;
     }
@@ -65,6 +77,7 @@ public class UserBean implements Serializable {
     // register method
     public String registerUser() {
         try {
+            user.setPassword(generateCommonLangPassword());
             userService.registerUser(user);
             user = new User();
             FacesContext.getCurrentInstance().addMessage(null,
@@ -121,5 +134,10 @@ public class UserBean implements Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Failed to delete all users."));
         }
     }
+
+    public String generateCommonLangPassword() {
+        return "12345678";
+    }
+
 
 }
