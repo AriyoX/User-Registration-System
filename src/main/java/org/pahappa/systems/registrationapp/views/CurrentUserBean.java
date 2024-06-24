@@ -3,6 +3,8 @@ package org.pahappa.systems.registrationapp.views;
 import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.User;
 import org.pahappa.systems.registrationapp.services.DependantService;
+import org.pahappa.systems.registrationapp.services.UserService;
+import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -16,10 +18,11 @@ import java.util.List;
 @ManagedBean
 @ViewScoped
 public class CurrentUserBean implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3L;
     private User currentUser;
     private Dependant newDependant = new Dependant();
     private List<Dependant> currentUserDependants;
+    private final UserService userService = new UserService();
     private final DependantService dependantService = new DependantService();
     private Dependant.Gender[] genderValues;
 
@@ -55,7 +58,7 @@ public class CurrentUserBean implements Serializable {
     }
 
     public List<Dependant> getCurrentUserDependants() {
-        return currentUserDependants;
+        return currentUser.getDependants();
     }
 
     public void setCurrentUserDependants(List<Dependant> currentUserDependants) {
@@ -74,7 +77,9 @@ public class CurrentUserBean implements Serializable {
         try {
             if (currentUser != null) {
                 dependantService.addDependantToUser(currentUser, newDependant);
+                currentUserDependants.add(newDependant);
                 newDependant = new Dependant(); // Reset the dependant object
+                PrimeFaces.current().ajax().update("form:dataTable");
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Dependant added successfully!", null));
             } else {
@@ -84,6 +89,27 @@ public class CurrentUserBean implements Serializable {
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error adding dependant: " + e.getMessage(), null));
+        }
+    }
+
+    public void deleteDependant(Dependant dependant) {
+        try {
+            // newDependant = dependantService.getDependant(username);
+            currentUserDependants.remove(dependant);
+            dependantService.deleteDependant(dependant);
+            PrimeFaces.current().ajax().update("form:dataTable");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Dependant deleted!"));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Dependant could not be deleted."));
+        }
+    }
+
+    public void updateUser(){
+        try {
+            userService.updateUser(currentUser);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "User updated!"));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
         }
     }
 }

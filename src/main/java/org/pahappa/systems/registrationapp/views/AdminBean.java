@@ -16,7 +16,7 @@ import java.util.List;
 @ManagedBean(name = "adminBean")
 @ViewScoped
 public class AdminBean implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     private long user_id;
     private Dependant dependant = new Dependant();
     private final DependantService dependantService = new DependantService();
@@ -43,7 +43,7 @@ public class AdminBean implements Serializable {
     }
 
     public List<Dependant> getDependants() {
-        return dependants;
+        return dependantService.getAllDependants();
     }
 
     public Dependant.Gender[] getGenderValues() {
@@ -99,9 +99,10 @@ public class AdminBean implements Serializable {
         return dependantService.getDependantsByUserId(user_id);
     }
 
-    public void deleteDependant(String username) {
+    public void deleteDependant(Dependant dependant) {
         try {
-            dependant = dependantService.getDependant(username);
+            // dependant = dependantService.getDependant(username);
+            dependants.remove(dependant);
             dependantService.deleteDependant(dependant);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Dependant deleted!"));
         } catch (Exception e) {

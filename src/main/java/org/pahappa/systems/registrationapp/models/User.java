@@ -14,6 +14,8 @@ public class User extends Person{
 
     private String role;
 
+    private String email;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Dependant> dependants;
 
@@ -50,6 +52,14 @@ public class User extends Person{
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override

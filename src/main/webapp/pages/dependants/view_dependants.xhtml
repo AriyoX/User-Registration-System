@@ -151,10 +151,9 @@
         <p:column headerText="Gender">
             <h:outputText value="#{dependant.gender}" />
         </p:column>
-        <p:column>
-            <p:column headerText="Actions"/>
+        <p:column headerText="Actions">
             <h:form>
-            <h:commandLink action="#{adminBean.deleteDependant(dependant.username)}" value="Delete"/>
+            <h:commandLink action="#{adminBean.deleteDependant(dependant)}" value="Delete"/>
             </h:form>
         </p:column>
     </p:dataTable>

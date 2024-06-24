@@ -1,5 +1,6 @@
 package org.pahappa.systems.registrationapp.views;
 
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -7,11 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean(name = "mainmenu")
-@ApplicationScoped
+@RequestScoped
 public class MainMenuBean{
 
     public List<MenuItem> getMenuItems() {
         List<MenuItem> menuItems = new ArrayList<>();
+        menuItems.add(new MenuItem("Update Your Details", "/pages/update/update.xhtml"));
         menuItems.add(new MenuItem("Register Dependant", "/pages/dependants/register-dependant"));
         menuItems.add(new MenuItem("View Your Dependants", "/pages/dependants/view-user-dependants.xhtml"));
         return menuItems;

@@ -2,6 +2,7 @@ package org.pahappa.systems.registrationapp.views;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.pahappa.systems.registrationapp.models.User;
+import org.pahappa.systems.registrationapp.services.MailService;
 import org.pahappa.systems.registrationapp.services.UserService;
 import org.primefaces.PrimeFaces;
 
@@ -28,21 +29,9 @@ public class UserBean implements Serializable {
     private String searchQuery;
     private User selectedUser;
     private long id;
-    private User currentUser;
 
     @PostConstruct
     public void init() {
-        currentUser = getCurrentUser();
-        try {
-            if (currentUser == null || !"ADMIN".equals(currentUser.getRole())) {
-                FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-                ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-                externalContext.getSessionMap().put("currentUser", null);
-                externalContext.redirect(externalContext.getRequestContextPath() + "/pages/login/login.xhtml?faces-redirect=true");
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-        }
         users = userService.getAllUsers();
     }
 
@@ -91,6 +80,7 @@ public class UserBean implements Serializable {
         try {
             user.setPassword(generateCommonLangPassword());
             user.setRole("USER");
+            MailService.send("ahumuzaariyo@gmail.com", "tiadbqtshilfdprn", user.getEmail(), "Log In Details", "Your password is: " + user.getPassword());
             userService.registerUser(user);
             user = new User();
             FacesContext.getCurrentInstance().addMessage(null,

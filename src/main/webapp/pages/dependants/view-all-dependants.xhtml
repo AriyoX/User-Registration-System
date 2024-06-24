@@ -157,6 +157,11 @@
         <p:column headerText="User">
             <h:outputText value="#{dependant.user.username}"/>
         </p:column>
+        <p:column headerText="Actions">
+            <h:form>
+                <h:commandLink action="#{adminBean.deleteDependant(dependant)}" value="Delete"/>
+            </h:form>
+        </p:column>
 
         <f:facet name="paginatorTopLeft">
             <p:commandButton type="button" icon="pi pi-refresh"/>

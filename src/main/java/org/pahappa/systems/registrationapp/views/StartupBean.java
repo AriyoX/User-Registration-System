@@ -1,6 +1,5 @@
 package org.pahappa.systems.registrationapp.views;
 
-import org.pahappa.systems.registrationapp.exception.WrongValidationException;
 import org.pahappa.systems.registrationapp.models.User;
 import org.pahappa.systems.registrationapp.services.UserService;
 import org.slf4j.Logger;
@@ -17,15 +16,16 @@ import java.util.Date;
 public class StartupBean {
 
     private static final Logger log = LoggerFactory.getLogger(StartupBean.class);
+
     @Inject
-    private UserService userService;
+    UserService userService;
 
     @PostConstruct
     public void init() {
         // Check if admin user exists
         Date date = new Date();
         try {
-            User admin = userService.getUser("admin");
+            User admin = userService.getUser("admin1");
 
             // Create admin user if it doesn't exist
             if (admin == null) {

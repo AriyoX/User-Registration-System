@@ -71,6 +71,12 @@
                 </p:inputText>
                 <p:message for="username" styleClass="error"/>
                 <br/>
+                <p:outputLabel for="email">Email:     </p:outputLabel>
+                <p:inputText id="email" value="#{userBean.user.email}" required="false">
+                   <!-- <f:validateRegex pattern="^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$" /> -->
+                </p:inputText>
+                <p:message for="email" styleClass="error"/>
+                <br/>
                 <p:outputLabel for="firstname">First Name:</p:outputLabel>
                 <p:inputText id="firstname" value="#{userBean.user.firstname}" required="true" validatorMessage="First Name is required">
                     <f:validateRegex pattern="[a-zA-Z ]*" />

@@ -137,6 +137,9 @@
                       paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                       currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
                       rowsPerPageTemplate="5,10,{ShowAll|'All'}">
+            <p:messages id="messages" showDetail="false" closable="true">
+               <p:autoUpdate/>
+            </p:messages>
             <p:column headerText="Username">
                <h:outputText value="#{dependant.username}" />
             </p:column>
@@ -154,8 +157,10 @@
             <p:column headerText="Gender">
                <h:outputText value="#{dependant.gender}" />
             </p:column>
-            <p:column headerText="User">
-               <h:outputText value="#{dependant.user.username}"/>
+            <p:column headerText="Actions">
+               <h:form>
+                  <h:commandLink action="#{CurrentUserBean.deleteDependant(dependant)}" value="Delete"/>
+               </h:form>
             </p:column>
 
             <f:facet name="paginatorTopLeft">

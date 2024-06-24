@@ -58,21 +58,19 @@
     </div>
 
     <div class="container">
-        <h2>Register Dependant</h2>
+        <h2>Update User <h:outputText value="#{currentUserBean.currentUser.username}"/></h2>
         <h:form id="registrationForm">
             <p:messages id="messages" showDetail="false" closable="true">
                 <p:autoUpdate/>
             </p:messages>
-            <p:outputLabel for="username">Username:</p:outputLabel>
-            <p:inputText id="username" value="#{currentUserBean.newDependant.username}" required="true" validatorMessage="User name is required">
-                <f:validateRegex pattern="[a-zA-Z0-9_]*" />
-                <f:validateLength minimum="3" maximum="16" />
-                <f:validateRequired/>
-            </p:inputText>
-            <p:message for="username" styleClass="error"/>
             <br/>
+            <p:outputLabel for="email">Email:     </p:outputLabel>
+            <p:inputText id="email" value="#{userBean.user.email}" required="false">
+                <!-- <f:validateRegex pattern="^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$" /> -->
+            </p:inputText>
+            <p:message for="email" styleClass="error"/>
             <p:outputLabel for="firstname">First Name:</p:outputLabel>
-            <p:inputText id="firstname" value="#{currentUserBean.newDependant.firstname}" required="true" validatorMessage="First Name is required">
+            <p:inputText id="firstname" value="#{currentUserBean.currentUser.firstname}" required="true" validatorMessage="First Name is required">
                 <f:validateRegex pattern="[a-zA-Z ]*" />
                 <f:validateLength minimum="3" maximum="32" />
                 <f:validateRequired/>
@@ -80,7 +78,7 @@
             <p:message for="firstname" styleClass="error" />
             <br/>
             <p:outputLabel for="lastname">Last Name:</p:outputLabel>
-            <p:inputText id="lastname" value="#{currentUserBean.newDependant.lastname}" required="true" validatorMessage="Last Name is required">
+            <p:inputText id="lastname" value="#{currentUserBean.currentUser.lastname}" required="true" validatorMessage="Last Name is required">
                 <f:validateRegex pattern="[a-zA-Z ]*" />
                 <f:validateLength minimum="3" maximum="32" />
                 <f:validateRequired/>
@@ -88,20 +86,14 @@
             <p:message for="lastname" styleClass="error" />
             <br/>
             <p:outputLabel for="dateOfBirth">Date of Birth:</p:outputLabel>
-            <p:datePicker id="dateOfBirth" value="#{currentUserBean.newDependant.dateOfBirth}"
+            <p:datePicker id="dateOfBirth" value="#{currentUserBean.currentUser.dateOfBirth}"
                           pattern="dd-MM-yyyy"
                           showOnFocus="true"
                           showTime="false" timeInput="false"
                           maxdate="#{calendarBean.currentDate}" />
             <p:message for="dateOfBirth" styleClass="error" />
             <br/>
-            <h:outputLabel for="dependantGender">Gender: </h:outputLabel>
-            <p:selectOneMenu id="dependantGender" value="#{currentUserBean.newDependant.gender}" required="true">
-                <f:selectItems value="#{currentUserBean.genderValues}" var="gender" itemLabel="#{gender}" itemValue="#{gender}"/>
-            </p:selectOneMenu>
-            <br/>
-            <h:message for="dependantGender" styleClass="error"/>
-            <h:commandButton value="Register" action="#{currentUserBean.addDependant()}" styleClass="register-button"/>
+            <h:commandButton value="Update" action="#{currentUserBean.updateUser()}" styleClass="register-button"/>
         </h:form>
     </div>
     <h:form>
