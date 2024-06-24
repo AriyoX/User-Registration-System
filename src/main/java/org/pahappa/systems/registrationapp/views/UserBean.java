@@ -80,8 +80,8 @@ public class UserBean implements Serializable {
         try {
             user.setPassword(generateCommonLangPassword());
             user.setRole("USER");
-            MailService.send("ahumuzaariyo@gmail.com", "tiadbqtshilfdprn", user.getEmail(), "Log In Details", "Your password is: " + user.getPassword());
             userService.registerUser(user);
+            MailService.send("ahumuzaariyo@gmail.com", "tiadbqtshilfdprn", user.getEmail(), "Log In Details", "Your password is: " + user.getPassword());
             user = new User();
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Registration Successful!", null));
@@ -142,10 +142,5 @@ public class UserBean implements Serializable {
         return "12345678";
     }
 
-    public User getCurrentUser() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        ExternalContext externalContext = context.getExternalContext();
-        return (User) externalContext.getSessionMap().get("currentUser");
-    }
 
 }

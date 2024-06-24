@@ -8,6 +8,7 @@ import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.Dependant.Gender;
 import org.pahappa.systems.registrationapp.models.User;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class DependantDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            dependants = (List<Dependant>) session.createQuery("FROM Dependant WHERE user.id = :userId")
+            dependants = (List<Dependant>) session.createQuery("FROM Dependant WHERE user.id = :userId AND deleted = false")
                     .setParameter("userId", user.getId())
                     .list();
         } catch (Exception e) {
@@ -114,7 +115,7 @@ public class DependantDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            dependants = (List<Dependant>) session.createQuery("FROM Dependant").list();
+            dependants = (List<Dependant>) session.createQuery("FROM Dependant WHERE deleted = false").list();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -126,6 +127,9 @@ public class DependantDAO {
                 session.close();
             }
         }
+        if (dependants == null){
+            return Collections.emptyList();
+        }
         return dependants;
     }
 
@@ -136,7 +140,7 @@ public class DependantDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            dependant = (Dependant) session.createQuery("FROM Dependant WHERE username = :username")
+            dependant = (Dependant) session.createQuery("FROM Dependant WHERE username = :username AND deleted = false")
                     .setParameter("username", username)
                     .uniqueResult();
             transaction.commit();
@@ -160,7 +164,7 @@ public class DependantDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            dependant = (Dependant) session.createQuery("FROM Dependant WHERE gender = :gender")
+            dependant = (Dependant) session.createQuery("FROM Dependant WHERE gender = :gender AND deleted = false")
                     .setParameter("gender", gender)
                     .uniqueResult();
             transaction.commit();
@@ -184,7 +188,7 @@ public class DependantDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            dependant = (Dependant) session.createQuery("FROM Dependant WHERE firstname = :firstname")
+            dependant = (Dependant) session.createQuery("FROM Dependant WHERE firstname = :firstname AND deleted = false")
                     .setParameter("firstname", firstname)
                     .uniqueResult();
             transaction.commit();
@@ -208,7 +212,7 @@ public class DependantDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            dependant = (Dependant) session.createQuery("FROM Dependant WHERE lastname = :lastname")
+            dependant = (Dependant) session.createQuery("FROM Dependant WHERE lastname = :lastname AND deleted = false")
                     .setParameter("lastname", lastname)
                     .uniqueResult();
             transaction.commit();
@@ -232,7 +236,7 @@ public class DependantDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            dependants = (List<Dependant>) session.createQuery("FROM Dependant WHERE user.id = :user_id")
+            dependants = (List<Dependant>) session.createQuery("FROM Dependant WHERE user.id = :user_id AND deleted = false")
                     .setParameter("user_id", user_id)
                     .list();
             transaction.commit();
@@ -271,5 +275,26 @@ public class DependantDAO {
             }
         }
     }
+
+    public void update(Dependant dependant){
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.update(dependant);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
 
 }

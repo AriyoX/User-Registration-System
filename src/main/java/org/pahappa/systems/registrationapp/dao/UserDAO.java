@@ -105,7 +105,7 @@ public class UserDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            user = (User) session.createQuery("FROM User WHERE username = :username")
+            user = (User) session.createQuery("FROM User WHERE username = :username and deleted = false")
                     .setParameter("username", username)
                     .uniqueResult();
             transaction.commit();
@@ -129,7 +129,7 @@ public class UserDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            user = (User) session.createQuery("FROM User WHERE firstname = :firstname")
+            user = (User) session.createQuery("FROM User WHERE firstname = :firstname and deleted = false")
                     .setParameter("firstname", firstname)
                     .uniqueResult();
             transaction.commit();
@@ -153,7 +153,7 @@ public class UserDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            user = (User) session.createQuery("FROM User WHERE lastname = :lastname")
+            user = (User) session.createQuery("FROM User WHERE lastname = :lastname and deleted = false")
                     .setParameter("lastname", lastname)
                     .uniqueResult();
             transaction.commit();
@@ -177,7 +177,7 @@ public class UserDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            users = session.createQuery("from User u where u.role != :role")
+            users = session.createQuery("from User u where u.role != :role and deleted = false")
                     .setParameter("role", "ADMIN")
                     .list();
             transaction.commit();
@@ -247,7 +247,7 @@ public class UserDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            user = (User) session.createQuery("from User where email = :email")
+            user = (User) session.createQuery("from User where email = :email and deleted = false")
                     .setParameter("email", email)
                     .uniqueResult();
             transaction.commit();

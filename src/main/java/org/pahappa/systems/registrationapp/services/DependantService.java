@@ -62,13 +62,30 @@ public class DependantService {
         User existingUser = userDAO.getUserByUsername(user.getUsername());
         if(existingDependant == null && existingUser != null){
             try {
-                validateDependant(dependant);
+                validateNewDependant(dependant);
                 dependantDAO.addDependantToUser(user, dependant);
             } catch (WrongValidationException e) {
                 throw new WrongValidationException("Error registering dependant.");
             }
         } else {
             throw new WrongValidationException("Dependant with that username already exists.");
+        }
+    }
+
+    public void updateDependant(Dependant dependant) throws WrongValidationException {
+        Dependant dependantToUpdate = dependantDAO.getDependantByUsername(dependant.getUsername());
+        if (dependantToUpdate == null) {
+            throw new WrongValidationException("Dependant does not exist.");
+        }
+        try {
+            validateExistingDependant(dependantToUpdate);
+            dependantToUpdate.setFirstname(dependant.getFirstname());
+            dependantToUpdate.setLastname(dependant.getLastname());
+            dependantToUpdate.setGender(dependant.getGender());
+            dependantToUpdate.setDateOfBirth(dependant.getDateOfBirth());
+            dependantDAO.update(dependantToUpdate);
+        } catch (WrongValidationException e) {
+            throw new WrongValidationException(e.getMessage());
         }
     }
 
@@ -97,8 +114,14 @@ public class DependantService {
         }
     }
 
-    public void validateDependant(Dependant dependant) throws WrongValidationException {
+    public void validateNewDependant(Dependant dependant) throws WrongValidationException {
         validateDependantUsername(dependant.getUsername());
+        userService.validateFirstName(dependant.getFirstname());
+        userService.validateLastName(dependant.getLastname());
+        userService.validateDateOfBirth(simpleDateFormat.format(dependant.getDateOfBirth()));
+    }
+
+    public void validateExistingDependant(Dependant dependant) throws WrongValidationException {
         userService.validateFirstName(dependant.getFirstname());
         userService.validateLastName(dependant.getLastname());
         userService.validateDateOfBirth(simpleDateFormat.format(dependant.getDateOfBirth()));

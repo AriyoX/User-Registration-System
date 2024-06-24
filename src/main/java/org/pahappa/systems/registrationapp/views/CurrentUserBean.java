@@ -26,6 +26,7 @@ public class CurrentUserBean implements Serializable {
     private final UserService userService = new UserService();
     private final DependantService dependantService = new DependantService();
     private Dependant.Gender[] genderValues;
+    private Dependant selectedDependant;
 
     @PostConstruct
     public void init() {
@@ -59,7 +60,7 @@ public class CurrentUserBean implements Serializable {
     }
 
     public List<Dependant> getCurrentUserDependants() {
-        return currentUser.getDependants();
+        return dependantService.getUserDependants(currentUser);
     }
 
     public void setCurrentUserDependants(List<Dependant> currentUserDependants) {
@@ -74,12 +75,16 @@ public class CurrentUserBean implements Serializable {
         this.newDependant = newDependant;
     }
 
-    public long getUser_id() {
-        return user_id;
+    public Dependant getSelectedDependant() {
+        return selectedDependant;
     }
 
-    public void setUser_id(long user_id) {
-        this.user_id = user_id;
+    public void setSelectedDependant(Dependant selectedDependant) {
+        this.selectedDependant = selectedDependant;
+    }
+
+    public void selectDependant(Dependant dependant) {
+        this.selectedDependant = dependant;
     }
 
     public void addDependant() {
@@ -116,6 +121,16 @@ public class CurrentUserBean implements Serializable {
         try {
             userService.updateUser(currentUser);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", "User updated!"));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
+        }
+    }
+
+    public void updateDependant() {
+        try {
+            dependantService.updateDependant(selectedDependant);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "User updated!"));
+            currentUserDependants = currentUser.getDependants();
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
         }

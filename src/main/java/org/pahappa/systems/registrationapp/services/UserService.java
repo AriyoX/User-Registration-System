@@ -59,7 +59,7 @@ public class UserService {
             throw new WrongValidationException("User does not exist. Please try again.");
         }
         try{
-            // validateExistingUser(existingUser);
+            validateExistingUser(existingUser);
             existingUser.setFirstname(user.getFirstname());
             existingUser.setLastname(user.getLastname());
             existingUser.setDateOfBirth(user.getDateOfBirth());
@@ -215,6 +215,7 @@ public class UserService {
         validateLastName(user.getLastname());
         validateBothNames(user.getFirstname(), user.getLastname());
         validateDateOfBirth(simpleDateFormat.format(user.getDateOfBirth()));
+        validateNewEmail(user.getEmail());
     }
 
     public void validateExistingUser(User user) throws WrongValidationException {
@@ -223,6 +224,7 @@ public class UserService {
         validateLastName(user.getLastname());
         validateBothNames(user.getFirstname(), user.getLastname());
         validateDateOfBirth(simpleDateFormat.format(user.getDateOfBirth()));
+        validateExistingEmail(user.getEmail());
     }
 
     public void isFunctionExited(String str) throws ExitException {
@@ -231,4 +233,20 @@ public class UserService {
         }
     }
 
+    public void validateNewEmail(String email){
+        List<User> users = getAllUsers();
+        Optional<User> optionalUser = users.stream().filter(user -> user.getEmail().equals(email)).findFirst();
+        if (optionalUser.isPresent()){
+            throw new WrongValidationException("Email is already in use. Please try again.");
+        }
+//        if(!email.matches("^(.+)@(\\\\S+)$")){
+//            throw new WrongValidationException("Invalid email address. Please try again.");
+//        }
+    }
+
+    public void validateExistingEmail(String email){
+        if(!email.matches("^(.+)@(\\\\S+)$")){
+            throw new WrongValidationException("Invalid email address. Please try again.");
+        }
+    }
 }
