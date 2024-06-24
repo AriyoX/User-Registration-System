@@ -54,15 +54,17 @@ public class UserService {
     }
 
     public void updateUser(User user) throws WrongValidationException {
-        User existingUser = userDAO.getUserByUsername(user.getUsername());
+        User existingUser = userDAO.getUserById(user.getId());
         if (existingUser == null) {
             throw new WrongValidationException("User does not exist. Please try again.");
         }
         try{
-            validateExistingUser(existingUser);
+            // validateExistingUser(existingUser);
             existingUser.setFirstname(user.getFirstname());
             existingUser.setLastname(user.getLastname());
             existingUser.setDateOfBirth(user.getDateOfBirth());
+            existingUser.setPassword(user.getPassword());
+            existingUser.setEmail(user.getEmail());
             userDAO.update(existingUser);
         } catch (Exception e) {
             throw new WrongValidationException(e.getMessage());
@@ -70,9 +72,9 @@ public class UserService {
     }
 
     public void deleteUser(User user) {
-        User existingUser = userDAO.getUserByUsername(user.getUsername());
+        User existingUser = userDAO.getUserById(user.getId());
         try{
-            validateExistingUser(user);
+            // validateExistingUser(user);
             userDAO.delete(existingUser);
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,12 +101,19 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public User loginUser(String username, String password) throws WrongValidationException {
-        User existingUser = userDAO.getUserByUsername(username);
-        if (existingUser != null) {
-            String databasePassword = existingUser.getPassword();
+    public User loginUser(String identifier, String password) throws WrongValidationException {
+        User existingUserWithUsername = userDAO.getUserByUsername(identifier);
+        User existingUserWithEmail = userDAO.getUserByEmail(identifier);
+        if (existingUserWithUsername != null) {
+            String databasePassword = existingUserWithUsername.getPassword();
             if (databasePassword.equals(password)) {
-                return existingUser;
+                return existingUserWithUsername;
+            }
+        }
+        if (existingUserWithEmail != null) {
+            String databasePassword = existingUserWithEmail.getPassword();
+            if (databasePassword.equals(password)) {
+                return existingUserWithEmail;
             }
         }
         return null;

@@ -14,6 +14,7 @@ import java.io.IOException;
 @ManagedBean(name = "loginBean")
 @RequestScoped
 public class LoginBean {
+    // username refers to either email or username
     private String username;
     private String password;
     private final UserService userService = new UserService();

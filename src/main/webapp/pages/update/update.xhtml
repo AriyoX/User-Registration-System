@@ -65,7 +65,7 @@
             </p:messages>
             <br/>
             <p:outputLabel for="email">Email:     </p:outputLabel>
-            <p:inputText id="email" value="#{userBean.user.email}" required="false">
+            <p:inputText id="email" value="#{currentUserBean.currentUser.email}" required="false">
                 <!-- <f:validateRegex pattern="^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$" /> -->
             </p:inputText>
             <p:message for="email" styleClass="error"/>
@@ -85,6 +85,12 @@
             </p:inputText>
             <p:message for="lastname" styleClass="error" />
             <br/>
+            <p:outputLabel for="password">Password:</p:outputLabel>
+            <p:password id="password" value="#{currentUserBean.currentUser.password}" required="true">
+            </p:password>
+            <p:message for="password" styleClass="error"/>
+            <br/>
+            <p:message for="email" styleClass="error"/>
             <p:outputLabel for="dateOfBirth">Date of Birth:</p:outputLabel>
             <p:datePicker id="dateOfBirth" value="#{currentUserBean.currentUser.dateOfBirth}"
                           pattern="dd-MM-yyyy"

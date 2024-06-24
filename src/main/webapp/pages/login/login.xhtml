@@ -64,18 +64,16 @@
             <p:messages id="messages" showDetail="false" closable="true">
                 <p:autoUpdate/>
             </p:messages>
-            <p:outputLabel for="username">Username:</p:outputLabel>
-            <p:inputText id="username" value="#{loginBean.username}" required="true" validatorMessage="User name is required">
-                <f:validateRegex pattern="[a-zA-Z0-9_]*" />
-                <f:validateLength minimum="3" maximum="16" />
+            <p:outputLabel for="username">Username or Email:</p:outputLabel>
+            <p:inputText id="username" value="#{loginBean.username}" required="true" validatorMessage="User name or Eail is required">
                 <f:validateRequired/>
             </p:inputText>
             <p:message for="username" styleClass="error"/>
             <br/>
-            <p:outputLabel for="firstname">Password:</p:outputLabel>
-            <p:password id="firstname" value="#{loginBean.password}" required="true" validatorMessage="Password is required">
+            <p:outputLabel for="password">Password:</p:outputLabel>
+            <p:password id="password" value="#{loginBean.password}" required="true" validatorMessage="Password is required">
             </p:password>
-            <p:message for="firstname" styleClass="error" />
+            <p:message for="password" styleClass="error" />
             <br/>
         <h:commandButton value="Login" action="#{loginBean.login}"/>
         </h:form>

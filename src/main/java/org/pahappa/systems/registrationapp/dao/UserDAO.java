@@ -235,4 +235,28 @@ public class UserDAO {
         return user;
     }
 
+    public User getUserByEmail(String email) {
+        Transaction transaction = null;
+        Session session = null;
+        User user = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            user = (User) session.createQuery("from User where email = :email")
+                    .setParameter("email", email)
+                    .uniqueResult();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return user;
+    }
+
 }
