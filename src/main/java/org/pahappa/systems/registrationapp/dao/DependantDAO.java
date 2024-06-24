@@ -86,25 +86,25 @@ public class DependantDAO {
         return dependants;
     }
 
-    public void delete(Dependant dependant){
-        Transaction transaction = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            session.delete(dependant);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-    }
+//    public void delete(Dependant dependant){
+//        Transaction transaction = null;
+//        Session session = null;
+//        try {
+//            session = sessionFactory.openSession();
+//            transaction = session.beginTransaction();
+//            session.delete(dependant);
+//            transaction.commit();
+//        } catch (Exception e) {
+//            if (transaction != null) {
+//                transaction.rollback();
+//            }
+//            e.printStackTrace();
+//        } finally {
+//            if (session != null) {
+//                session.close();
+//            }
+//        }
+//    }
 
     public List<Dependant> getAllDependants(){
         Transaction transaction = null;
@@ -246,6 +246,28 @@ public class DependantDAO {
             }
         }
         return dependants;
+    }
+
+    public void delete(Dependant dependant){
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            dependant = (Dependant) session.get(Dependant.class, dependant.getId());
+            dependant.setDeleted(true); // Mark as deleted
+            session.update(dependant);   // Update the entity
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
     }
 
 }

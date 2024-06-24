@@ -1,6 +1,9 @@
 package org.pahappa.systems.registrationapp.models;
 
+import org.hibernate.annotations.SQLDelete;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @MappedSuperclass
@@ -20,6 +23,12 @@ public class Person {
 
     @Column(name = "date_of_birth")
     protected Date dateOfBirth;
+
+    @Column(name = "deleted", nullable = false)
+    protected Boolean deleted = false;
+
+    @Column(name = "deleted_at")
+    protected Date deletedAt;
 
     public String getUsername() {
         return username;
@@ -59,5 +68,21 @@ public class Person {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public Date getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(Date deletedAt) {
+        this.deletedAt = deletedAt;
     }
 }

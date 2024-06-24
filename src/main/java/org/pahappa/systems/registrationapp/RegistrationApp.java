@@ -25,6 +25,7 @@ public class RegistrationApp {
             admin.setDateOfBirth(date);
             admin.setPassword("admin");
             admin.setRole("ADMIN");
+            // admin.setDeleted(false);
             userService.registerUser(admin);
         }
     }

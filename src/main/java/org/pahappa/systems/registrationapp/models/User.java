@@ -1,5 +1,8 @@
 package org.pahappa.systems.registrationapp.models;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -7,6 +10,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users")
+@SQLDelete(sql = "UPDATE users SET deleted = true, deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@Where(clause = "deleted = 0")
 public class User extends Person{
 
     @Column(name = "password", nullable = false)

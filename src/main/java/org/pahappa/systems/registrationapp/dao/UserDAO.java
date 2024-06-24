@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 import org.pahappa.systems.registrationapp.config.SessionConfiguration;
 import org.pahappa.systems.registrationapp.models.User;
 
+import java.util.Collections;
 import java.util.List;
 
 public class UserDAO {
@@ -76,25 +77,25 @@ public class UserDAO {
         }
     }
 
-    public void delete(User user) {
-        Transaction transaction = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            session.delete(user);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-    }
+//    public void delete(User user) {
+//        Transaction transaction = null;
+//        Session session = null;
+//        try {
+//            session = sessionFactory.openSession();
+//            transaction = session.beginTransaction();
+//            session.delete(user);
+//            transaction.commit();
+//        } catch (Exception e) {
+//            if (transaction != null) {
+//                transaction.rollback();
+//            }
+//            e.printStackTrace();
+//        } finally {
+//            if (session != null) {
+//                session.close();
+//            }
+//        }
+//    }
 
     public User getUserByUsername(String username) {
         Transaction transaction = null;
@@ -189,6 +190,9 @@ public class UserDAO {
                 session.close();
             }
         }
+        if (users == null) {
+            return Collections.emptyList();
+        }
         return users;
     }
 
@@ -257,6 +261,28 @@ public class UserDAO {
             }
         }
         return user;
+    }
+
+    public void delete(User user){
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            user = (User) session.get(User.class, user.getId());
+            user.setDeleted(true);
+            session.update(user);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
     }
 
 }

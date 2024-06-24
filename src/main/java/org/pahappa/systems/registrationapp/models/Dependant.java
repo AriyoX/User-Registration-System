@@ -1,5 +1,8 @@
 package org.pahappa.systems.registrationapp.models;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -7,6 +10,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "dependants")
+@SQLDelete(sql = "UPDATE dependants SET deleted = true, deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@Where(clause = "deleted = 0")
 public class Dependant extends Person{
 
     public enum Gender {
@@ -48,6 +53,7 @@ public class Dependant extends Person{
     public void setGender(Gender gender) {
         this.gender = gender;
     }
+
 
     @Override
     public boolean equals(Object o) {
