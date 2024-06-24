@@ -20,6 +20,7 @@ import java.util.List;
 public class CurrentUserBean implements Serializable {
     private static final long serialVersionUID = 3L;
     private User currentUser;
+    private long user_id;
     private Dependant newDependant = new Dependant();
     private List<Dependant> currentUserDependants;
     private final UserService userService = new UserService();
@@ -73,6 +74,14 @@ public class CurrentUserBean implements Serializable {
         this.newDependant = newDependant;
     }
 
+    public long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(long user_id) {
+        this.user_id = user_id;
+    }
+
     public void addDependant() {
         try {
             if (currentUser != null) {
@@ -97,7 +106,6 @@ public class CurrentUserBean implements Serializable {
             // newDependant = dependantService.getDependant(username);
             currentUserDependants.remove(dependant);
             dependantService.deleteDependant(dependant);
-            PrimeFaces.current().ajax().update("form:dataTable");
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Dependant deleted!"));
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Dependant could not be deleted."));

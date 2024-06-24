@@ -7,6 +7,7 @@ import org.pahappa.systems.registrationapp.config.SessionConfiguration;
 import org.pahappa.systems.registrationapp.models.User;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class UserDAO {
@@ -271,6 +272,7 @@ public class UserDAO {
             transaction = session.beginTransaction();
             user = (User) session.get(User.class, user.getId());
             user.setDeleted(true);
+            user.setDeletedAt(new Date());
             session.update(user);
             transaction.commit();
         } catch (Exception e) {

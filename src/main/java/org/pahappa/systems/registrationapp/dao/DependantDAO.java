@@ -8,6 +8,7 @@ import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.Dependant.Gender;
 import org.pahappa.systems.registrationapp.models.User;
 
+import java.util.Date;
 import java.util.List;
 
 public class DependantDAO {
@@ -256,6 +257,7 @@ public class DependantDAO {
             transaction = session.beginTransaction();
             dependant = (Dependant) session.get(Dependant.class, dependant.getId());
             dependant.setDeleted(true); // Mark as deleted
+            dependant.setDeletedAt(new Date());
             session.update(dependant);   // Update the entity
             transaction.commit();
         } catch (Exception e) {
