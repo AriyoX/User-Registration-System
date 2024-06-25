@@ -122,6 +122,13 @@
       }
 
    </style>
+   <script type="text/javascript">
+      function handleSaveCompleteUpdate(xhr, status, args) {
+         if (!args.validationFailed) {
+            PF('updateDependantDialog').hide();
+         }
+      }
+   </script>
 </h:head>
 <h:body>
    <div class="header">
@@ -129,7 +136,20 @@
    </div>
    <h1>Dependants for: <h:outputText value="#{CurrentUserBean.currentUser}"/></h1>
    <div class="container">
-         <p:dataTable var="dependant" value="#{CurrentUserBean.currentUserDependants}"
+
+      <h:form id="filterForm">
+         <h:panelGrid columns="2">
+            <h:outputLabel for="genderFilter" value="Filter by Gender:" />
+            <p:selectOneMenu id="genderFilter" value="#{CurrentUserBean.selectedGender}" required="false">
+               <f:selectItem itemLabel="All" itemValue="#{null}" />
+               <f:selectItems value="#{currentUserBean.genderValues}" var="gender" itemLabel="#{gender}" itemValue="#{gender}" />
+               <p:ajax event="change" update=":DependantTable" execute="genderFilter" listener="#{CurrentUserBean.filterDependantsByGender}"/>
+            </p:selectOneMenu>
+         </h:panelGrid>
+      </h:form>
+
+      <h:panelGroup id="dependantTablePanel">
+         <p:dataTable var="dependant" id="DependantTable" value="#{CurrentUserBean.currentUserDependants}"
                       rows="10"
                       paginator="true"
                       paginatorPosition="both"
@@ -159,6 +179,12 @@
             <p:column headerText="Actions">
                <h:form>
                   <h:commandButton action="#{CurrentUserBean.deleteDependant(dependant)}" value="Delete"/>
+                  <p:commandButton value="Update"
+                                   actionListener="#{CurrentUserBean.selectDependant(dependant)}"
+                                   update=":updateForm :dependantTablePanel"
+                                   oncomplete="PF('updateDependantDialog').show()"
+                                   styleClass="register-button">
+                  </p:commandButton>
                </h:form>
             </p:column>
 
@@ -171,12 +197,59 @@
             </f:facet>
 
          </p:dataTable>
+      </h:panelGroup>
    </div>
    <h:form>
       <div class="buttons">
          <h:commandButton value="Back" onclick="history.back()" type="button" styleClass="register-button" />
          <h:commandButton value="Menu" action="/pages/main/main.xhtml" styleClass="register-button" />
       </div>
+   </h:form>
+
+   <h:form id="updateForm">
+      <p:dialog header="Update Dependant: #{CurrentUserBean.selectedDependant.username}"
+                widgetVar="updateDependantDialog"
+                modal="true"
+                resizable="false"
+                showEffect="fade"
+                hideEffect="fade"
+                closable="true"
+                visible="#{facesContext.validationFailed}">
+         <p:outputLabel id="updatePanel" rendered="true">
+            <p:panelGrid columns="1">
+               <p:outputLabel for="firstname">First Name: </p:outputLabel>
+               <p:inputText id="firstname" value="#{CurrentUserBean.selectedDependant.firstname}" required="true">
+                  <f:validateRegex pattern="[a-zA-Z]*" />
+                  <f:validateLength minimum="3" maximum="32" />
+               </p:inputText>
+               <h:message for="firstname" styleClass="error"/>
+
+               <p:outputLabel for="lastname">Last Name: </p:outputLabel>
+               <p:inputText id="lastname" value="#{CurrentUserBean.selectedDependant.lastname}" required="true">
+                  <f:validateRegex pattern="[a-zA-Z]*" />
+                  <f:validateLength minimum="3" maximum="32" />
+               </p:inputText>
+               <h:message for="lastname" styleClass="error"/>
+
+               <p:outputLabel for="dateOfBirth">Date of Birth:</p:outputLabel>
+               <p:datePicker id="dateOfBirth" value="#{CurrentUserBean.selectedDependant.dateOfBirth}"
+                             pattern="dd-MM-yyyy"
+                             showOnFocus="true"
+                             showTime="false" timeInput="false"
+                             maxdate="#{calendarBean.currentDate}"/>
+               <p:message for="dateOfBirth" styleClass="error" />
+
+               <p:outputLabel for="gender">Gender: </p:outputLabel>
+               <p:selectOneMenu id="gender" value="#{CurrentUserBean.selectedDependant.gender}" required="true">
+                  <f:selectItems value="#{CurrentUserBean.genderValues}" var="gender" itemLabel="#{gender}" itemValue="#{gender}"/>
+               </p:selectOneMenu>
+               <h:message for="gender" styleClass="error"/>
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="Save" update=":updateForm:updatePanel :dependantTablePanel" actionListener="#{CurrentUserBean.updateDependant}" oncomplete="handleSaveCompleteUpdate(xhr, status, args)" styleClass="register-button"/>
+            <p:commandButton value="Cancel" onclick="PF('updateDependantDialog').hide();" styleClass="register-button"/>
+         </p:outputLabel>
+      </p:dialog>
    </h:form>
 
 </h:body>

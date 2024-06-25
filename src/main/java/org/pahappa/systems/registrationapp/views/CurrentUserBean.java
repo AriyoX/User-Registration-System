@@ -13,7 +13,9 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ManagedBean
 @ViewScoped
@@ -27,12 +29,16 @@ public class CurrentUserBean implements Serializable {
     private final DependantService dependantService = new DependantService();
     private Dependant.Gender[] genderValues;
     private Dependant selectedDependant;
+    private List<Dependant> filteredDependants;
+    private Dependant.Gender selectedGender;
 
     @PostConstruct
     public void init() {
         currentUser = getCurrentUser();
-        currentUserDependants = currentUser.getDependants();
+        currentUserDependants = dependantService.getUserDependants(currentUser);
+        filteredDependants = currentUserDependants;
         genderValues = Dependant.Gender.values();
+        selectedDependant = new Dependant();
         try {
             if (currentUser == null) {
                 FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
@@ -87,6 +93,34 @@ public class CurrentUserBean implements Serializable {
         this.selectedDependant = dependant;
     }
 
+    public List<Dependant> getFilteredDependants() {
+        return filteredDependants;
+    }
+
+    public void setFilteredDependants(List<Dependant> filteredDependants) {
+        this.filteredDependants = filteredDependants;
+    }
+
+    public Dependant.Gender getSelectedGender() {
+        return selectedGender;
+    }
+
+    public void setSelectedGender(Dependant.Gender selectedGender) {
+        this.selectedGender = selectedGender;
+    }
+
+    public void filterDependantsByGender() {
+        if (selectedGender == null) {
+            filteredDependants = new ArrayList<>(currentUserDependants);
+            PrimeFaces.current().ajax().update("dependantTable");
+        } else {
+            filteredDependants = currentUserDependants.stream()
+                    .filter(dependant -> dependant.getGender() == selectedGender)
+                    .collect(Collectors.toList());
+            PrimeFaces.current().ajax().update("dependantTable");
+        }
+    }
+
     public void addDependant() {
         try {
             if (currentUser != null) {
@@ -130,7 +164,7 @@ public class CurrentUserBean implements Serializable {
         try {
             dependantService.updateDependant(selectedDependant);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "User updated!"));
-            currentUserDependants = currentUser.getDependants();
+            currentUserDependants =  dependantService.getUserDependants(currentUser);
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
         }

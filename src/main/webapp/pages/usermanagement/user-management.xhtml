@@ -358,7 +358,7 @@
                                   maxdate="#{calendarBean.currentDate}"/>
                     <p:message for="dependantDateOfBirth" styleClass="error" />
 
-                <h:outputLabel for="dependantGender">Gender: </h:outputLabel>
+                <p:outputLabel for="dependantGender">Gender: </p:outputLabel>
                 <p:selectOneMenu id="dependantGender" value="#{adminBean.dependant.gender}" required="true">
                     <f:selectItems value="#{adminBean.genderValues}" var="gender" itemLabel="#{gender}" itemValue="#{gender}"/>
                 </p:selectOneMenu>
