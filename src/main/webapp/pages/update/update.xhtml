@@ -58,19 +58,19 @@
     </div>
 
     <div class="container">
-        <h2>Update User <h:outputText value="#{currentUserBean.currentUser.username}"/></h2>
+        <h2>Update User <h:outputText value="#{CurrentUserBean.currentUser.username}"/></h2>
         <h:form id="registrationForm">
             <p:messages id="messages" showDetail="false" closable="true">
                 <p:autoUpdate/>
             </p:messages>
             <br/>
             <p:outputLabel for="email">Email:     </p:outputLabel>
-            <p:inputText id="email" value="#{currentUserBean.currentUser.email}" required="false">
+            <p:inputText id="email" value="#{CurrentUserBean.currentUser.email}" required="true">
                 <!-- <f:validateRegex pattern="^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$" /> -->
             </p:inputText>
             <p:message for="email" styleClass="error"/>
             <p:outputLabel for="firstname">First Name:</p:outputLabel>
-            <p:inputText id="firstname" value="#{currentUserBean.currentUser.firstname}" required="true" validatorMessage="First Name is required">
+            <p:inputText id="firstname" value="#{CurrentUserBean.currentUser.firstname}" required="true" validatorMessage="First Name is required">
                 <f:validateRegex pattern="[a-zA-Z ]*" />
                 <f:validateLength minimum="3" maximum="32" />
                 <f:validateRequired/>
@@ -78,7 +78,7 @@
             <p:message for="firstname" styleClass="error" />
             <br/>
             <p:outputLabel for="lastname">Last Name:</p:outputLabel>
-            <p:inputText id="lastname" value="#{currentUserBean.currentUser.lastname}" required="true" validatorMessage="Last Name is required">
+            <p:inputText id="lastname" value="#{CurrentUserBean.currentUser.lastname}" required="true" validatorMessage="Last Name is required">
                 <f:validateRegex pattern="[a-zA-Z ]*" />
                 <f:validateLength minimum="3" maximum="32" />
                 <f:validateRequired/>
@@ -86,20 +86,20 @@
             <p:message for="lastname" styleClass="error" />
             <br/>
             <p:outputLabel for="password">Password:</p:outputLabel>
-            <p:password id="password" value="#{currentUserBean.currentUser.password}" required="true">
+            <p:password id="password" value="#{CurrentUserBean.currentUser.password}" required="true">
             </p:password>
             <p:message for="password" styleClass="error"/>
             <br/>
             <p:message for="email" styleClass="error"/>
             <p:outputLabel for="dateOfBirth">Date of Birth:</p:outputLabel>
-            <p:datePicker id="dateOfBirth" value="#{currentUserBean.currentUser.dateOfBirth}"
+            <p:datePicker id="dateOfBirth" value="#{CurrentUserBean.currentUser.dateOfBirth}"
                           pattern="dd-MM-yyyy"
                           showOnFocus="true"
                           showTime="false" timeInput="false"
                           maxdate="#{calendarBean.currentDate}" />
             <p:message for="dateOfBirth" styleClass="error" />
             <br/>
-            <h:commandButton value="Update" action="#{currentUserBean.updateUser()}" styleClass="register-button"/>
+            <h:commandButton value="Update" action="#{CurrentUserBean.updateUser()}" styleClass="register-button"/>
         </h:form>
     </div>
     <h:form>

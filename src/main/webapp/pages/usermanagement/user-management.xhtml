@@ -285,7 +285,13 @@
                       >
 
                 <p:outputPanel id="updatePanel" rendered="#{not empty userBean.selectedUser}">
-                    <p:panelGrid columns="1" cellpadding="5">
+                    <p:panelGrid columns="1">
+                        <p:outputLabel for="email">Email:     </p:outputLabel>
+                        <p:inputText id="email" value="#{CurrentUserBean.currentUser.email}" required="true">
+                            <!-- <f:validateRegex pattern="^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$" /> -->
+                        </p:inputText>
+                        <p:message for="email" styleClass="error"/>
+
                         <p:outputLabel for="firstname">First Name:</p:outputLabel>
                         <p:inputText id="firstname" value="#{userBean.selectedUser.firstname}" required="true">
                             <f:validateRegex pattern="[a-zA-Z]*" />
@@ -299,6 +305,11 @@
                             <f:validateLength minimum="3" maximum="32" />
                         </p:inputText>
                         <h:message for="lastname" styleClass="error" />
+
+                        <p:outputLabel for="password">Password:</p:outputLabel>
+                        <p:password id="password" value="#{userBean.selectedUser.password}" required="true">
+                        </p:password>
+                        <p:message for="password" styleClass="error"/>
 
                         <p:outputLabel for="dateOfBirth">Date of Birth:</p:outputLabel>
                         <p:datePicker id="dateOfBirth" value="#{userBean.selectedUser.dateOfBirth}"

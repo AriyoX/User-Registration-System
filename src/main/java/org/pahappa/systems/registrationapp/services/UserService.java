@@ -4,6 +4,7 @@ import org.pahappa.systems.registrationapp.dao.UserDAO;
 import org.pahappa.systems.registrationapp.exception.ExitException;
 import org.pahappa.systems.registrationapp.exception.WrongValidationException;
 import org.pahappa.systems.registrationapp.models.User;
+import org.pahappa.systems.registrationapp.util.MailService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Base64;
 
 public class UserService {
     private final UserDAO userDAO;
@@ -31,6 +33,8 @@ public class UserService {
         }
         try {
             validateNewUser(user);
+            String encodedPassword = Base64.getEncoder().encodeToString((user.getPassword()).getBytes());
+            user.setPassword(encodedPassword);
             userDAO.add(user);
         } catch (Exception e) {
             throw new WrongValidationException(e.getMessage());
@@ -63,9 +67,11 @@ public class UserService {
             existingUser.setFirstname(user.getFirstname());
             existingUser.setLastname(user.getLastname());
             existingUser.setDateOfBirth(user.getDateOfBirth());
-            existingUser.setPassword(user.getPassword());
+            String encodedPassword = Base64.getEncoder().encodeToString((user.getPassword()).getBytes());
+            existingUser.setPassword(encodedPassword);
             existingUser.setEmail(user.getEmail());
             userDAO.update(existingUser);
+            MailService.send("ahumuzaariyo@gmail.com", "tiadbqtshilfdprn", existingUser.getEmail(), "Updated Details",user.getUsername() + "\nYour details have been updated. Your new password is: " + user.getPassword());
         } catch (Exception e) {
             throw new WrongValidationException(e.getMessage());
         }
@@ -105,14 +111,16 @@ public class UserService {
         User existingUserWithUsername = userDAO.getUserByUsername(identifier);
         User existingUserWithEmail = userDAO.getUserByEmail(identifier);
         if (existingUserWithUsername != null) {
-            String databasePassword = existingUserWithUsername.getPassword();
-            if (databasePassword.equals(password)) {
+            String encodedPasswordFromDatabase = existingUserWithUsername.getPassword();
+            String actualPassword = new String(Base64.getDecoder().decode(encodedPasswordFromDatabase));
+            if (actualPassword.equals(password)) {
                 return existingUserWithUsername;
             }
         }
         if (existingUserWithEmail != null) {
-            String databasePassword = existingUserWithEmail.getPassword();
-            if (databasePassword.equals(password)) {
+            String encodedPasswordFromDatabase = existingUserWithEmail.getPassword();
+            String actualPassword = new String(Base64.getDecoder().decode(encodedPasswordFromDatabase));
+            if (actualPassword.equals(password)) {
                 return existingUserWithEmail;
             }
         }
@@ -224,7 +232,7 @@ public class UserService {
         validateLastName(user.getLastname());
         validateBothNames(user.getFirstname(), user.getLastname());
         validateDateOfBirth(simpleDateFormat.format(user.getDateOfBirth()));
-        validateExistingEmail(user.getEmail());
+        // validateExistingEmail(user.getEmail());
     }
 
     public void isFunctionExited(String str) throws ExitException {
@@ -233,7 +241,7 @@ public class UserService {
         }
     }
 
-    public void validateNewEmail(String email){
+    public void validateNewEmail(String email) throws WrongValidationException{
         List<User> users = getAllUsers();
         Optional<User> optionalUser = users.stream().filter(user -> user.getEmail().equals(email)).findFirst();
         if (optionalUser.isPresent()){
@@ -244,7 +252,7 @@ public class UserService {
 //        }
     }
 
-    public void validateExistingEmail(String email){
+    public void validateExistingEmail(String email) throws WrongValidationException{
         if(!email.matches("^(.+)@(\\\\S+)$")){
             throw new WrongValidationException("Invalid email address. Please try again.");
         }

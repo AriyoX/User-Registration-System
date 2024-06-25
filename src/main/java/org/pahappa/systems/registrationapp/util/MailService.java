@@ -1,4 +1,4 @@
-package org.pahappa.systems.registrationapp.services;
+package org.pahappa.systems.registrationapp.util;
 
 import java.util.Properties;
 import javax.mail.*;

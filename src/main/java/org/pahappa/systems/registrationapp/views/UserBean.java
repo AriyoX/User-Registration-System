@@ -1,22 +1,18 @@
 package org.pahappa.systems.registrationapp.views;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.pahappa.systems.registrationapp.models.User;
-import org.pahappa.systems.registrationapp.services.MailService;
+import org.pahappa.systems.registrationapp.util.MailService;
 import org.pahappa.systems.registrationapp.services.UserService;
-import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.util.Collections;
+import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Random;
 
 @ManagedBean(name = "userBean")
 @ViewScoped
@@ -78,10 +74,11 @@ public class UserBean implements Serializable {
     // register method
     public String registerUser() {
         try {
-            user.setPassword(generateCommonLangPassword());
+            String password = generateCommonLangPassword();
+            user.setPassword(password);
             user.setRole("USER");
             userService.registerUser(user);
-            MailService.send("ahumuzaariyo@gmail.com", "tiadbqtshilfdprn", user.getEmail(), "Log In Details", "Your password is: " + user.getPassword());
+            MailService.send("ahumuzaariyo@gmail.com", "tiadbqtshilfdprn", user.getEmail(), "Log In Details", "Your username is: " + user.getUsername() + "\nYour password is: " + password);
             user = new User();
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Registration Successful!", null));
@@ -139,8 +136,14 @@ public class UserBean implements Serializable {
     }
 
     public String generateCommonLangPassword() {
-        return "12345678";
+        final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=";
+        final int LENGTH = 8;
+        final Random RANDOM = new Random();
+        StringBuilder result = new StringBuilder(LENGTH);
+        for (int i = 0; i < LENGTH; i++) {
+            result.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
+        }
+        return result.toString();
     }
-
 
 }

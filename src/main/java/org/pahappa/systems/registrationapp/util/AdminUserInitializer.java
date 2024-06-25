@@ -33,7 +33,7 @@ public class AdminUserInitializer implements ServletContextListener {
                 admin.setLastname("admin");
                 admin.setDateOfBirth(new Date());
                 admin.setEmail("ahumuzaariyo@outlook.com");
-                admin.setPassword("admin"); // Use a strong hashing method in production!
+                admin.setPassword("@dmin"); // Use a strong hashing method in production!
                 admin.setRole("ADMIN");
                 userService.registerUser(admin);
 

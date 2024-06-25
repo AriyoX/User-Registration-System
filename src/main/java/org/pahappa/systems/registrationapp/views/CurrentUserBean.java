@@ -4,6 +4,7 @@ import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.User;
 import org.pahappa.systems.registrationapp.services.DependantService;
 import org.pahappa.systems.registrationapp.services.UserService;
+import org.pahappa.systems.registrationapp.util.MailService;
 import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -125,7 +127,7 @@ public class CurrentUserBean implements Serializable {
             userService.updateUser(currentUser);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", "User updated!"));
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage()));
         }
     }
 
