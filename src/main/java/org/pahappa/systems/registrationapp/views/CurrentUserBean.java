@@ -30,6 +30,7 @@ public class CurrentUserBean implements Serializable {
     private final DependantService dependantService = new DependantService();
     private Dependant.Gender[] genderValues;
     private Dependant selectedDependant;
+    private String searchQuery;
 
     @PostConstruct
     public void init() {
@@ -64,7 +65,7 @@ public class CurrentUserBean implements Serializable {
     }
 
     public List<Dependant> getCurrentUserDependants() {
-        return dependantService.getUserDependants(currentUser);
+        return currentUserDependants;
     }
 
     public void setCurrentUserDependants(List<Dependant> currentUserDependants) {
@@ -91,6 +92,13 @@ public class CurrentUserBean implements Serializable {
         this.selectedDependant = dependant;
     }
 
+    public String getSearchQuery() {
+        return searchQuery;
+    }
+
+    public void setSearchQuery(String searchQuery) {
+        this.searchQuery = searchQuery;
+    }
 
     public void addDependant() {
         try {
@@ -140,4 +148,9 @@ public class CurrentUserBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
         }
     }
+
+    public void searchDependent() {
+        currentUserDependants = dependantService.searchDependants(searchQuery, currentUser);
+    }
+
 }

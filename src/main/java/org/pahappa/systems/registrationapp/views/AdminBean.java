@@ -24,6 +24,8 @@ public class AdminBean implements Serializable {
     private Dependant.Gender[] genderValues;
     private List<Dependant> dependants;
     private User currentUser;
+    private String searchQuery;
+
 
     @PostConstruct
     public void init() {
@@ -43,7 +45,7 @@ public class AdminBean implements Serializable {
     }
 
     public List<Dependant> getDependants() {
-        return dependantService.getAllDependants();
+        return dependants;
     }
 
     public Dependant.Gender[] getGenderValues() {
@@ -72,6 +74,14 @@ public class AdminBean implements Serializable {
 
     public void setUser_id(long user_id) {
         this.user_id = user_id;
+    }
+
+    public String getSearchQuery() {
+        return searchQuery;
+    }
+
+    public void setSearchQuery(String searchQuery) {
+        this.searchQuery = searchQuery;
     }
 
     public void selectUser(User user) {
@@ -114,5 +124,9 @@ public class AdminBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext externalContext = context.getExternalContext();
         return (User) externalContext.getSessionMap().get("currentUser");
+    }
+
+    public void searchDependent() {
+        dependants = dependantService.searchDependants(searchQuery);
     }
 }

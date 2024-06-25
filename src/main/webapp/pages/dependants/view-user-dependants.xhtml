@@ -22,6 +22,12 @@
          text-align: center;
       }
 
+      .search {
+         text-align: center;
+         font-weight: bold;
+         padding-top: 20px;
+      }
+
       .container {
          max-width: 1600px;
          margin: 40px auto;
@@ -134,6 +140,19 @@
    <div class="header">
       <h1>User Registration System</h1>
    </div>
+
+   <div class="search">
+      <h:form id="searchDependentsForm">
+         <h:outputLabel for="searchDependentsInput">Search by Dependent Name:</h:outputLabel>
+         <br/>
+         <br/>
+         <h:inputText id="searchDependentsInput" value="#{CurrentUserBean.searchQuery}" styleClass="search-box"/>
+         <br/>
+         <br/>
+         <h:commandButton value="Search" action="#{CurrentUserBean.searchDependent}" styleClass="search-button"/>
+      </h:form>
+   </div>
+
    <h1>Dependants for: <h:outputText value="#{CurrentUserBean.currentUser}"/></h1>
    <div class="container">
 

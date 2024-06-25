@@ -127,6 +127,19 @@
     <div class="header">
         <h1>User Registration System</h1>
     </div>
+
+    <div class="search">
+        <h:form id="searchDependentsForm">
+            <h:outputLabel for="searchDependentsInput">Search by Dependent Name:</h:outputLabel>
+            <br/>
+            <br/>
+            <h:inputText id="searchDependentsInput" value="#{adminBean.searchQuery}" styleClass="search-box"/>
+            <br/>
+            <br/>
+            <h:commandButton value="Search" action="#{adminBean.searchDependent}" styleClass="search-button"/>
+        </h:form>
+    </div>
+
     <h1>All Dependants: </h1>
     <div class="container">
     <p:dataTable var="dependant" value="#{adminBean.dependants}"

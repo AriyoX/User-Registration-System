@@ -10,6 +10,7 @@ import org.pahappa.systems.registrationapp.models.User;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class DependantService {
     private final DependantDAO dependantDAO;
@@ -51,6 +52,31 @@ public class DependantService {
 
     public Dependant getDependantByGender(Gender gender){
         return dependantDAO.getDependantByGender(gender);
+    }
+
+    public List<Dependant> searchDependants(String query, User user){
+        List<Dependant> dependants = getUserDependants(user);
+        if (query == null || query.isEmpty()){
+            return dependants;
+        }
+        return dependants.stream()
+                .filter(dependent -> dependent.getFirstname().toLowerCase().contains(query.toLowerCase()) ||
+                        dependent.getUsername().toLowerCase().contains(query.toLowerCase()) ||
+                        dependent.getLastname().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+
+    }
+
+    public List<Dependant> searchDependants(String query){
+        List<Dependant> dependants = getAllDependants();
+        if (query == null || query.isEmpty()){
+            return dependants;
+        }
+        return dependants.stream()
+                .filter(dependent -> dependent.getFirstname().toLowerCase().contains(query.toLowerCase()) ||
+                        dependent.getUsername().toLowerCase().contains(query.toLowerCase()) ||
+                        dependent.getLastname().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
     public List<Dependant> getDependantsByUserId(long userId){
