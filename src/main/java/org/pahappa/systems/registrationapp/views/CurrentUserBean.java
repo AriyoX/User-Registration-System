@@ -22,21 +22,17 @@ import java.util.stream.Collectors;
 public class CurrentUserBean implements Serializable {
     private static final long serialVersionUID = 3L;
     private User currentUser;
-    private long user_id;
     private Dependant newDependant = new Dependant();
     private List<Dependant> currentUserDependants;
     private final UserService userService = new UserService();
     private final DependantService dependantService = new DependantService();
     private Dependant.Gender[] genderValues;
     private Dependant selectedDependant;
-    private List<Dependant> filteredDependants;
-    private Dependant.Gender selectedGender;
 
     @PostConstruct
     public void init() {
         currentUser = getCurrentUser();
         currentUserDependants = dependantService.getUserDependants(currentUser);
-        filteredDependants = currentUserDependants;
         genderValues = Dependant.Gender.values();
         selectedDependant = new Dependant();
         try {
@@ -93,33 +89,6 @@ public class CurrentUserBean implements Serializable {
         this.selectedDependant = dependant;
     }
 
-    public List<Dependant> getFilteredDependants() {
-        return filteredDependants;
-    }
-
-    public void setFilteredDependants(List<Dependant> filteredDependants) {
-        this.filteredDependants = filteredDependants;
-    }
-
-    public Dependant.Gender getSelectedGender() {
-        return selectedGender;
-    }
-
-    public void setSelectedGender(Dependant.Gender selectedGender) {
-        this.selectedGender = selectedGender;
-    }
-
-    public void filterDependantsByGender() {
-        if (selectedGender == null) {
-            filteredDependants = new ArrayList<>(currentUserDependants);
-            PrimeFaces.current().ajax().update("dependantTable");
-        } else {
-            filteredDependants = currentUserDependants.stream()
-                    .filter(dependant -> dependant.getGender() == selectedGender)
-                    .collect(Collectors.toList());
-            PrimeFaces.current().ajax().update("dependantTable");
-        }
-    }
 
     public void addDependant() {
         try {

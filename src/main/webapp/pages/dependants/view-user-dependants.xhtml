@@ -137,17 +137,6 @@
    <h1>Dependants for: <h:outputText value="#{CurrentUserBean.currentUser}"/></h1>
    <div class="container">
 
-      <h:form id="filterForm">
-         <h:panelGrid columns="2">
-            <h:outputLabel for="genderFilter" value="Filter by Gender:" />
-            <p:selectOneMenu id="genderFilter" value="#{CurrentUserBean.selectedGender}" required="false">
-               <f:selectItem itemLabel="All" itemValue="#{null}" />
-               <f:selectItems value="#{currentUserBean.genderValues}" var="gender" itemLabel="#{gender}" itemValue="#{gender}" />
-               <p:ajax event="change" update=":DependantTable" execute="genderFilter" listener="#{CurrentUserBean.filterDependantsByGender}"/>
-            </p:selectOneMenu>
-         </h:panelGrid>
-      </h:form>
-
       <h:panelGroup id="dependantTablePanel">
          <p:dataTable var="dependant" id="DependantTable" value="#{CurrentUserBean.currentUserDependants}"
                       rows="10"
