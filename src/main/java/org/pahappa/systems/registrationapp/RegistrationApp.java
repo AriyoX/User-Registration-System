@@ -15,7 +15,7 @@ public class RegistrationApp {
         // UserView userView = new UserView();
         // userView.displayMenu();
         DependantService dependantService = new DependantService();
-        List<Dependant> dependants = dependantService.getAllDependants();
+        List<Dependant> dependants = dependantService.getDependantsByGender(Dependant.Gender.MALE);
         for (Dependant dependant : dependants) {
             System.out.println(dependant);
         }

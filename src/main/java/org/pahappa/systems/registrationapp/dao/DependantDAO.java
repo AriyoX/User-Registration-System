@@ -162,30 +162,6 @@ public class DependantDAO {
         return dependant;
     }
 
-    public Dependant getDependantByGender(Gender gender){
-        Transaction transaction = null;
-        Session session = null;
-        Dependant dependant = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            dependant = (Dependant) session.createQuery("FROM Dependant WHERE gender = :gender AND deleted = false")
-                    .setParameter("gender", gender)
-                    .uniqueResult();
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return dependant;
-    }
-
     public Dependant getDependantByFirstName(String firstname){
         Transaction transaction = null;
         Session session = null;
@@ -319,6 +295,63 @@ public class DependantDAO {
                 session.close();
             }
         }
+    }
+
+    public List<Dependant> getDependantsByGender(Dependant.Gender gender){
+        Transaction transaction = null;
+        Session session = null;
+        List<Dependant> dependants = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            dependants = (List<Dependant>) session.createQuery(
+                            "FROM Dependant d WHERE d.gender = :gender AND d.deleted = false AND d.user.deleted = false")
+                    .setParameter("gender", gender)
+                    .list();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        if (dependants == null){
+            return Collections.emptyList();
+        }
+        return dependants;
+    }
+
+    public List<Dependant> getDependantsByGender(User user, Dependant.Gender gender){
+        Transaction transaction = null;
+        Session session = null;
+        List<Dependant> dependants = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            dependants = (List<Dependant>) session.createQuery(
+                            "FROM Dependant WHERE user.id = :userId AND gender = :gender AND deleted = false AND user.deleted = false")
+                    .setParameter("userId", user.getId())
+                    .setParameter("gender", gender)
+                    .list();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        if (dependants == null){
+            return Collections.emptyList();
+        }
+        return dependants;
     }
 
 

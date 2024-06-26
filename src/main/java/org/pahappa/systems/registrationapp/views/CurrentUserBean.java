@@ -31,6 +31,7 @@ public class CurrentUserBean implements Serializable {
     private Dependant.Gender[] genderValues;
     private Dependant selectedDependant;
     private String searchQuery;
+    private Dependant.Gender selectedGender;
 
     @PostConstruct
     public void init() {
@@ -48,6 +49,14 @@ public class CurrentUserBean implements Serializable {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public Dependant.Gender getSelectedGender() {
+        return selectedGender;
+    }
+
+    public void setSelectedGender(Dependant.Gender selectedGender) {
+        this.selectedGender = selectedGender;
     }
 
     public Dependant.Gender[] getGenderValues() {
@@ -201,6 +210,14 @@ public class CurrentUserBean implements Serializable {
         int simplifiedB = b / gcd;
 
         return simplifiedA + ":" + simplifiedB;
+    }
+
+    public void filterDependantsByGender() {
+        if (selectedGender == null) {
+            currentUserDependants = dependantService.getUserDependants(currentUser);
+        } else {
+            currentUserDependants = dependantService.getDependantsByGender(currentUser,selectedGender);
+        }
     }
 
 }

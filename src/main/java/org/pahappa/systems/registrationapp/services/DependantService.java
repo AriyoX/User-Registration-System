@@ -50,10 +50,6 @@ public class DependantService {
         return dependantDAO.getDependantByLastName(lastName);
     }
 
-    public Dependant getDependantByGender(Gender gender){
-        return dependantDAO.getDependantByGender(gender);
-    }
-
     public List<Dependant> searchDependants(String query, User user){
         List<Dependant> dependants = getUserDependants(user);
         if (query == null || query.isEmpty()){
@@ -188,6 +184,14 @@ public class DependantService {
         return getUserDependants(user).stream()
                 .filter(dependant -> dependant.getGender() == Dependant.Gender.FEMALE)
                 .collect(Collectors.toList());
+    }
+
+    public List<Dependant> getDependantsByGender(Dependant.Gender gender) {
+        return dependantDAO.getDependantsByGender(gender);
+    }
+
+    public List<Dependant> getDependantsByGender(User user, Dependant.Gender gender) {
+        return dependantDAO.getDependantsByGender(user, gender);
     }
 
 }

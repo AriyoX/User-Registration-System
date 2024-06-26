@@ -33,6 +33,7 @@ public class AdminBean implements Serializable {
     private String username;
     private final UserDAO userDAO = new UserDAO();
     private User user = new User();
+    private Dependant.Gender selectedGender;
 
 
     @PostConstruct
@@ -50,6 +51,14 @@ public class AdminBean implements Serializable {
         }
         genderValues = Dependant.Gender.values();
         dependants = dependantService.getAllDependants();
+    }
+
+    public Dependant.Gender getSelectedGender() {
+        return selectedGender;
+    }
+
+    public void setSelectedGender(Dependant.Gender selectedGender) {
+        this.selectedGender = selectedGender;
     }
 
     public User getUser() {
@@ -187,10 +196,6 @@ public class AdminBean implements Serializable {
         }
     }
 
-//    public void filterDependant(){
-//        dependants = dependantService.filterDependants();
-//    }
-
     public int userCount(){
         List<User> users = userService.getAllUsers();
         if (users == null){
@@ -249,7 +254,6 @@ public class AdminBean implements Serializable {
         return simplifiedA + ":" + simplifiedB;
     }
 
-
     public int femaleDependantsCount(){
         List<Dependant> dependantsFemale = dependantService.getFemaleDependants();
         if (dependantsFemale == null){
@@ -290,6 +294,14 @@ public class AdminBean implements Serializable {
             return 0;
         }
         return dependants.size();
+    }
+
+    public void filterDependantsByGender() {
+        if (selectedGender == null) {
+            dependants = dependantService.getAllDependants();
+        } else {
+            dependants = dependantService.getDependantsByGender(selectedGender);
+        }
     }
 
 }
