@@ -166,4 +166,16 @@ public class DependantService {
         userService.validateDateOfBirth(simpleDateFormat.format(dependant.getDateOfBirth()));
     }
 
+    public List<Dependant> getMaleDependants() {
+        return getAllDependants().stream()
+                .filter(dependant -> dependant.getGender() == Dependant.Gender.MALE)
+                .collect(Collectors.toList());
+    }
+
+    public List<Dependant> getFemaleDependants() {
+        return getAllDependants().stream()
+                .filter(dependant -> dependant.getGender() == Dependant.Gender.FEMALE)
+                .collect(Collectors.toList());
+    }
+
 }

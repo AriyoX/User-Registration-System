@@ -1,9 +1,11 @@
 package org.pahappa.systems.registrationapp.views;
 
+import org.pahappa.systems.registrationapp.dao.UserDAO;
 import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.User;
 import org.pahappa.systems.registrationapp.services.DependantService;
 import org.pahappa.systems.registrationapp.services.UserService;
+import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -29,6 +31,7 @@ public class AdminBean implements Serializable {
     private String searchQuery;
     private final UserService userService = new UserService();
     private String username;
+    private final UserDAO userDAO = new UserDAO();
 
 
     @PostConstruct
@@ -125,6 +128,7 @@ public class AdminBean implements Serializable {
                 dependants.add(dependant);
                 dependants = dependantService.getAllDependants();
                 dependant = new Dependant(); // Reset the dependant object
+                PrimeFaces.current().ajax().update("form:dataTable");
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Dependant added successfully!", null));
             } else {
@@ -177,4 +181,100 @@ public class AdminBean implements Serializable {
 //    public void filterDependant(){
 //        dependants = dependantService.filterDependants();
 //    }
+
+    public int userCount(){
+        List<User> users = userService.getAllUsers();
+        if (users == null){
+            return 0;
+        }
+        return users.size();
+    }
+
+    public int dependantCount(){
+        List<Dependant> dependants = dependantService.getAllDependants();
+        if (dependants == null){
+            return 0;
+        }
+        return dependants.size();
+    }
+
+    public int usersWithDependantsCount(){
+        List<User> users = userDAO.getUsersWithActiveDependants();
+        if (users == null){
+            return 0;
+        }
+        return users.size();
+    }
+
+    public int usersWithoutDependantsCount(){
+        List<User> users = userDAO.getUsersWithoutDependants();
+        if (users == null){
+            return 0;
+        }
+        return users.size();
+    }
+
+    private int gcd(int a, int b) {
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+
+    public String ratioOfUsersWithDependantsToUsersWithout() {
+        List<User> usersWithActiveDependants = userDAO.getUsersWithActiveDependants();
+        int a = usersWithActiveDependants.size();
+
+        List<User> usersWithoutActiveDependants = userDAO.getUsersWithoutDependants();
+        int b =  usersWithoutActiveDependants.size();
+        if (b == 0 || a == 0) {
+            return "0";
+        }
+
+        int gcd = gcd(a, b);
+        int simplifiedA = a / gcd;
+        int simplifiedB = b / gcd;
+
+        return simplifiedA + ":" + simplifiedB;
+    }
+
+
+    public int femaleDependantsCount(){
+        List<Dependant> dependantsFemale = dependantService.getFemaleDependants();
+        if (dependantsFemale == null){
+            return 0;
+        }
+        return dependantsFemale.size();
+    }
+
+    public int maleDependantsCount(){
+        List<Dependant> dependantsMale = dependantService.getMaleDependants();
+        if (dependantsMale == null){
+            return 0;
+        }
+        return dependantsMale.size();
+    }
+
+    public String ratioOfFemaleToMaleDependants() {
+        List<Dependant> dependantsFemale = dependantService.getFemaleDependants();
+        int a = dependantsFemale.size();
+        List<Dependant> dependantsMale = dependantService.getMaleDependants();
+        int b = dependantsMale.size();
+
+        if (b == 0 || a == 0) {
+            return "0";
+        }
+
+        int gcd = gcd(a, b);
+        int simplifiedA = a / gcd;
+        int simplifiedB = b / gcd;
+
+        return simplifiedA + ":" + simplifiedB;
+
+    }
+
+
+
 }

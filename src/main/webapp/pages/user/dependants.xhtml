@@ -370,7 +370,7 @@
                                     <p:confirm header="Confirmation" message="Are you sure you want to delete this user?"
                                                icon="pi pi-exclamation-triangle" />
                                 </p:commandButton>
-                                <p:commandButton value="Update"
+                                <p:commandButton value="U"
                                                  actionListener="#{CurrentUserBean.selectDependant(dependant)}"
                                                  update=":updateForm :dependantTablePanel"
                                                  oncomplete="PF('updateDependantDialog').show()"
@@ -456,7 +456,7 @@
                   closable="true"
                   visible="#{facesContext.validationFailed}">
             <p:outputLabel id="updatePanel" rendered="true">
-                <p:panelGrid columns="1">
+                <h:panelGrid columns="2" cellpadding="7">
                     <p:outputLabel for="firstname">First Name: </p:outputLabel>
                     <p:inputText id="firstname" value="#{CurrentUserBean.selectedDependant.firstname}" required="true">
                         <f:validateRegex pattern="[a-zA-Z]*" />
@@ -484,7 +484,7 @@
                         <f:selectItems value="#{CurrentUserBean.genderValues}" var="gender" itemLabel="#{gender}" itemValue="#{gender}"/>
                     </p:selectOneMenu>
                     <h:message for="gender" styleClass="error"/>
-                </p:panelGrid>
+                </h:panelGrid>
                 <br/>
                 <p:commandButton value="Save" update=":updateForm:updatePanel :dependantTablePanel" actionListener="#{CurrentUserBean.updateDependant}" oncomplete="handleSaveCompleteUpdate(xhr, status, args)" style="margin-right: 5px"/>
                 <p:commandButton value="Cancel" onclick="PF('updateDependantDialog').hide();" style="margin-left: 5px"/>

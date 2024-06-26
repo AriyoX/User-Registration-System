@@ -194,7 +194,7 @@
       .table-format .detail-rectangle .box {
          justify-content: center;
          margin-top: 12px;
-         margin-bottom: 20px;
+         margin-bottom: 16px;
          font-size: 16px;
          margin-left: 20px;
       }
@@ -281,8 +281,8 @@
                   <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gU3ZnIFZlY3RvciBJY29ucyA6IGh0dHA6Ly93d3cub25saW5ld2ViZm9udHMuY29tL2ljb24gLS0+DQo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjU2IDI1NiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjU2IDI1NiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8bWV0YWRhdGE+IFN2ZyBWZWN0b3IgSWNvbnMgOiBodHRwOi8vd3d3Lm9ubGluZXdlYmZvbnRzLmNvbS9pY29uIDwvbWV0YWRhdGE+DQo8Zz48Zz48Zz48cGF0aCBmaWxsPSIjMDAwMDAwIiBkPSJNMTI0LjksMTAuNmMtMS4xLDAuNS0xNy4yLDE5LjUtNTgsNjguNGMtNDQuOSw1My44LTU2LjUsNjguMS01Ni44LDY5LjRjLTAuNCwyLjQsMC4xLDQuNywxLjUsNi4zYzIuMiwyLjYsMy4xLDIuNywxNiwyLjdoMTEuOHY0MS44YzAsNDYuMy0wLjEsNDQsMyw0NS45YzEuMywwLjgsMi44LDAuOSwyNi43LDAuOWgyNS4ybDEuNS0xLjJjMi44LTIuNCwyLjctMS42LDIuNy0zMi41YzAtMzEuOCwwLTMyLDMuMy0zOC42YzQuOC05LjYsMTUuMy0xNi4xLDI2LjItMTYuMWMxMSwwLDIxLjQsNi41LDI2LjIsMTYuMmMzLjMsNi42LDMuMyw2LjgsMy4zLDM4LjVjMCwyNi44LDAsMjguMiwwLjksMzAuMWMwLjUsMS4yLDEuNSwyLjQsMi40LDIuOWMxLjUsMC45LDIuMywwLjksMjYuNSwwLjloMjQuOWwxLjUtMS4yYzIuOS0yLjQsMi43LTAuNCwyLjctNDUuOHYtNDEuNWgxMS44YzEzLDAsMTMuOS0wLjEsMTYtMi43YzEuNS0xLjgsMi00LjIsMS40LTYuNWMtMC4zLTEuMi00LjYtNi43LTE0LjctMTguOGwtMTQuMy0xNy4xbC0wLjItMzQuMWMtMC4yLTMzLjUtMC4yLTM0LjEtMS4yLTM1LjRjLTIuNC0zLjEtMi40LTMuMi0xMy42LTMuMnMtMTEuMiwwLTEzLjYsMy4yYy0wLjksMS4yLTEsMi0xLjIsMTcuNGwtMC4yLDE2LjFsLTI3LjEtMzIuNkMxMzksMTksMTMyLjIsMTEuMSwxMzEsMTAuNkMxMjksOS43LDEyNi45LDkuOCwxMjQuOSwxMC42eiIvPjwvZz48L2c+PC9nPg0KPC9zdmc+" width="16" height="16" alt="Dashboard"/>
                </div>
                <div class="box">
-                  <h3>Users</h3>
-                  <h1>40</h1>
+                  <h3>Users with Dependants</h3>
+                  <h1><h:outputText value="#{AdminBean.usersWithDependantsCount()}"/></h1>
                </div>
             </div>
             <div class="card">
@@ -290,8 +290,8 @@
                   <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gU3ZnIFZlY3RvciBJY29ucyA6IGh0dHA6Ly93d3cub25saW5ld2ViZm9udHMuY29tL2ljb24gLS0+DQo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjU2IDI1NiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjU2IDI1NiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8bWV0YWRhdGE+IFN2ZyBWZWN0b3IgSWNvbnMgOiBodHRwOi8vd3d3Lm9ubGluZXdlYmZvbnRzLmNvbS9pY29uIDwvbWV0YWRhdGE+DQo8Zz48Zz48Zz48cGF0aCBmaWxsPSIjMDAwMDAwIiBkPSJNMTI0LjksMTAuNmMtMS4xLDAuNS0xNy4yLDE5LjUtNTgsNjguNGMtNDQuOSw1My44LTU2LjUsNjguMS01Ni44LDY5LjRjLTAuNCwyLjQsMC4xLDQuNywxLjUsNi4zYzIuMiwyLjYsMy4xLDIuNywxNiwyLjdoMTEuOHY0MS44YzAsNDYuMy0wLjEsNDQsMyw0NS45YzEuMywwLjgsMi44LDAuOSwyNi43LDAuOWgyNS4ybDEuNS0xLjJjMi44LTIuNCwyLjctMS42LDIuNy0zMi41YzAtMzEuOCwwLTMyLDMuMy0zOC42YzQuOC05LjYsMTUuMy0xNi4xLDI2LjItMTYuMWMxMSwwLDIxLjQsNi41LDI2LjIsMTYuMmMzLjMsNi42LDMuMyw2LjgsMy4zLDM4LjVjMCwyNi44LDAsMjguMiwwLjksMzAuMWMwLjUsMS4yLDEuNSwyLjQsMi40LDIuOWMxLjUsMC45LDIuMywwLjksMjYuNSwwLjloMjQuOWwxLjUtMS4yYzIuOS0yLjQsMi43LTAuNCwyLjctNDUuOHYtNDEuNWgxMS44YzEzLDAsMTMuOS0wLjEsMTYtMi43YzEuNS0xLjgsMi00LjIsMS40LTYuNWMtMC4zLTEuMi00LjYtNi43LTE0LjctMTguOGwtMTQuMy0xNy4xbC0wLjItMzQuMWMtMC4yLTMzLjUtMC4yLTM0LjEtMS4yLTM1LjRjLTIuNC0zLjEtMi40LTMuMi0xMy42LTMuMnMtMTEuMiwwLTEzLjYsMy4yYy0wLjksMS4yLTEsMi0xLjIsMTcuNGwtMC4yLDE2LjFsLTI3LjEtMzIuNkMxMzksMTksMTMyLjIsMTEuMSwxMzEsMTAuNkMxMjksOS43LDEyNi45LDkuOCwxMjQuOSwxMC42eiIvPjwvZz48L2c+PC9nPg0KPC9zdmc+" width="16" height="16" alt="Dashboard"/>
                </div>
                <div class="box">
-                  <h3>Users</h3>
-                  <h1>40</h1>
+                  <h3>Users without dependants</h3>
+                  <h1><h:outputText value="#{AdminBean.usersWithoutDependantsCount()}"/></h1>
                </div>
             </div>
             <div class="card">
@@ -299,8 +299,8 @@
                   <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gU3ZnIFZlY3RvciBJY29ucyA6IGh0dHA6Ly93d3cub25saW5ld2ViZm9udHMuY29tL2ljb24gLS0+DQo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjU2IDI1NiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjU2IDI1NiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8bWV0YWRhdGE+IFN2ZyBWZWN0b3IgSWNvbnMgOiBodHRwOi8vd3d3Lm9ubGluZXdlYmZvbnRzLmNvbS9pY29uIDwvbWV0YWRhdGE+DQo8Zz48Zz48Zz48cGF0aCBmaWxsPSIjMDAwMDAwIiBkPSJNMTI0LjksMTAuNmMtMS4xLDAuNS0xNy4yLDE5LjUtNTgsNjguNGMtNDQuOSw1My44LTU2LjUsNjguMS01Ni44LDY5LjRjLTAuNCwyLjQsMC4xLDQuNywxLjUsNi4zYzIuMiwyLjYsMy4xLDIuNywxNiwyLjdoMTEuOHY0MS44YzAsNDYuMy0wLjEsNDQsMyw0NS45YzEuMywwLjgsMi44LDAuOSwyNi43LDAuOWgyNS4ybDEuNS0xLjJjMi44LTIuNCwyLjctMS42LDIuNy0zMi41YzAtMzEuOCwwLTMyLDMuMy0zOC42YzQuOC05LjYsMTUuMy0xNi4xLDI2LjItMTYuMWMxMSwwLDIxLjQsNi41LDI2LjIsMTYuMmMzLjMsNi42LDMuMyw2LjgsMy4zLDM4LjVjMCwyNi44LDAsMjguMiwwLjksMzAuMWMwLjUsMS4yLDEuNSwyLjQsMi40LDIuOWMxLjUsMC45LDIuMywwLjksMjYuNSwwLjloMjQuOWwxLjUtMS4yYzIuOS0yLjQsMi43LTAuNCwyLjctNDUuOHYtNDEuNWgxMS44YzEzLDAsMTMuOS0wLjEsMTYtMi43YzEuNS0xLjgsMi00LjIsMS40LTYuNWMtMC4zLTEuMi00LjYtNi43LTE0LjctMTguOGwtMTQuMy0xNy4xbC0wLjItMzQuMWMtMC4yLTMzLjUtMC4yLTM0LjEtMS4yLTM1LjRjLTIuNC0zLjEtMi40LTMuMi0xMy42LTMuMnMtMTEuMiwwLTEzLjYsMy4yYy0wLjksMS4yLTEsMi0xLjIsMTcuNGwtMC4yLDE2LjFsLTI3LjEtMzIuNkMxMzksMTksMTMyLjIsMTEuMSwxMzEsMTAuNkMxMjksOS43LDEyNi45LDkuOCwxMjQuOSwxMC42eiIvPjwvZz48L2c+PC9nPg0KPC9zdmc+" width="16" height="16" alt="Dashboard"/>
                </div>
                <div class="box">
-                  <h3>Users</h3>
-                  <h1>40</h1>
+                  <h3>Dependency Ratio</h3>
+                  <h1><h:outputText value="#{AdminBean.ratioOfUsersWithDependantsToUsersWithout()}"/></h1>
                </div>
             </div>
          </div>
@@ -316,7 +316,7 @@
          <div class="table-format">
             <div class="detail-rectangle">
                <div class="box">
-                  <p>40 Users</p>
+                  <p><h:outputText value="#{AdminBean.userCount()}"/> Users</p>
                </div>
                <h:form>
                   <p:commandButton value="Add New"

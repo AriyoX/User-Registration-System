@@ -287,4 +287,65 @@ public class UserDAO {
         }
     }
 
+    public List<User> getUsersWithActiveDependants() {
+        Transaction transaction = null;
+        Session session = null;
+        List<User> users = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+
+            users = session.createQuery(
+                            "SELECT DISTINCT u FROM User u JOIN u.dependants d WHERE d.deleted = false and u.role != :role")
+                    .setParameter("role", "ADMIN")
+                    .list();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        if (users == null) {
+            return Collections.emptyList();
+        }
+        return users;
+    }
+
+    public List<User> getUsersWithoutDependants() {
+        Transaction transaction = null;
+        Session session = null;
+        List<User> users = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            // Use HQL to select users who do not have any dependants
+            users = session.createQuery(
+                            "SELECT u FROM User u WHERE u.dependants IS EMPTY and u.role != :role")
+                    .setParameter("role", "ADMIN")
+                    .list();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        if (users == null){
+            return Collections.emptyList();
+        }
+        return users;
+    }
+
+
+
 }
