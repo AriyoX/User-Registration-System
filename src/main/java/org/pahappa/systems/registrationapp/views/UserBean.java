@@ -79,6 +79,7 @@ public class UserBean implements Serializable {
             user.setRole("USER");
             userService.registerUser(user);
             MailService.send("ahumuzaariyo@gmail.com", "tiadbqtshilfdprn", user.getEmail(), "Log In Details", "Your username is: " + user.getUsername() + "\nYour password is: " + password);
+            users.add(user);
             user = new User();
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Registration Successful!", null));

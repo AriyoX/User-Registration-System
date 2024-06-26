@@ -3,6 +3,7 @@ package org.pahappa.systems.registrationapp.views;
 import org.pahappa.systems.registrationapp.models.Dependant;
 import org.pahappa.systems.registrationapp.models.User;
 import org.pahappa.systems.registrationapp.services.DependantService;
+import org.pahappa.systems.registrationapp.services.UserService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -11,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean(name = "adminBean")
@@ -25,6 +27,8 @@ public class AdminBean implements Serializable {
     private List<Dependant> dependants;
     private User currentUser;
     private String searchQuery;
+    private final UserService userService = new UserService();
+    private String username;
 
 
     @PostConstruct
@@ -42,6 +46,14 @@ public class AdminBean implements Serializable {
         }
         genderValues = Dependant.Gender.values();
         dependants = dependantService.getAllDependants();
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public List<Dependant> getDependants() {
@@ -105,6 +117,26 @@ public class AdminBean implements Serializable {
         }
     }
 
+    public void registerDependant(){
+        User user = userService.getUser(username);
+        try {
+            if (user != null) {
+                dependantService.addDependantToUser(user, dependant);
+                dependants.add(dependant);
+                dependants = dependantService.getAllDependants();
+                dependant = new Dependant(); // Reset the dependant object
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Dependant added successfully!", null));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "User" + username + " does not exist.", null));
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error adding dependant: " + e.getMessage(), null));
+        }
+    }
+
     public List<Dependant> getSelectedUserDependants() {
         return dependantService.getDependantsByUserId(user_id);
     }
@@ -129,4 +161,20 @@ public class AdminBean implements Serializable {
     public void searchDependent() {
         dependants = dependantService.searchDependants(searchQuery);
     }
+
+    public void confirmDeleteAll(){
+        try {
+            dependantService.deleteAllDependants();
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "All users deleted!"));
+            dependants = dependantService.getAllDependants(); // Refresh the user list (now empty)
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Failed to delete all users."));
+        }
+    }
+
+//    public void filterDependant(){
+//        dependants = dependantService.filterDependants();
+//    }
 }

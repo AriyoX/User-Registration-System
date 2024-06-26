@@ -79,6 +79,19 @@ public class DependantService {
                 .collect(Collectors.toList());
     }
 
+//    public List<Dependant> filterDependants(String query, User user){
+//        List<Dependant> dependants = getUserDependants(user);
+//        if (query == null || query.isEmpty()){
+//            return dependants;
+//        }
+//        return dependants = dependants.stream()
+//                .filter(dependent -> dependent.getGender().name().equalsIgnoreCase(gender));
+//    }
+
+    public void deleteAllDependants(){
+        dependantDAO.deleteAllDependants();
+    }
+
     public List<Dependant> getDependantsByUserId(long userId){
         return dependantDAO.getDependantsByUserId(userId);
     }

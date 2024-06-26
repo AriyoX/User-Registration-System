@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+   <title>Users</title>
+   <style type="text/css">
+
+      @font-face {
+         font-family: Poppins;
+         src: url("/resources/Poppins-Regular.ttf");
+      }
+
+      @font-face {
+         font-family: Inter;
+         src: url("/resources/Inter-Regular.ttf");
+      }
+
+      * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         font-family: 'Inter', 'Arial', 'sans-serif';
+      }
+
+      body {
+         min-height: 100vh;
+         background-color: #F5F7FA;
+         display: flex;
+      }
+
+      a {
+         text-decoration: none;
+      }
+
+      li {
+         list-style: none;
+      }
+
+      h1, h2 {
+         color: #444;
+      }
+
+      .side-menu {
+         background: white;
+         border: 1px solid white;
+         border-right-color: #E6EFF5;
+         width: 16vw;
+         min-height: 100vh;
+         display: flex;
+         flex-direction: column;
+      }
+
+      .side-menu .brand-name {
+         height: 10vh;
+         margin-top: 10px;
+         font-family: 'Poppins', 'sans-serif';
+         display: flex;
+         color: #343C6A;
+         align-items: center;
+         justify-content: center;
+      }
+
+      .side-menu li {
+         font-size: 16px;
+         padding: 10px 40px;
+         color: #B1B1B1;
+         display: flex;
+      }
+
+      .side-menu li:hover {
+         color: #2D60FF;
+      }
+
+      li svg use {
+         fill: currentColor; /* Inherit color from parent */
+         transition: fill 0.3s ease; /* Add a smooth transition */
+      }
+
+      li:hover svg use {
+         fill: #2D60FF; /* Change to your desired hover color */
+      }
+
+      .container {
+         flex: 1;
+         display: flex;
+         flex-direction: column;
+         background-color: #f1f1f1;
+      }
+
+      .container .header {
+         height: 13vh;
+         background: white;
+         display: flex;
+         align-items: center;
+         padding-left: 25px;
+      }
+
+      .container .content {
+         flex: 1;
+         overflow: auto;
+      }
+
+      .cards-title {
+         padding: 10px 15px 0;
+         margin-left: 25px;
+         margin-top: 15px;
+         margin-bottom: 0;
+         font-size: 1.5rem; /* Adjust font size as needed */
+         color: #343C6A;   /* Use a color that stands out */
+      }
+
+      .container .content .cards {
+         padding: 25px 15px 5px;
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         flex-wrap: wrap;
+      }
+
+      .container .content .cards .card {
+         width: 340px;
+         height: 120px;
+         background: white;
+         margin: 20px 10px;
+         border-radius: 15px;
+         display: flex;
+         align-items: center;
+         justify-content: space-around;
+      }
+
+
+      .container .content .charts {
+         padding: 20px 15px;
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         flex-wrap: wrap;
+      }
+
+      .container .content .charts .chart {
+         width: calc(50% - 10px); /* Two charts per row with some spacing */
+         height: 300px; /* Adjust height as needed */
+         background: white;
+         margin-bottom: 20px;
+         border-radius: 15px;
+         padding: 20px;
+      }
+
+      .chart h3 {
+         color: #343C6A;
+         margin-bottom: 10px;
+      }
+
+      .search-box {
+         width: 800px;
+         margin-right: 30px;
+         margin-left: 45px;
+         padding: 15px 30px 15px 10px;
+         margin-top: 15px;
+         border-radius: 5px;
+         border: 1px solid #ccc;
+         font-size: 14px;
+         font-weight: lighter;
+      }
+
+      .search-button {
+         width: 120px;
+         margin-left: 10px;
+         font-size: 18px;
+         border-radius: 5px;
+         background-color: #2196F3;
+         color: white;
+         height: 32px;
+         border: 0.5px #f1f1f1;
+      }
+
+      .table-format {
+         margin: 10px 0 15px 20px;
+         padding: 10px 0 15px 20px;
+         width: 78vw;
+      }
+
+      .table-format .detail-rectangle {
+         background: #E1E1E1;
+         height: 60px;
+         display: flex;
+      }
+
+      .table-format .detail-rectangle .box {
+         justify-content: center;
+         margin-top: 12px;
+         margin-bottom: 20px;
+         font-size: 16px;
+         margin-left: 20px;
+      }
+
+      .table-format .detail-rectangle .table-button1 {
+         width: 100px;
+         margin-left: 730px;
+         height: 40px;
+         margin-top: 10px;
+         margin-bottom: 10px;
+         font-size: 13px;
+      }
+
+      .table-format .detail-rectangle .table-button2 {
+         width: 100px;
+         height: 40px;
+         margin: 10px 30px 10px 10px;
+         font-size: 13px;
+      }
+
+      .table-format .update-button {
+         height: 35px;
+         width: 50px;
+         font-size: 13px;
+      }
+
+      .table-format .delete-button {
+         height: 35px;
+         width: 50px;
+         font-size: 13px;
+         margin-left: 5px;
+      }
+
+      .dialog-button {
+         margin: 20px;
+      }
+
+   </style>
+   <script type="text/javascript">
+      function handleSaveCompleteUpdate(xhr, status, args) {
+         if (!args.validationFailed) {
+            PF('updateUserDialog').hide();
+         }
+      }
+      function handleRegisterCompleteUpdate(xhr, status, args) {
+         if (!args.validationFailed) {
+            PF('registerUserDialog').hide();
+         }
+      }
+   </script>
+</h:head>
+<h:body>
+   <div class="side-menu">
+      <div class="brand-name">
+         <h1>Admin</h1>
+      </div>
+      <ul>
+         <li>Dashboard</li>
+         <li>Dependants</li>
+         <li>Users</li>
+         <li>Settings</li>
+         <li>Logout</li>
+      </ul>
+   </div>
+   <div class="container">
+      <div class="header">
+         <h1 style="margin-left: 25px">
+            Users
+         </h1>
+      </div>
+      <div class="content">
+         <div class="cards">
+            <div class="card">
+               <div class="icon-case">
+                  <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gU3ZnIFZlY3RvciBJY29ucyA6IGh0dHA6Ly93d3cub25saW5ld2ViZm9udHMuY29tL2ljb24gLS0+DQo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjU2IDI1NiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjU2IDI1NiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8bWV0YWRhdGE+IFN2ZyBWZWN0b3IgSWNvbnMgOiBodHRwOi8vd3d3Lm9ubGluZXdlYmZvbnRzLmNvbS9pY29uIDwvbWV0YWRhdGE+DQo8Zz48Zz48Zz48cGF0aCBmaWxsPSIjMDAwMDAwIiBkPSJNMTI0LjksMTAuNmMtMS4xLDAuNS0xNy4yLDE5LjUtNTgsNjguNGMtNDQuOSw1My44LTU2LjUsNjguMS01Ni44LDY5LjRjLTAuNCwyLjQsMC4xLDQuNywxLjUsNi4zYzIuMiwyLjYsMy4xLDIuNywxNiwyLjdoMTEuOHY0MS44YzAsNDYuMy0wLjEsNDQsMyw0NS45YzEuMywwLjgsMi44LDAuOSwyNi43LDAuOWgyNS4ybDEuNS0xLjJjMi44LTIuNCwyLjctMS42LDIuNy0zMi41YzAtMzEuOCwwLTMyLDMuMy0zOC42YzQuOC05LjYsMTUuMy0xNi4xLDI2LjItMTYuMWMxMSwwLDIxLjQsNi41LDI2LjIsMTYuMmMzLjMsNi42LDMuMyw2LjgsMy4zLDM4LjVjMCwyNi44LDAsMjguMiwwLjksMzAuMWMwLjUsMS4yLDEuNSwyLjQsMi40LDIuOWMxLjUsMC45LDIuMywwLjksMjYuNSwwLjloMjQuOWwxLjUtMS4yYzIuOS0yLjQsMi43LTAuNCwyLjctNDUuOHYtNDEuNWgxMS44YzEzLDAsMTMuOS0wLjEsMTYtMi43YzEuNS0xLjgsMi00LjIsMS40LTYuNWMtMC4zLTEuMi00LjYtNi43LTE0LjctMTguOGwtMTQuMy0xNy4xbC0wLjItMzQuMWMtMC4yLTMzLjUtMC4yLTM0LjEtMS4yLTM1LjRjLTIuNC0zLjEtMi40LTMuMi0xMy42LTMuMnMtMTEuMiwwLTEzLjYsMy4yYy0wLjksMS4yLTEsMi0xLjIsMTcuNGwtMC4yLDE2LjFsLTI3LjEtMzIuNkMxMzksMTksMTMyLjIsMTEuMSwxMzEsMTAuNkMxMjksOS43LDEyNi45LDkuOCwxMjQuOSwxMC42eiIvPjwvZz48L2c+PC9nPg0KPC9zdmc+" width="16" height="16" alt="Dashboard"/>
+               </div>
+               <div class="box">
+                  <h3>Users</h3>
+                  <h1>40</h1>
+               </div>
+            </div>
+            <div class="card">
+               <div class="icon-case">
+                  <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gU3ZnIFZlY3RvciBJY29ucyA6IGh0dHA6Ly93d3cub25saW5ld2ViZm9udHMuY29tL2ljb24gLS0+DQo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjU2IDI1NiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjU2IDI1NiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8bWV0YWRhdGE+IFN2ZyBWZWN0b3IgSWNvbnMgOiBodHRwOi8vd3d3Lm9ubGluZXdlYmZvbnRzLmNvbS9pY29uIDwvbWV0YWRhdGE+DQo8Zz48Zz48Zz48cGF0aCBmaWxsPSIjMDAwMDAwIiBkPSJNMTI0LjksMTAuNmMtMS4xLDAuNS0xNy4yLDE5LjUtNTgsNjguNGMtNDQuOSw1My44LTU2LjUsNjguMS01Ni44LDY5LjRjLTAuNCwyLjQsMC4xLDQuNywxLjUsNi4zYzIuMiwyLjYsMy4xLDIuNywxNiwyLjdoMTEuOHY0MS44YzAsNDYuMy0wLjEsNDQsMyw0NS45YzEuMywwLjgsMi44LDAuOSwyNi43LDAuOWgyNS4ybDEuNS0xLjJjMi44LTIuNCwyLjctMS42LDIuNy0zMi41YzAtMzEuOCwwLTMyLDMuMy0zOC42YzQuOC05LjYsMTUuMy0xNi4xLDI2LjItMTYuMWMxMSwwLDIxLjQsNi41LDI2LjIsMTYuMmMzLjMsNi42LDMuMyw2LjgsMy4zLDM4LjVjMCwyNi44LDAsMjguMiwwLjksMzAuMWMwLjUsMS4yLDEuNSwyLjQsMi40LDIuOWMxLjUsMC45LDIuMywwLjksMjYuNSwwLjloMjQuOWwxLjUtMS4yYzIuOS0yLjQsMi43LTAuNCwyLjctNDUuOHYtNDEuNWgxMS44YzEzLDAsMTMuOS0wLjEsMTYtMi43YzEuNS0xLjgsMi00LjIsMS40LTYuNWMtMC4zLTEuMi00LjYtNi43LTE0LjctMTguOGwtMTQuMy0xNy4xbC0wLjItMzQuMWMtMC4yLTMzLjUtMC4yLTM0LjEtMS4yLTM1LjRjLTIuNC0zLjEtMi40LTMuMi0xMy42LTMuMnMtMTEuMiwwLTEzLjYsMy4yYy0wLjksMS4yLTEsMi0xLjIsMTcuNGwtMC4yLDE2LjFsLTI3LjEtMzIuNkMxMzksMTksMTMyLjIsMTEuMSwxMzEsMTAuNkMxMjksOS43LDEyNi45LDkuOCwxMjQuOSwxMC42eiIvPjwvZz48L2c+PC9nPg0KPC9zdmc+" width="16" height="16" alt="Dashboard"/>
+               </div>
+               <div class="box">
+                  <h3>Users</h3>
+                  <h1>40</h1>
+               </div>
+            </div>
+            <div class="card">
+               <div class="icon-case">
+                  <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gU3ZnIFZlY3RvciBJY29ucyA6IGh0dHA6Ly93d3cub25saW5ld2ViZm9udHMuY29tL2ljb24gLS0+DQo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjU2IDI1NiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjU2IDI1NiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8bWV0YWRhdGE+IFN2ZyBWZWN0b3IgSWNvbnMgOiBodHRwOi8vd3d3Lm9ubGluZXdlYmZvbnRzLmNvbS9pY29uIDwvbWV0YWRhdGE+DQo8Zz48Zz48Zz48cGF0aCBmaWxsPSIjMDAwMDAwIiBkPSJNMTI0LjksMTAuNmMtMS4xLDAuNS0xNy4yLDE5LjUtNTgsNjguNGMtNDQuOSw1My44LTU2LjUsNjguMS01Ni44LDY5LjRjLTAuNCwyLjQsMC4xLDQuNywxLjUsNi4zYzIuMiwyLjYsMy4xLDIuNywxNiwyLjdoMTEuOHY0MS44YzAsNDYuMy0wLjEsNDQsMyw0NS45YzEuMywwLjgsMi44LDAuOSwyNi43LDAuOWgyNS4ybDEuNS0xLjJjMi44LTIuNCwyLjctMS42LDIuNy0zMi41YzAtMzEuOCwwLTMyLDMuMy0zOC42YzQuOC05LjYsMTUuMy0xNi4xLDI2LjItMTYuMWMxMSwwLDIxLjQsNi41LDI2LjIsMTYuMmMzLjMsNi42LDMuMyw2LjgsMy4zLDM4LjVjMCwyNi44LDAsMjguMiwwLjksMzAuMWMwLjUsMS4yLDEuNSwyLjQsMi40LDIuOWMxLjUsMC45LDIuMywwLjksMjYuNSwwLjloMjQuOWwxLjUtMS4yYzIuOS0yLjQsMi43LTAuNCwyLjctNDUuOHYtNDEuNWgxMS44YzEzLDAsMTMuOS0wLjEsMTYtMi43YzEuNS0xLjgsMi00LjIsMS40LTYuNWMtMC4zLTEuMi00LjYtNi43LTE0LjctMTguOGwtMTQuMy0xNy4xbC0wLjItMzQuMWMtMC4yLTMzLjUtMC4yLTM0LjEtMS4yLTM1LjRjLTIuNC0zLjEtMi40LTMuMi0xMy42LTMuMnMtMTEuMiwwLTEzLjYsMy4yYy0wLjksMS4yLTEsMi0xLjIsMTcuNGwtMC4yLDE2LjFsLTI3LjEtMzIuNkMxMzksMTksMTMyLjIsMTEuMSwxMzEsMTAuNkMxMjksOS43LDEyNi45LDkuOCwxMjQuOSwxMC42eiIvPjwvZz48L2c+PC9nPg0KPC9zdmc+" width="16" height="16" alt="Dashboard"/>
+               </div>
+               <div class="box">
+                  <h3>Users</h3>
+                  <h1>40</h1>
+               </div>
+            </div>
+         </div>
+         <h2 class="cards-title">User Table</h2>
+         <h:form id="searchForm">
+            <p:inputText id="searchInput" value="#{userBean.searchQuery}" styleClass="search-box"/>
+            <h:commandButton value="Search"
+                             action="#{userBean.searchUser}"
+                             styleClass="search-button">
+            </h:commandButton>
+         </h:form>
+
+         <div class="table-format">
+            <div class="detail-rectangle">
+               <div class="box">
+                  <p>40 Users</p>
+               </div>
+               <h:form>
+                  <p:commandButton value="Add New"
+                                   update=":registerForm :userTablePanel"
+                                   oncomplete="PF('registerUserDialog').show()"
+                                   styleClass="table-button1">
+                  </p:commandButton>
+               </h:form>
+               <h:form>
+                  <p:commandButton value="Delete All"
+                                   actionListener="#{userBean.confirmDeleteAll}"
+                                   update=":userTablePanel"
+                                   styleClass="table-button2">
+                     <p:confirm header="Confirmation"
+                                message="Are you absolutely sure you want to delete ALL users? This action cannot be undone!"
+                                icon="pi pi-exclamation-triangle" />
+                  </p:commandButton>
+               </h:form>
+            </div>
+
+            <h:panelGroup id="userTablePanel">
+               <p:dataTable var="user" value="#{userBean.users}" rows="10"
+                            paginator="true" paginatorPosition="bottom"
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} users"
+                            rowsPerPageTemplate="5,10,{ShowAll|'All'}">
+
+                  <p:column headerText="First Name">
+                     <h:outputText value="#{user.firstname}"/>
+                  </p:column>
+
+                  <p:column headerText="Last Name">
+                     <h:outputText value="#{user.lastname}"/>
+                  </p:column>
+
+                  <p:column headerText="Date of Birth">
+                     <h:outputText value="#{user.dateOfBirth}">
+                        <f:convertDateTime pattern="dd-MM-yyyy" timeZone="Africa/Kampala"/>
+                     </h:outputText>
+                  </p:column>
+
+                  <p:column headerText="No. of Dependants">
+                     <h:outputText value="#{user.id}"/>
+                  </p:column>
+
+                  <p:column headerText="Username">
+                     <h:outputText value="#{user.username}"/>
+                  </p:column>
+
+                  <p:column headerText="Action">
+                     <h:form>
+                        <p:commandButton value="U"
+                                         actionListener="#{userBean.selectUser(user)}"
+                                         update=":updateForm :userTablePanel"
+                                         oncomplete="PF('updateUserDialog').show()"
+                                         styleClass="update-button">
+                        </p:commandButton>
+                        <p:commandButton value="D"
+                                         update=":userTablePanel"
+                                         actionListener="#{userBean.confirmDelete(user)}"
+                                         styleClass="delete-button">
+                           <p:confirm header="Confirmation" message="Are you sure you want to delete this user?"
+                                      icon="pi pi-exclamation-triangle" />
+                        </p:commandButton>
+                     </h:form>
+                  </p:column>
+
+                  <f:facet name="paginatorTopLeft">
+                     <p:commandButton type="button" icon="pi pi-refresh"/>
+                  </f:facet>
+
+               </p:dataTable>
+            </h:panelGroup>
+         </div>
+      </div>
+   </div>
+
+   <h:form id="updateForm">
+      <p:dialog header="Update User: #{userBean.selectedUser.username}"
+                widgetVar="updateUserDialog"
+                modal="true"
+                resizable="false"
+                showEffect="fade"
+                hideEffect="fade"
+                closable="true"
+                visible="#{facesContext.validationFailed}"
+      >
+
+         <p:outputPanel id="updatePanel" rendered="#{not empty userBean.selectedUser}">
+            <h:panelGrid columns="1" cellpadding="7">
+               <p:outputLabel for="email">Email:     </p:outputLabel>
+               <p:inputText id="email" value="#{userBean.selectedUser.email}" required="true">
+                  <!-- <f:validateRegex pattern="^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$" /> -->
+               </p:inputText>
+               <h:message for="email" styleClass="error"/>
+
+               <p:outputLabel for="firstname">First Name:</p:outputLabel>
+               <p:inputText id="firstname" value="#{userBean.selectedUser.firstname}" required="true">
+                  <f:validateRegex pattern="[a-zA-Z]*" />
+                  <f:validateLength minimum="3" maximum="32" />
+               </p:inputText>
+               <h:message for="firstname" styleClass="error" />
+
+               <p:outputLabel for="lastname">Last Name:</p:outputLabel>
+               <p:inputText id="lastname" value="#{userBean.selectedUser.lastname}" required="true">
+                  <f:validateRegex pattern="[a-zA-Z]*" />
+                  <f:validateLength minimum="3" maximum="32" />
+               </p:inputText>
+               <h:message for="lastname" styleClass="error" />
+
+               <p:outputLabel for="password">Password:</p:outputLabel>
+               <p:password id="password" value="#{userBean.selectedUser.password}" required="true">
+               </p:password>
+               <h:message for="password" styleClass="error"/>
+
+               <p:outputLabel for="dateOfBirth">Date of Birth:</p:outputLabel>
+               <p:datePicker id="dateOfBirth" value="#{userBean.selectedUser.dateOfBirth}"
+                             pattern="dd-MM-yyyy"
+                             showOnFocus="true"
+                             showTime="false" timeInput="false"
+                             maxdate="#{calendarBean.currentDate}"/>
+               <h:message for="dateOfBirth" styleClass="error" />
+            </h:panelGrid>
+            <br/>
+            <p:commandButton value="Save" update=":updateForm:updatePanel :userTablePanel" actionListener="#{userBean.updateUser}" oncomplete="handleSaveCompleteUpdate(xhr, status, args)" icon="pi pi-check" style="margin-right: 5px"/>
+            <p:commandButton value="Cancel" onclick="PF('updateUserDialog').hide();" icon="pi pi-times" style="margin-left: 5px"/>
+         </p:outputPanel>
+      </p:dialog>
+   </h:form>
+
+   <h:form id="registerForm">
+      <p:dialog header="Register New User."
+                widgetVar="registerUserDialog"
+                modal="true"
+                resizable="false"
+                showEffect="fade"
+                hideEffect="fade"
+                closable="true"
+                visible="#{facesContext.validationFailed}"
+      >
+         <p:outputPanel id="registerPanel" rendered="true">
+            <h:panelGrid columns="2" cellpadding="7">
+               <p:outputLabel for="userusername">Username:</p:outputLabel>
+               <p:inputText id="userusername" value="#{userBean.user.username}" required="true" validatorMessage="User name is required">
+                  <f:validateRegex pattern="[a-zA-Z0-9_]*" />
+                  <f:validateLength minimum="3" maximum="16" />
+                  <f:validateRequired/>
+               </p:inputText>
+               <p:message for="userusername" styleClass="error"/>
+               <br/>
+               <p:outputLabel for="useremail">Email:     </p:outputLabel>
+               <p:inputText id="useremail" value="#{userBean.user.email}" required="true">
+                  <!-- <f:validateRegex pattern="^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$" /> -->
+               </p:inputText>
+               <p:message for="useremail" styleClass="error"/>
+               <br/>
+               <p:outputLabel for="userfirstname">First Name:</p:outputLabel>
+               <p:inputText id="userfirstname" value="#{userBean.user.firstname}" required="true" validatorMessage="First Name is required">
+                  <f:validateRegex pattern="[a-zA-Z ]*" />
+                  <f:validateLength minimum="3" maximum="32" />
+                  <f:validateRequired/>
+               </p:inputText>
+               <p:message for="userfirstname" styleClass="error" />
+               <br/>
+               <p:outputLabel for="userlastname">Last Name:</p:outputLabel>
+               <p:inputText id="userlastname" value="#{userBean.user.lastname}" required="true" validatorMessage="Last Name is required">
+                  <f:validateRegex pattern="[a-zA-Z ]*" />
+                  <f:validateLength minimum="3" maximum="32" />
+                  <f:validateRequired/>
+               </p:inputText>
+               <p:message for="userlastname" styleClass="error" />
+               <br/>
+               <p:outputLabel for="userdateOfBirth">Date of Birth:</p:outputLabel>
+               <p:datePicker id="userdateOfBirth" value="#{userBean.user.dateOfBirth}"
+                             pattern="dd-MM-yyyy"
+                             showOnFocus="true"
+                             showTime="false" timeInput="false"
+                             maxdate="#{calendarBean.currentDate}" />
+               <p:message for="userdateOfBirth" styleClass="error" />
+            </h:panelGrid>
+            <p:commandButton value="Register" update=":registerForm:registerPanel :userTablePanel" actionListener="#{userBean.registerUser}" icon="pi pi-check" style="margin-right: 5px"/>
+            <p:commandButton value="Cancel" onclick="PF('registerUserDialog').hide();" icon="pi pi-times" style="margin-left: 5px"/>
+         </p:outputPanel>
+      </p:dialog>
+   </h:form>
+
+   <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+      <p:button value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+      <p:button value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+   </p:confirmDialog>
+
+</h:body>
+</html>

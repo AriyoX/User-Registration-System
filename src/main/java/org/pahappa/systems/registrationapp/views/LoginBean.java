@@ -42,9 +42,9 @@ public class LoginBean {
             ExternalContext externalContext = context.getExternalContext();
             externalContext.getSessionMap().put("currentUser", user);
             if ((user.getRole()).equals("ADMIN")){
-                return "/pages/index/index.xhtml?faces-redirect=true";
+                return "/pages/admin/dashboard.xhtml?faces-redirect=true";
             } else
-                return "/pages/main/main.xhtml?faces-redirect=true";
+                return "/pages/user/dependants.xhtml?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid username or password", null));

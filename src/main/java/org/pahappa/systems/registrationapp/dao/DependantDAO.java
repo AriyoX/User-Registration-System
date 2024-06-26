@@ -11,6 +11,7 @@ import org.pahappa.systems.registrationapp.models.User;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class DependantDAO {
     private final SessionFactory sessionFactory;
@@ -69,23 +70,27 @@ public class DependantDAO {
         Transaction transaction = null;
         Session session = null;
         List<Dependant> dependants = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            dependants = (List<Dependant>) session.createQuery("FROM Dependant WHERE user.id = :userId AND deleted = false")
-                    .setParameter("userId", user.getId())
-                    .list();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
+        if (user != null){
+            try {
+                session = sessionFactory.openSession();
+                transaction = session.beginTransaction();
+                dependants = (List<Dependant>) session.createQuery("FROM Dependant WHERE user.id = :userId AND deleted = false")
+                        .setParameter("userId", user.getId())
+                        .list();
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                e.printStackTrace();
+            } finally {
+                if (session != null) {
+                    session.close();
+                }
             }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return dependants;
         }
-        return dependants;
+        else
+            return Collections.emptyList();
     }
 
 //    public void delete(Dependant dependant){
@@ -115,7 +120,9 @@ public class DependantDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            dependants = (List<Dependant>) session.createQuery("FROM Dependant WHERE deleted = false").list();
+            dependants = (List<Dependant>) session.createQuery(
+                            "FROM Dependant d WHERE d.deleted = false AND d.user.deleted = false")
+                    .list();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -127,10 +134,8 @@ public class DependantDAO {
                 session.close();
             }
         }
-        if (dependants == null){
-            return Collections.emptyList();
-        }
-        return dependants;
+        return Objects.requireNonNullElse(dependants, Collections.emptyList());
+
     }
 
     public Dependant getDependantByUsername(String username){
@@ -283,6 +288,26 @@ public class DependantDAO {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
             session.update(dependant);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+    public void deleteAllDependants() {
+        Transaction transaction = null;
+        Session session = null;
+        try{
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.createQuery("delete from Dependant").executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

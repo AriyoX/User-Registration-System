@@ -30,6 +30,18 @@
     </managed-bean>
 
     <managed-bean>
+        <managed-bean-name>UserMenu</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.UserMenu</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>AdminMenu</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.AdminMenu</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
         <managed-bean-name>MainMenuBean</managed-bean-name>
         <managed-bean-class>org.pahappa.systems.registrationapp.views.MainMenuBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
