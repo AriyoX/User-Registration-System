@@ -244,6 +244,14 @@
             PF('registerUserDialog').hide();
          }
       }
+      function resetDialog() {
+         // Assuming your dialog has a form with id 'updateUserForm'
+         PF('updateUserDialog').hide(); // Hide the dialog
+         // Reset form fields inside the dialog
+         $('#updateUserForm').each(function() {
+            this.reset();
+         });
+      }
    </script>
 </h:head>
 <h:body>
@@ -359,7 +367,7 @@
                   </p:column>
 
                   <p:column headerText="No. of Dependants">
-                     <h:outputText value="#{user.id}"/>
+                     <h:outputText value="#{AdminBean.activeDependantsCount(user)}"/>
                   </p:column>
 
                   <p:column headerText="Username">
@@ -442,7 +450,7 @@
             </h:panelGrid>
             <br/>
             <p:commandButton value="Save" update=":updateForm:updatePanel :userTablePanel" actionListener="#{userBean.updateUser}" oncomplete="handleSaveCompleteUpdate(xhr, status, args)" icon="pi pi-check" style="margin-right: 5px"/>
-            <p:commandButton value="Cancel" onclick="PF('updateUserDialog').hide();" icon="pi pi-times" style="margin-left: 5px"/>
+            <p:commandButton value="Cancel" onclick="resetDialog();" icon="pi pi-times" style="margin-left: 5px"/>
          </p:outputPanel>
       </p:dialog>
    </h:form>

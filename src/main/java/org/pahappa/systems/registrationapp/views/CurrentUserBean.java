@@ -153,4 +153,54 @@ public class CurrentUserBean implements Serializable {
         currentUserDependants = dependantService.searchDependants(searchQuery, currentUser);
     }
 
+    private int gcd(int a, int b) {
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+
+    public int dependantCount() {
+        List<Dependant> dependants = dependantService.getUserDependants(currentUser);
+        if (dependants == null) {
+            return 0;
+        }
+        return dependants.size();
+    }
+
+    public int femaleDependantCount() {
+        List<Dependant> dependants = dependantService.getFemaleDependants(currentUser);
+        if (dependants == null) {
+            return 0;
+        }
+        return dependants.size();
+    }
+
+    public int maleDependantCount() {
+        List<Dependant> dependants = dependantService.getMaleDependants(currentUser);
+        if (dependants == null) {
+            return 0;
+        }
+        return dependants.size();
+    }
+
+    public String ratioOfFemaleToMaleDependants() {
+        List<Dependant> dependantsFemale = dependantService.getFemaleDependants(currentUser);
+        int a = dependantsFemale.size();
+        List<Dependant> dependantsMale = dependantService.getMaleDependants(currentUser);
+        int b = dependantsMale.size();
+
+        if (b == 0 || a == 0) {
+            return "0";
+        }
+
+        int gcd = gcd(a, b);
+        int simplifiedA = a / gcd;
+        int simplifiedB = b / gcd;
+
+        return simplifiedA + ":" + simplifiedB;
+    }
+
 }

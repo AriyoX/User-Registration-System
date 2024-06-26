@@ -178,4 +178,16 @@ public class DependantService {
                 .collect(Collectors.toList());
     }
 
+    public List<Dependant> getMaleDependants(User user) {
+        return getUserDependants(user).stream()
+                .filter(dependant -> dependant.getGender() == Dependant.Gender.MALE)
+                .collect(Collectors.toList());
+    }
+
+    public List<Dependant> getFemaleDependants(User user) {
+        return getUserDependants(user).stream()
+                .filter(dependant -> dependant.getGender() == Dependant.Gender.FEMALE)
+                .collect(Collectors.toList());
+    }
+
 }

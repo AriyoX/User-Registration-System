@@ -32,6 +32,7 @@ public class AdminBean implements Serializable {
     private final UserService userService = new UserService();
     private String username;
     private final UserDAO userDAO = new UserDAO();
+    private User user = new User();
 
 
     @PostConstruct
@@ -49,6 +50,14 @@ public class AdminBean implements Serializable {
         }
         genderValues = Dependant.Gender.values();
         dependants = dependantService.getAllDependants();
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getUsername() {
@@ -275,6 +284,12 @@ public class AdminBean implements Serializable {
 
     }
 
-
+    public int activeDependantsCount(User user){
+        List<Dependant> dependants = dependantService.getUserDependants(user);
+        if (dependants == null){
+            return 0;
+        }
+        return dependants.size();
+    }
 
 }
