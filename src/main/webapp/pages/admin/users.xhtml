@@ -173,10 +173,10 @@
          margin-left: 10px;
          font-size: 18px;
          border-radius: 5px;
-         background-color: #2196F3;
+         background-color: #1814F3 !important;
          color: white;
          height: 32px;
-         border: 0.5px #f1f1f1;
+         border: 0.5px #1814F3;
       }
 
       .table-format {
@@ -205,20 +205,26 @@
          height: 40px;
          margin-top: 10px;
          margin-bottom: 10px;
-         font-size: 13px;
+         font-size: 12px;
+         background-color: #1814F3 !important;
+         border: #1814F3 !important;
       }
 
       .table-format .detail-rectangle .table-button2 {
          width: 100px;
          height: 40px;
          margin: 10px 30px 10px 10px;
-         font-size: 13px;
+         font-size: 12px;
+         background-color: #EC1212 !important;
+         border: #EC1212 !important;
       }
 
       .table-format .update-button {
          height: 35px;
          width: 50px;
          font-size: 13px;
+         background-color: #1814F3 !important;
+         border: #1814f3 !important;
       }
 
       .table-format .delete-button {
@@ -226,6 +232,8 @@
          width: 50px;
          font-size: 13px;
          margin-left: 0;
+         background-color: #EC1212 !important;
+         border: #EC1212 !important;
       }
 
       .dialog-button {
@@ -328,6 +336,7 @@
                </div>
                <h:form>
                   <p:commandButton value="Add New"
+                                   icon="pi pi-user-minus"
                                    update=":registerForm :userTablePanel"
                                    oncomplete="PF('registerUserDialog').show()"
                                    styleClass="table-button1">
@@ -335,6 +344,7 @@
                </h:form>
                <h:form>
                   <p:commandButton value="Delete All"
+                                   icon="pi pi-user-plus"
                                    actionListener="#{userBean.confirmDeleteAll}"
                                    update=":userTablePanel"
                                    styleClass="table-button2">
@@ -376,14 +386,14 @@
 
                   <p:column headerText="Action">
                      <h:form>
-                        <p:commandButton value="D"
+                        <p:commandButton icon="pi pi-trash"
                                          update=":userTablePanel"
                                          actionListener="#{userBean.confirmDelete(user)}"
                                          styleClass="delete-button">
                            <p:confirm header="Confirmation" message="Are you sure you want to delete this user?"
                                       icon="pi pi-exclamation-triangle" />
                         </p:commandButton>
-                        <p:commandButton value="U"
+                        <p:commandButton icon="pi pi-user-edit"
                                          actionListener="#{userBean.selectUser(user)}"
                                          update=":updateForm :userTablePanel"
                                          oncomplete="PF('updateUserDialog').show()"

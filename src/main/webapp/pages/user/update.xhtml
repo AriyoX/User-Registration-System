@@ -225,23 +225,30 @@
             background-color: #1A47CC;
         }
 
-        .profile form .form-group .save-button {
-            text-align: center;
+        .profile form .form-group-save-button {
+            text-align: center !important;
+            width: 100% !important;
+            font-size: 16px;
+        }
+
+        .profile form .form-group-save-button .button {
             width: 100%;
+            padding: 10px 20px !important;
+            background-color: #1814F3 !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 5px !important;
+            cursor: pointer !important;
         }
 
-        .profile form .form-group .save-button button {
-            padding: 10px 20px;
-            background-color: #2D60FF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        body .ui-button:hover {
+            background-color: #1814F9 !important;
         }
 
-        .profile form .form-group .save-button button:hover {
-            background-color: #1A47CC;
+        .profile form .form-group .save-button .button:hover {
+            background-color: #1814F9 !important;
         }
+
     </style>
 </h:head>
 <h:body>
@@ -316,8 +323,8 @@
                         </p:inputText>
                         <p:message for="email" styleClass="error"/>
                     </div>
-                    <div class="form-group save-button">
-                        <h:commandButton value="Update" action="#{CurrentUserBean.updateUser()}" styleClass="register-button"/>
+                    <div class="form-group-save-button">
+                        <h:commandButton value="Update" action="#{CurrentUserBean.updateUser()}" styleClass="button"/>
                     </div>
                 </h:form>
             </div>

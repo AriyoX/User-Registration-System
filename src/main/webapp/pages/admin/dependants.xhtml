@@ -172,10 +172,10 @@
             margin-left: 0;
             font-size: 18px;
             border-radius: 5px;
-            background-color: #2196F3;
+            background-color: #1814F3 !important;
             color: white;
             height: 32px;
-            border: 0.5px #f1f1f1;
+            border: 0.5px #1814F3;
         }
 
         .gender-filter {
@@ -193,10 +193,10 @@
             margin-left: 0;
             font-size: 18px;
             border-radius: 5px;
-            background-color: #2196F3;
+            background-color: #1814F3 !important;
             color: white;
             height: 32px;
-            border: 0.5px #f1f1f1;
+            border: 0.5px #1814F3;
         }
 
         .search-box, .gender-filter {
@@ -229,20 +229,26 @@
             height: 40px;
             margin-top: 10px;
             margin-bottom: 10px;
-            font-size: 13px;
+            font-size: 12px;
+            background-color: #1814F3 !important;
+            border: #1814F3 !important;
         }
 
         .table-format .detail-rectangle .table-button2 {
             width: 100px;
             height: 40px;
             margin: 10px 30px 10px 10px;
-            font-size: 13px;
+            font-size: 12px;
+            background-color: #EC1212 !important;
+            border: #EC1212 !important;
         }
 
         .table-format .update-button {
             height: 35px;
             width: 50px;
             font-size: 13px;
+            background-color: #1814F3 !important;
+            border: #1814F3 !important;
         }
 
         .table-format .delete-button {
@@ -250,6 +256,8 @@
             width: 50px;
             font-size: 13px;
             margin-left: 0;
+            background-color: #EC1212 !important;
+            border: #EC1212 !important;
         }
 
         .dialog-button {
@@ -364,6 +372,7 @@
                     </div>
                     <h:form>
                         <p:commandButton value="Add New"
+                                         icon="pi pi-plus"
                                          update=":registerForm :dependantTablePanel"
                                          oncomplete="PF('registerDependantDialog').show()"
                                          styleClass="table-button1">
@@ -371,6 +380,7 @@
                     </h:form>
                     <h:form>
                         <p:commandButton value="Delete All"
+                                         icon="pi pi-minus"
                                          actionListener="#{adminBean.confirmDeleteAllDependants}"
                                          update=":dependantTablePanel"
                                          styleClass="table-button2">
@@ -413,14 +423,14 @@
 
                         <p:column headerText="Action">
                             <h:form>
-                                <p:commandButton value="D"
+                                <p:commandButton icon="pi pi-trash"
                                                  update=":dependantTablePanel"
                                                  actionListener="#{AdminBean.deleteDependant(dependant)}"
                                                  styleClass="delete-button" >
                                     <p:confirm header="Confirmation" message="Are you sure you want to delete this dependant?"
                                                icon="pi pi-exclamation-triangle" />
                                 </p:commandButton>
-                                <p:commandButton value="U"
+                                <p:commandButton icon="pi pi-user-edit"
                                                  actionListener="#{AdminBean.selectDependant(dependant)}"
                                                  update=":updateForm :dependantTablePanel"
                                                  oncomplete="PF('updateDependantDialog').show()"
