@@ -140,7 +140,7 @@
             flex-wrap: wrap;
         }
 
-        .container .content .charts .chart-1 {
+        .container .content .charts .chart {
             width: calc(50% - 10px); /* Two charts per row with some spacing */
             height: fit-content; /* Adjust height as needed */
             background: white;
@@ -149,7 +149,7 @@
             padding: 20px;
         }
 
-        .container .content .charts .chart-2 {
+        .container .content .charts .chart {
             width: calc(50% - 10px); /* Two charts per row with some spacing */
             height: fit-content; /* Adjust height as needed */
             background: white;
@@ -239,11 +239,11 @@
                 </div>
             </div>
             <div class="charts">
-                <div class="chart-1">
+                <div class="chart">
                     <h3>User Dependant Statistics</h3>
                     <p><p:barChart model="#{AdminBean.barModel}" /></p>
                 </div>
-                <div class="chart-2">
+                <div class="chart">
                     <h3>Dependant Gender Statistics</h3>
                     <p:pieChart model="#{AdminBean.pieModel}" />
                 </div>

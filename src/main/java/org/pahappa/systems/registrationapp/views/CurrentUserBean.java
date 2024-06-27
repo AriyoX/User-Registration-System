@@ -162,6 +162,18 @@ public class CurrentUserBean implements Serializable {
         currentUserDependants = dependantService.searchDependants(searchQuery, currentUser);
     }
 
+    public void confirmDeleteAllDependants(){
+        try {
+            dependantService.deleteAllUserDependants(currentUser);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "All users deleted!"));
+            currentUserDependants = dependantService.getUserDependants(currentUser); // Refresh the user list (now empty)
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Failed to delete all users."));
+        }
+    }
+
     private int gcd(int a, int b) {
         while (b != 0) {
             int temp = b;

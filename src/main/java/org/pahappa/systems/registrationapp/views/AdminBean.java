@@ -224,7 +224,7 @@ public class AdminBean implements Serializable {
         }
     }
 
-    public void confirmDeleteAll(){
+    public void confirmDeleteAllDependants(){
         try {
             dependantService.deleteAllDependants();
             FacesContext.getCurrentInstance().addMessage(null,

@@ -283,7 +283,9 @@ public class DependantDAO {
         try{
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            session.createQuery("delete from Dependant").executeUpdate();
+            session.createQuery("update Dependant set deleted = true, deletedAt = :deletedAt")
+                    .setParameter("deletedAt", (new Date()))
+                    .executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -354,5 +356,27 @@ public class DependantDAO {
         return dependants;
     }
 
+    public void deleteAllUserDependants(User user){
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.createQuery("update Dependant set deleted = true, deletedAt = :deletedAt where user.id = :userId")
+                    .setParameter("deletedAt", (new Date()))
+                    .setParameter("userId", user.getId())
+                    .executeUpdate();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
 
 }

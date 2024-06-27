@@ -203,8 +203,13 @@ public class UserDAO {
         try{
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            session.createQuery("delete from Dependant").executeUpdate();
-            session.createQuery("delete from User").executeUpdate();
+            session.createQuery("update Dependant set deleted = true, deletedAt = :deletedAt")
+                    .setParameter("deletedAt", (new Date()))
+                    .executeUpdate();
+            session.createQuery("update User set deleted = true, deletedAt = :deletedAt where role != :role")
+                    .setParameter("role", "ADMIN")
+                    .setParameter("deletedAt", (new Date()))
+                    .executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

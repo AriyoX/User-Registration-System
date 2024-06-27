@@ -88,6 +88,10 @@ public class DependantService {
         dependantDAO.deleteAllDependants();
     }
 
+    public void deleteAllUserDependants(User user){
+        dependantDAO.deleteAllUserDependants(user);
+    }
+
     public List<Dependant> getDependantsByUserId(long userId){
         return dependantDAO.getDependantsByUserId(userId);
     }

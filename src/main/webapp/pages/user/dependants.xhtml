@@ -360,7 +360,7 @@
                     </h:form>
                     <h:form>
                         <p:commandButton value="Delete All"
-                                         actionListener="#{adminBean.confirmDeleteAll}"
+                                         actionListener="#{CurrentUserBean.confirmDeleteAllDependants}"
                                          update=":dependantTablePanel"
                                          styleClass="table-button2">
                             <p:confirm header="Confirmation"
