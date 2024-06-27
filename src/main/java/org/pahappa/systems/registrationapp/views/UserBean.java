@@ -74,6 +74,11 @@ public class UserBean implements Serializable {
     // register method
     public String registerUser() {
         try {
+            if (user.getFirstname().isBlank() || user.getLastname().isBlank()){
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Name cannot be blank.", null));
+                return null;
+            }
             String password = generateCommonLangPassword();
             user.setPassword(password);
             user.setRole("USER");
@@ -99,9 +104,13 @@ public class UserBean implements Serializable {
     // update method
     public void updateUser() {
         try {
-            userService.updateUser(selectedUser);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "User updated!"));
-            users = userService.getAllUsers();
+            if (selectedUser.getFirstname().isBlank() || selectedUser.getLastname().isBlank()){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Name cannot be blank", null));
+            } else {
+                userService.updateUser(selectedUser);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "User updated!"));
+                users = userService.getAllUsers();
+            }
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
         }

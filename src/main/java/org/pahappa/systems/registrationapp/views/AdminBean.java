@@ -172,13 +172,19 @@ public class AdminBean implements Serializable {
         User user = userService.getUser(username);
         try {
             if (user != null) {
-                dependantService.addDependantToUser(user, dependant);
-                dependants.add(dependant);
-                dependants = dependantService.getAllDependants();
-                dependant = new Dependant(); // Reset the dependant object
-                PrimeFaces.current().ajax().update("form:dataTable");
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Dependant added successfully!", null));
+                if (dependant.getFirstname().isBlank() || dependant.getLastname().isBlank()) {
+                    FacesContext.getCurrentInstance().addMessage(null,
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Name cannot be blank!", null));
+                } else {
+                    dependantService.addDependantToUser(user, dependant);
+                    dependants.add(dependant);
+                    dependants = dependantService.getAllDependants();
+                    dependant = new Dependant(); // Reset the dependant object
+                    PrimeFaces.current().ajax().update("form:dataTable");
+                    FacesContext.getCurrentInstance().addMessage(null,
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, "Dependant added successfully!", null));
+
+                }
             } else {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, "User: " + username + " does not exist.", null));
@@ -216,9 +222,13 @@ public class AdminBean implements Serializable {
 
     public void updateDependant() {
         try {
-            dependantService.updateDependant(selectedDependant);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "User updated!"));
-            dependants =  dependantService.getAllDependants();
+            if (selectedDependant.getFirstname().isBlank() || selectedDependant.getLastname().isBlank()) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Name cannot be blank.", null));
+            } else {
+                dependantService.updateDependant(selectedDependant);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "User updated!"));
+                dependants =  dependantService.getAllDependants();
+            }
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
         }
