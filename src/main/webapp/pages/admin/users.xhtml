@@ -201,7 +201,7 @@
 
       .table-format .detail-rectangle .table-button1 {
          width: 100px;
-         margin-left: 730px;
+         margin-left: 765px;
          height: 40px;
          margin-top: 10px;
          margin-bottom: 10px;
@@ -225,7 +225,7 @@
          height: 35px;
          width: 50px;
          font-size: 13px;
-         margin-left: 5px;
+         margin-left: 0;
       }
 
       .dialog-button {
@@ -376,18 +376,18 @@
 
                   <p:column headerText="Action">
                      <h:form>
-                        <p:commandButton value="U"
-                                         actionListener="#{userBean.selectUser(user)}"
-                                         update=":updateForm :userTablePanel"
-                                         oncomplete="PF('updateUserDialog').show()"
-                                         styleClass="update-button">
-                        </p:commandButton>
                         <p:commandButton value="D"
                                          update=":userTablePanel"
                                          actionListener="#{userBean.confirmDelete(user)}"
                                          styleClass="delete-button">
                            <p:confirm header="Confirmation" message="Are you sure you want to delete this user?"
                                       icon="pi pi-exclamation-triangle" />
+                        </p:commandButton>
+                        <p:commandButton value="U"
+                                         actionListener="#{userBean.selectUser(user)}"
+                                         update=":updateForm :userTablePanel"
+                                         oncomplete="PF('updateUserDialog').show()"
+                                         styleClass="update-button" style="margin-left: 5px">
                         </p:commandButton>
                      </h:form>
                   </p:column>

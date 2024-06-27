@@ -34,6 +34,7 @@ public class AdminBean implements Serializable {
     private final UserDAO userDAO = new UserDAO();
     private User user = new User();
     private Dependant.Gender selectedGender;
+    private Dependant selectedDependant;
 
 
     @PostConstruct
@@ -51,6 +52,19 @@ public class AdminBean implements Serializable {
         }
         genderValues = Dependant.Gender.values();
         dependants = dependantService.getAllDependants();
+        selectedDependant = new Dependant();
+    }
+
+    public Dependant getSelectedDependant() {
+        return selectedDependant;
+    }
+
+    public void setSelectedDependant(Dependant selectedDependant) {
+        this.selectedDependant = selectedDependant;
+    }
+
+    public void selectDependant(Dependant dependant) {
+        this.selectedDependant = dependant;
     }
 
     public Dependant.Gender getSelectedGender() {
@@ -182,6 +196,16 @@ public class AdminBean implements Serializable {
 
     public void searchDependent() {
         dependants = dependantService.searchDependants(searchQuery);
+    }
+
+    public void updateDependant() {
+        try {
+            dependantService.updateDependant(selectedDependant);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "User updated!"));
+            dependants =  dependantService.getAllDependants();
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage()));
+        }
     }
 
     public void confirmDeleteAll(){
