@@ -135,21 +135,35 @@
         .container .content .charts {
             padding: 20px 15px;
             display: flex;
-            align-items: center;
+
             justify-content: space-between;
             flex-wrap: wrap;
         }
 
-        .container .content .charts .chart {
+        .container .content .charts .chart-1 {
             width: calc(50% - 10px); /* Two charts per row with some spacing */
-            height: 300px; /* Adjust height as needed */
+            height: fit-content; /* Adjust height as needed */
             background: white;
             margin-bottom: 20px;
             border-radius: 15px;
             padding: 20px;
         }
 
-        .chart h3 {
+        .container .content .charts .chart-2 {
+            width: calc(50% - 10px); /* Two charts per row with some spacing */
+            height: fit-content; /* Adjust height as needed */
+            background: white;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .chart-1 h3 {
+            color: #343C6A;
+            margin-bottom: 10px;
+        }
+
+        .chart-2 h3 {
             color: #343C6A;
             margin-bottom: 10px;
         }
@@ -225,13 +239,13 @@
                 </div>
             </div>
             <div class="charts">
-                <div class="chart">
-                    <h3>Weekly Activity</h3>
-                    <p>Chart Placeholder 1</p>
+                <div class="chart-1">
+                    <h3>User Dependant Statistics</h3>
+                    <p><p:barChart model="#{AdminBean.barModel}" /></p>
                 </div>
-                <div class="chart">
-                    <h3>Gender Statistics</h3>
-                    <p>Chart Placeholder 2</p>
+                <div class="chart-2">
+                    <h3>Dependant Gender Statistics</h3>
+                    <p:pieChart model="#{AdminBean.pieModel}" />
                 </div>
             </div>
         </div>

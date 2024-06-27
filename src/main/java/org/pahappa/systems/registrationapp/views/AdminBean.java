@@ -6,6 +6,18 @@ import org.pahappa.systems.registrationapp.models.User;
 import org.pahappa.systems.registrationapp.services.DependantService;
 import org.pahappa.systems.registrationapp.services.UserService;
 import org.primefaces.PrimeFaces;
+import org.primefaces.model.charts.ChartData;
+import org.primefaces.model.charts.axes.cartesian.CartesianScales;
+import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes;
+import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearTicks;
+import org.primefaces.model.charts.bar.BarChartDataSet;
+import org.primefaces.model.charts.bar.BarChartModel;
+import org.primefaces.model.charts.bar.BarChartOptions;
+import org.primefaces.model.charts.optionconfig.legend.Legend;
+import org.primefaces.model.charts.optionconfig.legend.LegendLabel;
+import org.primefaces.model.charts.optionconfig.title.Title;
+import org.primefaces.model.charts.pie.PieChartDataSet;
+import org.primefaces.model.charts.pie.PieChartModel;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -35,11 +47,15 @@ public class AdminBean implements Serializable {
     private User user = new User();
     private Dependant.Gender selectedGender;
     private Dependant selectedDependant;
+    private PieChartModel pieModel;
+    private BarChartModel barModel;
 
 
     @PostConstruct
     public void init() {
         currentUser = getCurrentUser();
+        createPieModel();
+        createBarModel();
         try {
             if (currentUser == null || !"ADMIN".equals(currentUser.getRole())) {
                 FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
@@ -328,4 +344,97 @@ public class AdminBean implements Serializable {
         }
     }
 
+    public void createPieModel(){
+        pieModel = new PieChartModel();
+        ChartData data = new ChartData();
+
+        PieChartDataSet dataSet = new PieChartDataSet();
+        List<Number> values = new ArrayList<>();
+        values.add(femaleDependantsCount());
+        values.add(maleDependantsCount());
+        dataSet.setData(values);
+
+        List<String> bgColors = new ArrayList<>();
+        bgColors.add("rgb(255, 99, 132)");
+        bgColors.add("rgb(54, 162, 235)");
+        dataSet.setBackgroundColor(bgColors);
+
+        data.addChartDataSet(dataSet);
+        List<String> labels = new ArrayList<>();
+        labels.add("Female");
+        labels.add("Male");
+        data.setLabels(labels);
+
+        pieModel.setData(data);
+    }
+
+    public PieChartModel getPieModel() {
+        return pieModel;
+    }
+
+    public void createBarModel(){
+        barModel = new BarChartModel();
+        ChartData data = new ChartData();
+
+        BarChartDataSet barDataSet = new BarChartDataSet();
+        barDataSet.setLabel("Users");
+
+        List<Number> values = new ArrayList<>();
+        values.add(usersWithDependantsCount());
+        values.add(usersWithoutDependantsCount());
+        barDataSet.setData(values);
+
+        List<String> bgColor = new ArrayList<>();
+        bgColor.add("rgba(255, 99, 132, 0.2)");
+        bgColor.add("rgba(255, 159, 64, 0.2)");
+        barDataSet.setBackgroundColor(bgColor);
+
+        List<String> borderColor = new ArrayList<>();
+        borderColor.add("rgb(255, 99, 132)");
+        borderColor.add("rgb(255, 159, 64)");
+        barDataSet.setBorderColor(borderColor);
+        barDataSet.setBorderWidth(1);
+
+        data.addChartDataSet(barDataSet);
+
+        List<String> labels = new ArrayList<>();
+        labels.add("Users with dependants");
+        labels.add("Users without dependants");
+        data.setLabels(labels);
+
+        //Data
+        barModel.setData(data);
+
+        //Options
+        BarChartOptions options = new BarChartOptions();
+        CartesianScales cScales = new CartesianScales();
+        CartesianLinearAxes linearAxes = new CartesianLinearAxes();
+        CartesianLinearTicks ticks = new CartesianLinearTicks();
+        ticks.setStepSize(1);
+        linearAxes.setTicks(ticks);
+        linearAxes.setBeginAtZero(true);
+        cScales.addYAxesData(linearAxes);
+        options.setScales(cScales);
+
+        Title title = new Title();
+        title.setDisplay(true);
+        title.setText("Users With and Without Dependants");
+        options.setTitle(title);
+
+        Legend legend = new Legend();
+        legend.setDisplay(true);
+        legend.setPosition("top");
+        LegendLabel legendLabels = new LegendLabel();
+        legendLabels.setFontStyle("bold");
+        legendLabels.setFontColor("#2980B9");
+        legendLabels.setFontSize(24);
+        legend.setLabels(legendLabels);
+        options.setLegend(legend);
+
+        barModel.setOptions(options);
+    }
+
+    public BarChartModel getBarModel() {
+        return barModel;
+    }
 }
