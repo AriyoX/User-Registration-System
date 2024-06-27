@@ -14,10 +14,10 @@ public class RegistrationApp {
     public static void main(String[] args) {
         // UserView userView = new UserView();
         // userView.displayMenu();
-        DependantService dependantService = new DependantService();
-        List<Dependant> dependants = dependantService.getDependantsByGender(Dependant.Gender.MALE);
-        for (Dependant dependant : dependants) {
-            System.out.println(dependant);
+        UserService userService = new UserService();
+        List<User> users = userService.getAllUsers();
+        for (User user : users) {
+            System.out.println(user.getPassword());
         }
     }
 }

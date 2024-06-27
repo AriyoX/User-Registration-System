@@ -10,6 +10,44 @@
    <title>Users</title>
    <style type="text/css">
 
+      .custom-grid {
+         width: 100%;
+         padding: 20px;
+         background-color: #f5f5f5;
+         border-radius: 8px;
+         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .custom-label {
+         font-weight: bold;
+         margin-bottom: 5px;
+         text-align: right;
+         padding-right: 10px;
+      }
+
+      .custom-input {
+         width: 100%;
+      }
+
+      .button-group {
+         display: flex;
+         justify-content: flex-end;
+         margin-top: 20px;
+      }
+
+      .custom-button1 {
+         margin-right: 10px;
+         background-color: #1814F3 !important;
+         border: #1814F3 !important;
+      }
+
+      .custom-button2 {
+         margin-left: 10px !important;
+         margin-right: 10px;
+         background-color: #EC1212 !important;
+         border: #EC1212 !important;
+      }
+
       @font-face {
          font-family: Poppins;
          src: url("/resources/Poppins-Regular.ttf");
@@ -416,51 +454,57 @@
       <p:dialog header="Update User: #{userBean.selectedUser.username}"
                 widgetVar="updateUserDialog"
                 modal="true"
-                resizable="false"
+                resizable="true"
                 showEffect="fade"
                 hideEffect="fade"
                 closable="true"
+                width="800px"
                 visible="#{facesContext.validationFailed}"
       >
 
          <p:outputPanel id="updatePanel" rendered="#{not empty userBean.selectedUser}">
-            <h:panelGrid columns="1" cellpadding="7">
-               <p:outputLabel for="email">Email:     </p:outputLabel>
-               <p:inputText id="email" value="#{userBean.selectedUser.email}" required="true">
+
+            <p:messages id="updatemessages" showDetail="false" closable="true" severity="error" showSummary="true">
+               <p:autoUpdate/>
+            </p:messages>
+            <p:growl id="growl" showDetail="false" severity="info"/>
+
+            <p:panelGrid columns="2" styleClass="custom-grid">
+
+               <p:outputLabel for="email" styleClass="custom-label">Email:     </p:outputLabel>
+               <p:inputText id="email" value="#{userBean.selectedUser.email}" required="true" styleClass="custom-input">
                   <!-- <f:validateRegex pattern="^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$" /> -->
                </p:inputText>
-               <h:message for="email" styleClass="error"/>
 
-               <p:outputLabel for="firstname">First Name:</p:outputLabel>
-               <p:inputText id="firstname" value="#{userBean.selectedUser.firstname}" required="true">
+               <p:outputLabel for="firstname" styleClass="custom-label">First Name:</p:outputLabel>
+               <p:inputText id="firstname" value="#{userBean.selectedUser.firstname}" required="true" styleClass="custom-input">
                   <f:validateRegex pattern="[a-zA-Z]*" />
                   <f:validateLength minimum="3" maximum="32" />
                </p:inputText>
-               <h:message for="firstname" styleClass="error" />
 
-               <p:outputLabel for="lastname">Last Name:</p:outputLabel>
-               <p:inputText id="lastname" value="#{userBean.selectedUser.lastname}" required="true">
+               <p:outputLabel for="lastname" styleClass="custom-label">Last Name:</p:outputLabel>
+               <p:inputText id="lastname" value="#{userBean.selectedUser.lastname}" required="true" styleClass="custom-input">
                   <f:validateRegex pattern="[a-zA-Z]*" />
                   <f:validateLength minimum="3" maximum="32" />
                </p:inputText>
-               <h:message for="lastname" styleClass="error" />
 
-               <p:outputLabel for="password">Password:</p:outputLabel>
-               <p:password id="password" value="#{userBean.selectedUser.password}" required="true">
+               <p:outputLabel for="password" styleClass="custom-label">Password:</p:outputLabel>
+               <p:password id="password" value="#{userBean.selectedUser.password}" required="true" styleClass="custom-input">
                </p:password>
-               <h:message for="password" styleClass="error"/>
 
-               <p:outputLabel for="dateOfBirth">Date of Birth:</p:outputLabel>
+               <p:outputLabel for="dateOfBirth" styleClass="custom-label">Date of Birth:</p:outputLabel>
                <p:datePicker id="dateOfBirth" value="#{userBean.selectedUser.dateOfBirth}"
                              pattern="dd-MM-yyyy"
                              showOnFocus="true"
                              showTime="false" timeInput="false"
-                             maxdate="#{calendarBean.currentDate}"/>
+                             maxdate="#{calendarBean.currentDate}" styleClass="custom-input"/>
                <h:message for="dateOfBirth" styleClass="error" />
-            </h:panelGrid>
-            <br/>
-            <p:commandButton value="Save" update=":updateForm:updatePanel :userTablePanel" actionListener="#{userBean.updateUser}" oncomplete="handleSaveCompleteUpdate(xhr, status, args)" icon="pi pi-check" style="margin-right: 5px"/>
-            <p:commandButton value="Cancel" onclick="resetDialog();" icon="pi pi-times" style="margin-left: 5px"/>
+            </p:panelGrid>
+
+            <div class="button-group">
+               <p:commandButton value="Save" update=":updateForm:updatePanel :userTablePanel" actionListener="#{userBean.updateUser}" oncomplete="handleSaveCompleteUpdate(xhr, status, args)" icon="pi pi-check" styleClass="custom-button1"/>
+               <p:commandButton value="Cancel" onclick="resetDialog();" icon="pi pi-times" styleClass="custom-button2"/>
+            </div>
          </p:outputPanel>
       </p:dialog>
    </h:form>
@@ -469,61 +513,67 @@
       <p:dialog header="Register New User."
                 widgetVar="registerUserDialog"
                 modal="true"
-                resizable="false"
+                resizable="true"
                 showEffect="fade"
                 hideEffect="fade"
                 closable="true"
+                width="800px"
                 visible="#{facesContext.validationFailed}"
       >
          <p:outputPanel id="registerPanel" rendered="true">
-            <h:panelGrid columns="2" cellpadding="7">
-               <p:outputLabel for="userusername">Username:</p:outputLabel>
-               <p:inputText id="userusername" value="#{userBean.user.username}" required="true" validatorMessage="User name is required">
+
+            <p:messages id="registermessages" showDetail="false" closable="true" severity="error" showSummary="true">
+               <p:autoUpdate/>
+            </p:messages>
+
+            <p:panelGrid columns="2" styleClass="custom-grid">
+               <p:outputLabel for="userusername" styleClass="custom-label">Username:</p:outputLabel>
+               <p:inputText id="userusername" value="#{userBean.user.username}" required="true" validatorMessage="User name is required" styleClass="custom-input">
                   <f:validateRegex pattern="[a-zA-Z0-9_]*" />
                   <f:validateLength minimum="3" maximum="16" />
                   <f:validateRequired/>
                </p:inputText>
-               <p:message for="userusername" styleClass="error"/>
-               <br/>
-               <p:outputLabel for="useremail">Email:     </p:outputLabel>
-               <p:inputText id="useremail" value="#{userBean.user.email}" required="true">
+
+               <p:outputLabel for="useremail" styleClass="custom-label">Email:     </p:outputLabel>
+               <p:inputText id="useremail" value="#{userBean.user.email}" required="true" styleClass="custom-input">
                   <!-- <f:validateRegex pattern="^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$" /> -->
                </p:inputText>
-               <p:message for="useremail" styleClass="error"/>
-               <br/>
-               <p:outputLabel for="userfirstname">First Name:</p:outputLabel>
-               <p:inputText id="userfirstname" value="#{userBean.user.firstname}" required="true" validatorMessage="First Name is required">
+
+               <p:outputLabel for="userfirstname" styleClass="custom-label">First Name:</p:outputLabel>
+               <p:inputText id="userfirstname" value="#{userBean.user.firstname}" required="true" validatorMessage="First Name is required" styleClass="custom-input">
                   <f:validateRegex pattern="[a-zA-Z ]*" />
                   <f:validateLength minimum="3" maximum="32" />
                   <f:validateRequired/>
                </p:inputText>
-               <p:message for="userfirstname" styleClass="error" />
-               <br/>
-               <p:outputLabel for="userlastname">Last Name:</p:outputLabel>
-               <p:inputText id="userlastname" value="#{userBean.user.lastname}" required="true" validatorMessage="Last Name is required">
+
+               <p:outputLabel for="userlastname" styleClass="custom-label">Last Name:</p:outputLabel>
+               <p:inputText id="userlastname" value="#{userBean.user.lastname}" required="true" validatorMessage="Last Name is required" styleClass="custom-input">
                   <f:validateRegex pattern="[a-zA-Z ]*" />
                   <f:validateLength minimum="3" maximum="32" />
                   <f:validateRequired/>
                </p:inputText>
-               <p:message for="userlastname" styleClass="error" />
-               <br/>
-               <p:outputLabel for="userdateOfBirth">Date of Birth:</p:outputLabel>
+
+               <p:outputLabel for="userdateOfBirth" styleClass="custom-label">Date of Birth:</p:outputLabel>
                <p:datePicker id="userdateOfBirth" value="#{userBean.user.dateOfBirth}"
                              pattern="dd-MM-yyyy"
                              showOnFocus="true"
                              showTime="false" timeInput="false"
-                             maxdate="#{calendarBean.currentDate}" />
-               <p:message for="userdateOfBirth" styleClass="error" />
-            </h:panelGrid>
-            <p:commandButton value="Register" update=":registerForm:registerPanel :userTablePanel" actionListener="#{userBean.registerUser}" icon="pi pi-check" style="margin-right: 5px"/>
-            <p:commandButton value="Cancel" onclick="PF('registerUserDialog').hide();" icon="pi pi-times" style="margin-left: 5px"/>
+                             maxdate="#{calendarBean.currentDate}" styleClass="custom-input"/>
+
+            </p:panelGrid>
+
+            <div class="button-group">
+               <p:commandButton value="Register" update=":registerForm:registerPanel :userTablePanel" actionListener="#{userBean.registerUser}" icon="pi pi-check" styleClass="custom-button1"/>
+               <p:commandButton value="Cancel" onclick="PF('registerUserDialog').hide();" icon="pi pi-times" styleClass="custom-button2"/>
+            </div>
+
          </p:outputPanel>
       </p:dialog>
    </h:form>
 
    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-      <p:button value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
-      <p:button value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+      <p:button value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" style="background-color: #EC1212 !important;"/>
+      <p:button value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" style="background-color: #1814F3 !important;"/>
    </p:confirmDialog>
 
 </h:body>

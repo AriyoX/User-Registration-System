@@ -181,7 +181,7 @@ public class AdminBean implements Serializable {
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Dependant added successfully!", null));
             } else {
                 FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "User" + username + " does not exist.", null));
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "User: " + username + " does not exist.", null));
             }
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
