@@ -365,7 +365,7 @@
                     </div>
                     <div class="box">
                         <h3>Female Dependants</h3>
-                        <h1><h:outputText value="#{AdminBean.femaleDependantsCount()}"/></h1>
+                        <h1><h:outputText id="card1" value="#{AdminBean.femaleDependantsCount()}"/></h1>
                     </div>
                 </div>
                 <div class="card">
@@ -374,7 +374,7 @@
                     </div>
                     <div class="box">
                         <h3>Male Dependants</h3>
-                        <h1><h:outputText value="#{AdminBean.maleDependantsCount()}"/></h1>
+                        <h1><h:outputText id="card2" value="#{AdminBean.maleDependantsCount()}"/></h1>
                     </div>
                 </div>
                 <div class="card">
@@ -383,7 +383,7 @@
                     </div>
                     <div class="box">
                         <h3>Female to Male Ratio</h3>
-                        <h1><h:outputText value="#{AdminBean.ratioOfFemaleToMaleDependants()}"/></h1>
+                        <h1><h:outputText id="card3" value="#{AdminBean.ratioOfFemaleToMaleDependants()}"/></h1>
                     </div>
                 </div>
             </div>
@@ -407,12 +407,12 @@
             <div class="table-format">
                 <div class="detail-rectangle">
                     <div class="box">
-                        <p><h:outputText value="#{AdminBean.dependantCount()}"/> Dependants</p>
+                        <p><h:outputText id="card4" value="#{AdminBean.dependantCount()}"/> Dependants</p>
                     </div>
                     <h:form>
                         <p:commandButton value="Add New"
                                          icon="pi pi-plus"
-                                         update=":registerForm :dependantTablePanel"
+                                         update=":registerForm dependantTablePanel card1 card2 card3 card4"
                                          oncomplete="PF('registerDependantDialog').show()"
                                          styleClass="table-button1">
                         </p:commandButton>
@@ -421,7 +421,7 @@
                         <p:commandButton value="Delete All"
                                          icon="pi pi-minus"
                                          actionListener="#{adminBean.confirmDeleteAllDependants}"
-                                         update=":dependantTablePanel"
+                                         update=":dependantTablePanel card1 card2 card3 card4"
                                          styleClass="table-button2">
                             <p:confirm header="Confirmation"
                                        message="Are you absolutely sure you want to delete ALL dependants? This action cannot be undone!"
@@ -436,7 +436,7 @@
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} dependants"
                                  rowsPerPageTemplate="5,10,{ShowAll|'All'}"
-                                 lazy="false">
+                                 >
 
                         <p:column headerText="First Name">
                             <h:outputText value="#{dependant.firstname}"/>
@@ -463,7 +463,7 @@
                         <p:column headerText="Action">
                             <h:form>
                                 <p:commandButton icon="pi pi-trash"
-                                                 update=":dependantTablePanel"
+                                                 update="dependantTablePanel card1 card2 card3 card4"
                                                  actionListener="#{AdminBean.deleteDependant(dependant)}"
                                                  styleClass="delete-button" >
                                     <p:confirm header="Confirmation" message="Are you sure you want to delete this dependant?"
@@ -471,7 +471,7 @@
                                 </p:commandButton>
                                 <p:commandButton icon="pi pi-user-edit"
                                                  actionListener="#{AdminBean.selectDependant(dependant)}"
-                                                 update=":updateForm :dependantTablePanel"
+                                                 update=":updateForm dependantTablePanel card1 card2 card3 card4"
                                                  oncomplete="PF('updateDependantDialog').show()"
                                                  styleClass="update-button" style="margin-left: 5px">
                                 </p:commandButton>
@@ -504,6 +504,7 @@
                 <p:messages id="registermessages" showDetail="false" closable="true" severity="error, info" showSummary="true">
                     <p:autoUpdate/>
                 </p:messages>
+                <p:growl id="registergrowl" severity="info"/>
 
                 <p:panelGrid columns="2" styleClass="custom-grid" >
 
@@ -546,7 +547,7 @@
                 </p:panelGrid>
 
                 <div class="button-group">
-                    <p:commandButton value="Register" update=":registerForm:registerPanel :dependantTablePanel" actionListener="#{AdminBean.registerDependant}" icon="pi pi-check" styleClass="custom-button1"/>
+                    <p:commandButton value="Register" update=":registerForm:registerPanel dependantTablePanel card1 card2 card3 card4" actionListener="#{AdminBean.registerDependant}" icon="pi pi-check" styleClass="custom-button1"/>
                     <p:commandButton value="Cancel" onclick="PF('registerDependantDialog').hide();" icon="pi pi-times" styleClass="custom-button2"/>
                 </div>
             </p:outputPanel>
@@ -598,7 +599,7 @@
                 </p:panelGrid>
 
                 <div class="button-group">
-                <p:commandButton value="Save" update=":updateForm:updatePanel :dependantTablePanel" actionListener="#{AdminBean.updateDependant}" oncomplete="handleUpdateCompleteUpdate(xhr, status, args)" styleClass="custom-button1"/>
+                <p:commandButton value="Save" update=":updateForm:updatePanel dependantTablePanel card1 card2 card3 card4" actionListener="#{AdminBean.updateDependant}" oncomplete="handleUpdateCompleteUpdate(xhr, status, args)" styleClass="custom-button1"/>
                 <p:commandButton value="Cancel" onclick="PF('updateDependantDialog').hide();" styleClass="custom-button2"/>
                 </div>
             </p:outputLabel>

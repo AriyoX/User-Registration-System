@@ -336,7 +336,7 @@
                </div>
                <div class="box">
                   <h3>Users with Dependants</h3>
-                  <h1><h:outputText value="#{AdminBean.usersWithDependantsCount()}"/></h1>
+                  <h1><h:outputText id="card1" value="#{AdminBean.usersWithDependantsCount()}"/></h1>
                </div>
             </div>
             <div class="card">
@@ -345,7 +345,7 @@
                </div>
                <div class="box">
                   <h3>Users without dependants</h3>
-                  <h1><h:outputText value="#{AdminBean.usersWithoutDependantsCount()}"/></h1>
+                  <h1><h:outputText id="card2" value="#{AdminBean.usersWithoutDependantsCount()}"/></h1>
                </div>
             </div>
             <div class="card">
@@ -354,7 +354,7 @@
                </div>
                <div class="box">
                   <h3>Dependency Ratio</h3>
-                  <h1><h:outputText value="#{AdminBean.ratioOfUsersWithDependantsToUsersWithout()}"/></h1>
+                  <h1><h:outputText id="card3" value="#{AdminBean.ratioOfUsersWithDependantsToUsersWithout()}"/></h1>
                </div>
             </div>
          </div>
@@ -370,12 +370,12 @@
          <div class="table-format">
             <div class="detail-rectangle">
                <div class="box">
-                  <p><h:outputText value="#{AdminBean.userCount()}"/> Users</p>
+                  <p><h:outputText id="card4" value="#{AdminBean.userCount()}"/> Users</p>
                </div>
                <h:form>
                   <p:commandButton value="Add New"
                                    icon="pi pi-user-minus"
-                                   update=":registerForm :userTablePanel"
+                                   update=":registerForm userTablePanel card1 card2 card3 card4"
                                    oncomplete="PF('registerUserDialog').show()"
                                    styleClass="table-button1">
                   </p:commandButton>
@@ -384,7 +384,7 @@
                   <p:commandButton value="Delete All"
                                    icon="pi pi-user-plus"
                                    actionListener="#{userBean.confirmDeleteAll}"
-                                   update=":userTablePanel"
+                                   update="userTablePanel card1 card2 card3 card4"
                                    styleClass="table-button2">
                      <p:confirm header="Confirmation"
                                 message="Are you absolutely sure you want to delete ALL users? This action cannot be undone!"
@@ -425,7 +425,7 @@
                   <p:column headerText="Action">
                      <h:form>
                         <p:commandButton icon="pi pi-trash"
-                                         update=":userTablePanel"
+                                         update="userTablePanel card1 card2 card3 card4"
                                          actionListener="#{userBean.confirmDelete(user)}"
                                          styleClass="delete-button">
                            <p:confirm header="Confirmation" message="Are you sure you want to delete this user?"
@@ -433,7 +433,7 @@
                         </p:commandButton>
                         <p:commandButton icon="pi pi-user-edit"
                                          actionListener="#{userBean.selectUser(user)}"
-                                         update=":updateForm :userTablePanel"
+                                         update=":updateForm userTablePanel card1 card2 card3 card4"
                                          oncomplete="PF('updateUserDialog').show()"
                                          styleClass="update-button" style="margin-left: 5px">
                         </p:commandButton>
@@ -502,7 +502,7 @@
             </p:panelGrid>
 
             <div class="button-group">
-               <p:commandButton value="Save" update=":updateForm:updatePanel :userTablePanel" actionListener="#{userBean.updateUser}" oncomplete="handleSaveCompleteUpdate(xhr, status, args)" icon="pi pi-check" styleClass="custom-button1"/>
+               <p:commandButton value="Save" update=":updateForm:updatePanel userTablePanel card1 card2 card3 card4" actionListener="#{userBean.updateUser}" oncomplete="handleSaveCompleteUpdate(xhr, status, args)" icon="pi pi-check" styleClass="custom-button1"/>
                <p:commandButton value="Cancel" onclick="resetDialog();" icon="pi pi-times" styleClass="custom-button2"/>
             </div>
          </p:outputPanel>
@@ -563,7 +563,7 @@
             </p:panelGrid>
 
             <div class="button-group">
-               <p:commandButton value="Register" update=":registerForm:registerPanel :userTablePanel" actionListener="#{userBean.registerUser}" icon="pi pi-check" styleClass="custom-button1"/>
+               <p:commandButton value="Register" update=":registerForm:registerPanel userTablePanel card1 card2 card3 card4" actionListener="#{userBean.registerUser}" icon="pi pi-check" styleClass="custom-button1"/>
                <p:commandButton value="Cancel" onclick="PF('registerUserDialog').hide();" icon="pi pi-times" styleClass="custom-button2"/>
             </div>
 
