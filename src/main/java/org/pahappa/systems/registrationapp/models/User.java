@@ -1,27 +1,28 @@
 package org.pahappa.systems.registrationapp.models;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class User {
+@Table(name = "users")
+@SQLDelete(sql = "UPDATE users SET deleted = true, deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@Where(clause = "deleted = 0")
+public class User extends Person{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @Column(name = "password", nullable = false)
+    private String password;
 
-    @Column(name = "username", unique = true, nullable = false)
-    private String username;
+    private String role;
 
-    @Column(name = "first_name")
-    private String firstname;
+    private String email;
 
-    @Column(name = "last_name")
-    private String lastname;
-
-    @Column(name = "date_of_birth")
-    private Date dateOfBirth;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Dependant> dependants;
 
     public User(){
 
@@ -34,36 +35,36 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public String getUsername() {
-        return username;
+    public List<Dependant> getDependants() {
+        return dependants;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setDependants(List<Dependant> dependants) {
+        this.dependants = dependants;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getPassword() {
+        return password;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getRole() {
+        return role;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
+    public String getEmail() {
+        return email;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
@@ -86,6 +87,5 @@ public class User {
     public int hashCode() {
         return Objects.hash(username, firstname, lastname, dateOfBirth);
     }
-
 
 }

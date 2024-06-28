@@ -4,26 +4,29 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.pahappa.systems.registrationapp.config.SessionConfiguration;
+import org.pahappa.systems.registrationapp.models.Dependant;
+import org.pahappa.systems.registrationapp.models.Dependant.Gender;
 import org.pahappa.systems.registrationapp.models.User;
 
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
-public class UserDAO {
+public class DependantDAO {
     private final SessionFactory sessionFactory;
 
-    public UserDAO() {
+    public DependantDAO() {
         this.sessionFactory = SessionConfiguration.getSessionFactory();
     }
 
-    public boolean isDatabaseConnected() {
+    public boolean isDatabaseConnected(){
         Transaction transaction = null;
         Session session = null;
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            session.createSQLQuery("SELECT 1 FROM Users").uniqueResult();
+            session.createSQLQuery("SELECT 1 FROM Dependants").uniqueResult();
             transaction.commit();
             return true;
         } catch (Exception e) {
@@ -38,13 +41,18 @@ public class UserDAO {
         }
     }
 
-    public void add(User user) {
+    public void addDependantToUser(User user, Dependant dependant){
         Transaction transaction = null;
         Session session = null;
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            session.save(user);
+            User existingUser = (User) session.get(User.class, user.getId());
+            if (existingUser == null){
+               throw new IllegalArgumentException("User does not exist");
+            }
+            dependant.setUser(user);
+            session.save(dependant);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -58,33 +66,40 @@ public class UserDAO {
         }
     }
 
-    public void update(User user) {
+    public List<Dependant> getUserDependants(User user){
         Transaction transaction = null;
         Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            session.update(user);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
+        List<Dependant> dependants = null;
+        if (user != null){
+            try {
+                session = sessionFactory.openSession();
+                transaction = session.beginTransaction();
+                dependants = (List<Dependant>) session.createQuery("FROM Dependant WHERE user.id = :userId AND deleted = false")
+                        .setParameter("userId", user.getId())
+                        .list();
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                e.printStackTrace();
+            } finally {
+                if (session != null) {
+                    session.close();
+                }
             }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            return dependants;
         }
+        else
+            return Collections.emptyList();
     }
 
-//    public void delete(User user) {
+//    public void delete(Dependant dependant){
 //        Transaction transaction = null;
 //        Session session = null;
 //        try {
 //            session = sessionFactory.openSession();
 //            transaction = session.beginTransaction();
-//            session.delete(user);
+//            session.delete(dependant);
 //            transaction.commit();
 //        } catch (Exception e) {
 //            if (transaction != null) {
@@ -98,14 +113,39 @@ public class UserDAO {
 //        }
 //    }
 
-    public User getUserByUsername(String username) {
+    public List<Dependant> getAllDependants(){
         Transaction transaction = null;
         Session session = null;
-        User user = null;
+        List<Dependant> dependants = null;
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            user = (User) session.createQuery("FROM User WHERE username = :username and deleted = false")
+            dependants = (List<Dependant>) session.createQuery(
+                            "FROM Dependant d WHERE d.deleted = false AND d.user.deleted = false")
+                    .list();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return Objects.requireNonNullElse(dependants, Collections.emptyList());
+
+    }
+
+    public Dependant getDependantByUsername(String username){
+        Transaction transaction = null;
+        Session session = null;
+        Dependant dependant = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            dependant = (Dependant) session.createQuery("FROM Dependant WHERE username = :username AND deleted = false")
                     .setParameter("username", username)
                     .uniqueResult();
             transaction.commit();
@@ -119,17 +159,17 @@ public class UserDAO {
                 session.close();
             }
         }
-        return user;
+        return dependant;
     }
 
-    public User getUserByFirstName(String firstname) {
+    public Dependant getDependantByFirstName(String firstname){
         Transaction transaction = null;
         Session session = null;
-        User user = null;
+        Dependant dependant = null;
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            user = (User) session.createQuery("FROM User WHERE firstname = :firstname and deleted = false")
+            dependant = (Dependant) session.createQuery("FROM Dependant WHERE firstname = :firstname AND deleted = false")
                     .setParameter("firstname", firstname)
                     .uniqueResult();
             transaction.commit();
@@ -143,17 +183,17 @@ public class UserDAO {
                 session.close();
             }
         }
-        return user;
+        return dependant;
     }
 
-    public User getUserByLastName(String lastname) {
+    public Dependant getDependantByLastName(String lastname){
         Transaction transaction = null;
         Session session = null;
-        User user = null;
+        Dependant dependant = null;
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            user = (User) session.createQuery("FROM User WHERE lastname = :lastname and deleted = false")
+            dependant = (Dependant) session.createQuery("FROM Dependant WHERE lastname = :lastname AND deleted = false")
                     .setParameter("lastname", lastname)
                     .uniqueResult();
             transaction.commit();
@@ -167,18 +207,18 @@ public class UserDAO {
                 session.close();
             }
         }
-        return user;
+        return dependant;
     }
 
-    public List<User> getAllUsers() {
+    public List<Dependant> getDependantsByUserId(long user_id){
         Transaction transaction = null;
         Session session = null;
-        List<User> users = null;
+        List<Dependant> dependants = null;
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            users = session.createQuery("from User u where u.role != :role and deleted = false")
-                    .setParameter("role", "ADMIN")
+            dependants = (List<Dependant>) session.createQuery("FROM Dependant WHERE user.id = :user_id AND deleted = false")
+                    .setParameter("user_id", user_id)
                     .list();
             transaction.commit();
         } catch (Exception e) {
@@ -191,13 +231,53 @@ public class UserDAO {
                 session.close();
             }
         }
-        if (users == null) {
-            return Collections.emptyList();
-        }
-        return users;
+        return dependants;
     }
 
-    public void deleteAllUsers() {
+    public void delete(Dependant dependant){
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            dependant = (Dependant) session.get(Dependant.class, dependant.getId());
+            dependant.setDeleted(true); // Mark as deleted
+            dependant.setDeletedAt(new Date());
+            session.update(dependant);   // Update the entity
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+    public void update(Dependant dependant){
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.update(dependant);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+    public void deleteAllDependants() {
         Transaction transaction = null;
         Session session = null;
         try{
@@ -206,9 +286,85 @@ public class UserDAO {
             session.createQuery("update Dependant set deleted = true, deletedAt = :deletedAt")
                     .setParameter("deletedAt", (new Date()))
                     .executeUpdate();
-            session.createQuery("update User set deleted = true, deletedAt = :deletedAt where role != :role")
-                    .setParameter("role", "ADMIN")
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+    public List<Dependant> getDependantsByGender(Dependant.Gender gender){
+        Transaction transaction = null;
+        Session session = null;
+        List<Dependant> dependants = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            dependants = (List<Dependant>) session.createQuery(
+                            "FROM Dependant d WHERE d.gender = :gender AND d.deleted = false AND d.user.deleted = false")
+                    .setParameter("gender", gender)
+                    .list();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        if (dependants == null){
+            return Collections.emptyList();
+        }
+        return dependants;
+    }
+
+    public List<Dependant> getDependantsByGender(User user, Dependant.Gender gender){
+        Transaction transaction = null;
+        Session session = null;
+        List<Dependant> dependants = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            dependants = (List<Dependant>) session.createQuery(
+                            "FROM Dependant WHERE user.id = :userId AND gender = :gender AND deleted = false AND user.deleted = false")
+                    .setParameter("userId", user.getId())
+                    .setParameter("gender", gender)
+                    .list();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        if (dependants == null){
+            return Collections.emptyList();
+        }
+        return dependants;
+    }
+
+    public void deleteAllUserDependants(User user){
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.createQuery("update Dependant set deleted = true, deletedAt = :deletedAt where user.id = :userId")
                     .setParameter("deletedAt", (new Date()))
+                    .setParameter("userId", user.getId())
                     .executeUpdate();
             transaction.commit();
         } catch (Exception e) {
@@ -222,135 +378,5 @@ public class UserDAO {
             }
         }
     }
-
-    public User getUserById(long userId){
-        Transaction transaction = null;
-        Session session = null;
-        User user = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            user = (User) session.get(User.class, userId);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return user;
-    }
-
-    public User getUserByEmail(String email) {
-        Transaction transaction = null;
-        Session session = null;
-        User user = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            user = (User) session.createQuery("from User where email = :email and deleted = false")
-                    .setParameter("email", email)
-                    .uniqueResult();
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return user;
-    }
-
-    public void delete(User user){
-        Transaction transaction = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            user = (User) session.get(User.class, user.getId());
-            user.setDeleted(true);
-            user.setDeletedAt(new Date());
-            session.update(user);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-    }
-
-    public List<User> getUsersWithActiveDependants() {
-        Transaction transaction = null;
-        Session session = null;
-        List<User> users = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-
-            users = session.createQuery(
-                            "SELECT DISTINCT u FROM User u JOIN u.dependants d WHERE d.deleted = false and u.role != :role")
-                    .setParameter("role", "ADMIN")
-                    .list();
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        if (users == null) {
-            return Collections.emptyList();
-        }
-        return users;
-    }
-
-    public List<User> getUsersWithoutDependants() {
-        Transaction transaction = null;
-        Session session = null;
-        List<User> users = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            // Use HQL to select users who do not have any dependants
-            users = session.createQuery(
-                            "SELECT u FROM User u WHERE u.dependants IS EMPTY and u.role != :role")
-                    .setParameter("role", "ADMIN")
-                    .list();
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        if (users == null){
-            return Collections.emptyList();
-        }
-        return users;
-    }
-
-
 
 }

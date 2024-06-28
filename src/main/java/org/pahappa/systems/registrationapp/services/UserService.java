@@ -4,12 +4,16 @@ import org.pahappa.systems.registrationapp.dao.UserDAO;
 import org.pahappa.systems.registrationapp.exception.ExitException;
 import org.pahappa.systems.registrationapp.exception.WrongValidationException;
 import org.pahappa.systems.registrationapp.models.User;
+import org.pahappa.systems.registrationapp.util.MailService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.Base64;
 
 public class UserService {
     private final UserDAO userDAO;
@@ -22,15 +26,18 @@ public class UserService {
         this.simpleDateFormat.setLenient(false);
     }
 
-    public void registerUser(User user) {
+    public void registerUser(User user) throws WrongValidationException{
         User existingUser = userDAO.getUserByUsername(user.getUsername());
-        if (existingUser == null) {
-            try{
-                validateNewUser(user);
-                userDAO.add(user);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (existingUser != null) {
+            throw new WrongValidationException("Username already exists, please choose another one.");
+        }
+        try {
+            validateNewUser(user);
+            String encodedPassword = Base64.getEncoder().encodeToString((user.getPassword()).getBytes());
+            user.setPassword(encodedPassword);
+            userDAO.add(user);
+        } catch (Exception e) {
+            throw new WrongValidationException(e.getMessage());
         }
     }
 
@@ -42,23 +49,38 @@ public class UserService {
         return userDAO.getUserByUsername(username);
     }
 
-    public void updateUser(User user) {
-        User existingUser = userDAO.getUserByUsername(user.getUsername());
+    public User getUserByFirstName(String firstName) {
+        return userDAO.getUserByFirstName(firstName);
+    }
+
+    public User getUserByLastName(String lastName) {
+        return userDAO.getUserByLastName(lastName);
+    }
+
+    public void updateUser(User user) throws WrongValidationException {
+        User existingUser = userDAO.getUserById(user.getId());
+        if (existingUser == null) {
+            throw new WrongValidationException("User does not exist. Please try again.");
+        }
         try{
             validateExistingUser(existingUser);
             existingUser.setFirstname(user.getFirstname());
             existingUser.setLastname(user.getLastname());
             existingUser.setDateOfBirth(user.getDateOfBirth());
+            String encodedPassword = Base64.getEncoder().encodeToString((user.getPassword()).getBytes());
+            existingUser.setPassword(encodedPassword);
+            existingUser.setEmail(user.getEmail());
             userDAO.update(existingUser);
+            MailService.send("ahumuzaariyo@gmail.com", "tiadbqtshilfdprn", existingUser.getEmail(), "Updated Details",user.getUsername() + "\nYour details have been updated. Your new password is: " + user.getPassword());
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new WrongValidationException(e.getMessage());
         }
     }
 
     public void deleteUser(User user) {
-        User existingUser = userDAO.getUserByUsername(user.getUsername());
+        User existingUser = userDAO.getUserById(user.getId());
         try{
-            validateExistingUser(user);
+            // validateExistingUser(user);
             userDAO.delete(existingUser);
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,6 +91,42 @@ public class UserService {
         userDAO.deleteAllUsers();
     }
 
+    public User getUserById(long userId) {
+        return userDAO.getUserById(userId);
+    }
+
+    public List<User> searchUsers(String query) {
+        List<User> users = userDAO.getAllUsers();
+        if (query == null || query.trim().isEmpty()) {
+            return users;
+        }
+        return users.stream()
+                .filter(user -> user.getUsername().toLowerCase().contains(query.toLowerCase()) ||
+                        user.getFirstname().toLowerCase().contains(query.toLowerCase()) ||
+                        user.getLastname().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public User loginUser(String identifier, String password) throws WrongValidationException {
+        User existingUserWithUsername = userDAO.getUserByUsername(identifier);
+        User existingUserWithEmail = userDAO.getUserByEmail(identifier);
+        if (existingUserWithUsername != null) {
+            String encodedPasswordFromDatabase = existingUserWithUsername.getPassword();
+            String actualPassword = new String(Base64.getDecoder().decode(encodedPasswordFromDatabase));
+            if (actualPassword.equals(password)) {
+                return existingUserWithUsername;
+            }
+        }
+        if (existingUserWithEmail != null) {
+            String encodedPasswordFromDatabase = existingUserWithEmail.getPassword();
+            String actualPassword = new String(Base64.getDecoder().decode(encodedPasswordFromDatabase));
+            if (actualPassword.equals(password)) {
+                return existingUserWithEmail;
+            }
+        }
+        return null;
+    }
+
     // for new username
     public void validateNewUsername(String username) throws WrongValidationException {
         List<User> users = getAllUsers();
@@ -76,7 +134,7 @@ public class UserService {
         if (optionalUser.isPresent()) {
             throw new WrongValidationException("Username is already taken. Please use a different username.");
         }
-        if (username.length() < 3){
+        if (username.length() < 3 || username == null){
             throw new WrongValidationException("Username must be at least 3 characters. Please try again.");
         }
         if (username.length() > 16){
@@ -165,6 +223,7 @@ public class UserService {
         validateLastName(user.getLastname());
         validateBothNames(user.getFirstname(), user.getLastname());
         validateDateOfBirth(simpleDateFormat.format(user.getDateOfBirth()));
+        validateNewEmail(user.getEmail());
     }
 
     public void validateExistingUser(User user) throws WrongValidationException {
@@ -173,6 +232,7 @@ public class UserService {
         validateLastName(user.getLastname());
         validateBothNames(user.getFirstname(), user.getLastname());
         validateDateOfBirth(simpleDateFormat.format(user.getDateOfBirth()));
+        // validateExistingEmail(user.getEmail());
     }
 
     public void isFunctionExited(String str) throws ExitException {
@@ -181,4 +241,20 @@ public class UserService {
         }
     }
 
+    public void validateNewEmail(String email) throws WrongValidationException{
+        List<User> users = getAllUsers();
+        Optional<User> optionalUser = users.stream().filter(user -> user.getEmail().equals(email)).findFirst();
+        if (optionalUser.isPresent()){
+            throw new WrongValidationException("Email is already in use. Please try again.");
+        }
+//        if(!email.matches("^(.+)@(\\\\S+)$")){
+//            throw new WrongValidationException("Invalid email address. Please try again.");
+//        }
+    }
+
+    public void validateExistingEmail(String email) throws WrongValidationException{
+        if(!email.matches("^(.+)@(\\\\S+)$")){
+            throw new WrongValidationException("Invalid email address. Please try again.");
+        }
+    }
 }

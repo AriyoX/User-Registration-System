@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                         http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+    <managed-bean>
+        <managed-bean-name>MenuBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.MenuBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>CalendarBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.CalenderBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>UserBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.UserBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>AdminBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.AdminBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>UserMenu</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.UserMenu</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>AdminMenu</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.AdminMenu</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>MainMenuBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.MainMenuBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>LoginBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.LoginBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>CurrentUserBean</managed-bean-name>
+        <managed-bean-class>org.pahappa.systems.registrationapp.views.CurrentUserBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+
+
+    <navigation-rule>
+        <from-view-id>/pages/index/index.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>register</from-outcome>
+            <to-view-id>/pages/register/register.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>user-management</from-outcome>
+            <to-view-id>/pages/usermanagement/user-management.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>view-all-dependants</from-outcome>
+            <to-view-id>/pages/dependants/view-all-dependants.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/pages/register/register.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>register</from-outcome>
+            <to-view-id>/pages/register/register.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>index</from-outcome>
+            <to-view-id>/pages/index/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/pages/usermanagement/user-management.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>index</from-outcome>
+            <to-view-id>/pages/index/index.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>view_dependants</from-outcome>
+            <to-view-id>/pages/dependants/view_dependants.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/pages/dependants/view_dependants.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>userManagement</from-outcome>
+            <to-view-id>/pages/usermanagement/user-management.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+</faces-config>
