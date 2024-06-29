@@ -197,6 +197,33 @@ public class UserDAO {
         return users;
     }
 
+    public List<User> getAdminUsers() {
+        Transaction transaction = null;
+        Session session = null;
+        List<User> users = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            users = session.createQuery("from User u where u.role = :role and deleted = false")
+                    .setParameter("role", "ADMIN")
+                    .list();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        if (users == null) {
+            return Collections.emptyList();
+        }
+        return users;
+    }
+
     public void deleteAllUsers() {
         Transaction transaction = null;
         Session session = null;

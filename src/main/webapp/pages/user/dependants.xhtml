@@ -252,6 +252,17 @@
             background: #E1E1E1;
             height: 60px;
             display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-format .detail-rectangle .buttons-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .forms-container {
+            display: flex;
         }
 
         .table-format .detail-rectangle .box {
@@ -260,14 +271,13 @@
             margin-bottom: 20px;
             font-size: 16px;
             margin-left: 20px;
+            flex-grow: 1;
         }
 
         .table-format .detail-rectangle .table-button1 {
             width: 100px;
-            margin-left: 720px;
             height: 40px;
-            margin-top: 10px;
-            margin-bottom: 10px;
+            margin: 0 10px;
             font-size: 12px;
             background-color: #1814F3 !important;
             border: #1814F3 !important;
@@ -276,7 +286,7 @@
         .table-format .detail-rectangle .table-button2 {
             width: 100px;
             height: 40px;
-            margin: 10px 30px 10px 10px;
+            margin: 0 10px;
             font-size: 12px;
             background-color: #EC1212 !important;
             border: #EC1212 !important;
@@ -299,9 +309,6 @@
             border: #EC1212 !important;
         }
 
-        .dialog-button {
-            margin: 20px;
-        }
 
         .inline-form {
             margin-top: 15px;
@@ -328,7 +335,7 @@
             <h:column>
                 <ul>
                     <li>
-                        <h:link outcome="#{item.outcome}" value="#{item.label}" style="text-decoration: none !important; color: #B1B1B1 !important;"/>
+                        <h:link outcome="#{item.outcome}" onmouseover="this.style.color='#228BE6'" onmouseout="this.style.color='#B1B1B1'" value="#{item.label}" style="text-decoration: none !important; color: #B1B1B1 !important;"/>
                     </li>
                 </ul>
             </h:column>
@@ -336,7 +343,7 @@
         <ul>
             <li>
                 <h:form>
-                <h:commandLink action="#{loginBean.logout()}" value="Logout" style="text-decoration: none !important; color: #B1B1B1 !important; margin-left: 2px"/>
+                <h:commandLink action="#{loginBean.logout()}" onmouseover="this.style.color='#EC1212'" onmouseout="this.style.color='#B1B1B1'" value="Logout" style="text-decoration: none !important; color: #B1B1B1 !important; margin-left: 2px"/>
                 </h:form>
             </li>
         </ul>
@@ -378,6 +385,7 @@
                 </div>
             </div>
             <h2 class="cards-title">Dependants Table</h2>
+            <div class="forms-container">
             <h:form id="searchForm" styleClass="inline-form">
                 <p:inputText id="searchInput" value="#{CurrentUserBean.searchQuery}" styleClass="search-box"/>
                 <h:commandButton value="Search"
@@ -392,12 +400,14 @@
                 </p:selectOneMenu>
                 <h:commandButton value="Filter" action="#{CurrentUserBean.filterDependantsByGender}" styleClass="filter-button" />
             </h:form>
+            </div>
 
             <div class="table-format">
                 <div class="detail-rectangle">
                     <div class="box">
                         <p><h:outputText id="card4" value="#{CurrentUserBean.dependantCount()}"/> Dependants</p>
                     </div>
+                    <div class="buttons-container">
                     <h:form>
                         <p:commandButton value="Add New"
                                          icon="pi pi-plus"
@@ -417,6 +427,7 @@
                                        icon="pi pi-exclamation-triangle" />
                         </p:commandButton>
                     </h:form>
+                    </div>
                 </div>
 
                 <h:panelGroup id="dependantTablePanel">

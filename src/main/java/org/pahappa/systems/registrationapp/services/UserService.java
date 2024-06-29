@@ -8,7 +8,6 @@ import org.pahappa.systems.registrationapp.util.MailService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +42,10 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userDAO.getAllUsers();
+    }
+
+    public List<User> getAdminUsers() {
+        return userDAO.getAdminUsers();
     }
 
     public User getUser(String username) {
