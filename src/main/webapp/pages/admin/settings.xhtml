@@ -9,6 +9,57 @@
 <h:head>
     <title>Settings</title>
     <style type="text/css">
+
+        .custom-grid {
+            width: 100%;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: right;
+            padding-right: 10px;
+        }
+
+        .custom-input {
+            width: 100%;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .custom-button1 {
+            margin-right: 10px;
+            background-color: #1814F3 !important;
+            border: #1814F3 !important;
+        }
+
+        .custom-button2 {
+            margin-left: 10px !important;
+            margin-right: 10px;
+            background-color: #EC1212 !important;
+            border: #EC1212 !important;
+        }
+
+        .form-group-save-button .button {
+            width: 25%;
+            justify-self: left;
+            margin-top: 10px;
+            padding: 10px 20px !important;
+            background-color: #1814F3 !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 10px !important;
+            cursor: pointer !important;
+        }
+
         @font-face {
             font-family: Poppins;
             src: url("/resources/Poppins-Regular.ttf");
@@ -253,7 +304,7 @@
             <h:column>
                 <ul>
                     <li>
-                        <h:link outcome="#{item.outcome}" value="#{item.label}" style="text-decoration: none !important; color: #B1B1B1 !important;"/>
+                        <h:link outcome="#{item.outcome}" value="#{item.label}" onmouseover="this.style.color='#228BE6'" onmouseout="this.style.color='#B1B1B1'" style="text-decoration: none !important; color: #B1B1B1 !important;"/>
                     </li>
                 </ul>
             </h:column>
@@ -261,7 +312,7 @@
         <ul>
             <li>
                 <h:form>
-                    <h:commandLink action="#{loginBean.logout()}" value="Logout" style="text-decoration: none !important; color: #B1B1B1 !important; margin-left: 2px"/>
+                    <h:commandLink action="#{loginBean.logout()}" onmouseover="this.style.color='#EC1212'" onmouseout="this.style.color='#B1B1B1'" value="Logout" style="text-decoration: none !important; color: #B1B1B1 !important; margin-left: 2px"/>
                 </h:form>
             </li>
         </ul>
@@ -277,7 +328,7 @@
                 <h2>View Details</h2>
                 <h:form id="updateForm">
                     <div class="form-group">
-                        <p:outputLabel for="username">First Name:</p:outputLabel>
+                        <p:outputLabel for="username">User Name:</p:outputLabel>
                         <h:outputText id="username" value="#{adminBean.currentUser.username}"/>
                         <p:message for="username" styleClass="error" />
                     </div>
@@ -297,8 +348,76 @@
                         <p:message for="lastname" styleClass="error" />
                     </div>
                 </h:form>
+                <!--
+                <div class="info">
+                    <h3>Admin Count</h3>
+                    <h1><h:outputText value="#{AdminBean.adminsCount()}"/></h1>
+                </div>
+                -->
+                <div class="form-group-save-button">
+                    <p:commandButton value="Add New Admin"
+                                     icon="pi pi-user-plus"
+                                     oncomplete="PF('registerAdminDialog').show()"
+                                     styleClass="button">
+                    </p:commandButton>
+                </div>
             </div>
         </div>
     </div>
+
+    <h:form id="registerForm">
+        <p:dialog header="Add a New Admin."
+                  widgetVar="registerAdminDialog"
+                  modal="true"
+                  resizable="true"
+                  showEffect="fade"
+                  hideEffect="fade"
+                  closable="true"
+                  width="800px"
+                  visible="#{facesContext.validationFailed}">
+            <p:outputPanel id="registerPanel" rendered="true">
+                <p:messages id="registermessages" showDetail="false" closable="true" severity="error, info" showSummary="true">
+                    <p:autoUpdate/>
+                </p:messages>
+                <p:growl id="registergrowl" severity="info"/>
+
+                <p:panelGrid columns="2" styleClass="custom-grid" >
+
+                <p:outputLabel for="adminusername" value="Username:" styleClass="custom-label" />
+                <p:inputText id="adminusername" value="#{AdminBean.admin.username}" required="true" validatorMessage="User name is required" styleClass="custom-input">
+                    <f:validateRegex pattern="[a-zA-Z0-9_]*"/>
+                    <f:validateLength minimum="3" maximum="16"/>
+                    <f:validateRequired/>
+                </p:inputText>
+
+                <p:outputLabel for="adminemail" styleClass="custom-label">Email:     </p:outputLabel>
+                <p:inputText id="adminemail" value="#{AdminBean.admin.email}" required="true" styleClass="custom-input">
+                    <!-- <f:validateRegex pattern="^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$" /> -->
+                </p:inputText>
+
+                <p:outputLabel for="adminfirstname" value="First Name:" styleClass="custom-label" />
+                <p:inputText id="adminfirstname" value="#{AdminBean.admin.firstname}" required="true" validatorMessage="First Name is required" styleClass="custom-input">
+                    <f:validateRegex pattern="[a-zA-Z ]*"/>
+                    <f:validateLength minimum="3" maximum="32"/>
+                    <f:validateRequired/>
+                </p:inputText>
+
+                <p:outputLabel for="adminlastname" value="Last Name:" styleClass="custom-label" />
+                <p:inputText id="adminlastname" value="#{AdminBean.admin.lastname}" required="true" validatorMessage="Last Name is required" styleClass="custom-input">
+                    <f:validateRegex pattern="[a-zA-Z ]*"/>
+                    <f:validateLength minimum="3" maximum="32"/>
+                    <f:validateRequired/>
+                </p:inputText>
+
+                </p:panelGrid>
+
+                <div class="button-group">
+                    <p:commandButton value="Register" update="registergrowl" actionListener="#{AdminBean.registerAdmin}" icon="pi pi-check" styleClass="custom-button1"/>
+                    <p:commandButton value="Cancel" onclick="PF('registerAdminDialog').hide();" icon="pi pi-times" styleClass="custom-button2"/>
+                </div>
+
+            </p:outputPanel>
+        </p:dialog>
+    </h:form>
 </h:body>
 </html>
