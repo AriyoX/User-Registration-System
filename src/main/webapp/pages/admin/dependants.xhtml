@@ -407,8 +407,9 @@
                 <p:selectOneMenu id="genderFilter" value="#{adminBean.selectedGender}" styleClass="gender-filter">
                     <f:selectItem itemLabel="ALL" itemValue="" />
                     <f:selectItems value="#{adminBean.genderValues}" var="gender" itemLabel="#{gender}" itemValue="#{gender}" />
+                    <p:ajax update="dependantTablePanel" listener="#{adminBean.filterDependantsByGender}"/>
                 </p:selectOneMenu>
-                <h:commandButton value="Filter" action="#{adminBean.filterDependantsByGender}" styleClass="filter-button" />
+
             </h:form>
             </div>
 
