@@ -110,6 +110,18 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public List<User> searchDeletedUsers(String query) {
+        List<User> users = userDAO.getDeletedUsers();
+        if (query == null || query.trim().isEmpty()) {
+            return users;
+        }
+        return users.stream()
+                .filter(user -> user.getUsername().toLowerCase().contains(query.toLowerCase()) ||
+                        user.getFirstname().toLowerCase().contains(query.toLowerCase()) ||
+                        user.getLastname().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
     public User loginUser(String identifier, String password) throws WrongValidationException {
         User existingUserWithUsername = userDAO.getUserByUsername(identifier);
         User existingUserWithEmail = userDAO.getUserByEmail(identifier);
@@ -260,4 +272,13 @@ public class UserService {
             throw new WrongValidationException("Invalid email address. Please try again.");
         }
     }
+
+    public void restoreDeletedUser(String username) throws WrongValidationException {
+        User user = userDAO.getDeletedUserByUsername(username);
+        if (user == null){
+            throw new WrongValidationException("User not found. Please try again.");
+        }
+        userDAO.restoreDeletedUser(username);
+    }
+
 }
