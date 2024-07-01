@@ -122,6 +122,30 @@ public class UserDAO {
         return user;
     }
 
+    public User getDeletedUserByUsername(String username) {
+        Transaction transaction = null;
+        Session session = null;
+        User user = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            user = (User) session.createQuery("FROM User WHERE username = :username and deleted = true")
+                    .setParameter("username", username)
+                    .uniqueResult();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return user;
+    }
+
     public User getUserByFirstName(String firstname) {
         Transaction transaction = null;
         Session session = null;
@@ -197,16 +221,70 @@ public class UserDAO {
         return users;
     }
 
+    public List<User> getDeletedUsers() {
+        Transaction transaction = null;
+        Session session = null;
+        List<User> users = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            users = session.createQuery("from User u where u.role != :role and deleted = true")
+                    .setParameter("role", "ADMIN")
+                    .list();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        if (users == null) {
+            return Collections.emptyList();
+        }
+        return users;
+    }
+
+    public List<User> getAdminUsers() {
+        Transaction transaction = null;
+        Session session = null;
+        List<User> users = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            users = session.createQuery("from User u where u.role = :role and deleted = false")
+                    .setParameter("role", "ADMIN")
+                    .list();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        if (users == null) {
+            return Collections.emptyList();
+        }
+        return users;
+    }
+
     public void deleteAllUsers() {
         Transaction transaction = null;
         Session session = null;
         try{
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            session.createQuery("update Dependant set deleted = true, deletedAt = :deletedAt")
+            session.createQuery("update Dependant set deleted = true, deletedAt = :deletedAt where deleted = false")
                     .setParameter("deletedAt", (new Date()))
                     .executeUpdate();
-            session.createQuery("update User set deleted = true, deletedAt = :deletedAt where role != :role")
+            session.createQuery("update User set deleted = true, deletedAt = :deletedAt where role != :role and deleted = false")
                     .setParameter("role", "ADMIN")
                     .setParameter("deletedAt", (new Date()))
                     .executeUpdate();
@@ -230,7 +308,9 @@ public class UserDAO {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            user = (User) session.get(User.class, userId);
+            user = (User) session.createQuery("from User where id = :userId and deleted = false")
+                    .setParameter("userId", userId)
+                    .uniqueResult();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -301,7 +381,7 @@ public class UserDAO {
             transaction = session.beginTransaction();
 
             users = session.createQuery(
-                            "SELECT DISTINCT u FROM User u JOIN u.dependants d WHERE d.deleted = false and u.role != :role")
+                            "SELECT DISTINCT u FROM User u JOIN u.dependants d WHERE d.deleted = false and u.role != :role and u.deleted = false")
                     .setParameter("role", "ADMIN")
                     .list();
             transaction.commit();
@@ -330,7 +410,7 @@ public class UserDAO {
             transaction = session.beginTransaction();
             // Use HQL to select users who do not have any dependants
             users = session.createQuery(
-                            "SELECT u FROM User u WHERE u.dependants IS EMPTY and u.role != :role")
+                            "SELECT u FROM User u WHERE u.dependants IS EMPTY and u.role != :role and u.deleted = false")
                     .setParameter("role", "ADMIN")
                     .list();
 
@@ -351,6 +431,30 @@ public class UserDAO {
         return users;
     }
 
-
+    public void restoreDeletedUser(String username){
+        Transaction transaction = null;
+        Session session = null;
+        User user = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            user = (User) session.createQuery("FROM User WHERE username = :username and deleted = true")
+                    .setParameter("username", username)
+                    .uniqueResult();
+            user.setDeleted(false);
+            user.setDeletedAt(null);
+            session.update(user);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
 
 }

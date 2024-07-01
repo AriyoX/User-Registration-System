@@ -40,7 +40,7 @@ public class CurrentUserBean implements Serializable {
         genderValues = Dependant.Gender.values();
         selectedDependant = new Dependant();
         try {
-            if (currentUser == null) {
+            if (currentUser == null || !"USER".equals(currentUser.getRole())) {
                 FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
                 ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
                 externalContext.getSessionMap().put("currentUser", null);

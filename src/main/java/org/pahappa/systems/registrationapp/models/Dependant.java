@@ -11,7 +11,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "dependants")
 @SQLDelete(sql = "UPDATE dependants SET deleted = true, deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@Where(clause = "deleted = 0")
+//@Where(clause = "deleted = 0")
 public class Dependant extends Person{
 
     public enum Gender {

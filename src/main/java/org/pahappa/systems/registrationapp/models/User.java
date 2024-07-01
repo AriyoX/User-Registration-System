@@ -11,7 +11,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "users")
 @SQLDelete(sql = "UPDATE users SET deleted = true, deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@Where(clause = "deleted = 0")
+// @Where(clause = "deleted = 0")
 public class User extends Person{
 
     @Column(name = "password", nullable = false)

@@ -19,7 +19,7 @@ public class UserMenu {
     public void init() {
         User currentUser = getCurrentUser();
         try {
-            if (currentUser == null ) {
+            if (currentUser == null || !"USER".equals(currentUser.getRole())) {
                 FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
                 ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
                 externalContext.getSessionMap().put("currentUser", null);
