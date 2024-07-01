@@ -497,4 +497,19 @@ public class AdminBean implements Serializable {
         return admins.size();
     }
 
+    public void restoreUser(){
+        try {
+            userService.restoreDeletedUser(username.trim());
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Success.", null));
+        } catch (Exception e){
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+        }
+    }
+
+    public List<User> deletedUserList(String query){
+        return userService.searchDeletedUsers(query);
+    }
+
 }

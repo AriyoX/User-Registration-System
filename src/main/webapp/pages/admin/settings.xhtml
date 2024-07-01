@@ -60,6 +60,18 @@
             cursor: pointer !important;
         }
 
+        .form-group-save-button2 .button {
+            width: 25%;
+            justify-self: left;
+            margin-top: 10px;
+            padding: 10px 20px !important;
+            background-color: #00FF00 !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 10px !important;
+            cursor: pointer !important;
+        }
+
         @font-face {
             font-family: Poppins;
             src: url("/resources/Poppins-Regular.ttf");
@@ -348,17 +360,19 @@
                         <p:message for="lastname" styleClass="error" />
                     </div>
                 </h:form>
-                <!--
-                <div class="info">
-                    <h3>Admin Count</h3>
-                    <h1><h:outputText value="#{AdminBean.adminsCount()}"/></h1>
-                </div>
-                -->
                 <div class="form-group-save-button">
                     <p:commandButton value="Add New Admin"
                                      icon="pi pi-user-plus"
                                      oncomplete="PF('registerAdminDialog').show()"
                                      styleClass="button">
+                    </p:commandButton>
+                </div>
+                <div class="form-group-save-button2">
+                    <p:commandButton value="Restore Deleted User"
+                                     icon="pi pi-refresh"
+                                     oncomplete="PF('restoreUserDialog').show()"
+                                     styleClass="button"
+                                     style="background-color: #00FF00">
                     </p:commandButton>
                 </div>
             </div>
@@ -419,5 +433,45 @@
             </p:outputPanel>
         </p:dialog>
     </h:form>
+
+    <h:form id="restoreUserForm">
+        <p:dialog header="Restore a Deleted User."
+                  widgetVar="restoreUserDialog"
+                  modal="true"
+                  resizable="true"
+                  showEffect="fade"
+                  hideEffect="fade"
+                  closable="true"
+                  width="800px"
+                  visible="#{facesContext.validationFailed}">
+
+        <p:outputPanel id="restorePanel" rendered="true">
+
+        <p:messages id="restoremessages" showDetail="false" closable="true" severity="error, info" showSummary="true">
+            <p:autoUpdate/>
+        </p:messages>
+
+        <p:growl id="restoregrowl" severity="info"/>
+
+        <p:panelGrid columns="2" styleClass="custom-grid" >
+
+        <p:outputLabel for="userusername" value="Username:" styleClass="custom-label" />
+        <p:autoComplete id="userusername" value="#{AdminBean.username}" completeMethod="#{AdminBean.deletedUserList}" required="true" validatorMessage="User name is required" styleClass="custom-input">
+            <f:validateRegex pattern="[a-zA-Z0-9_]*"/>
+            <f:validateLength minimum="3" maximum="16"/>
+            <f:validateRequired/>
+        </p:autoComplete>
+
+        </p:panelGrid>
+
+            <div class="button-group">
+                <p:commandButton value="Restore" update="restoregrowl" actionListener="#{AdminBean.restoreUser}" icon="pi pi-check" styleClass="custom-button1" />
+                <p:commandButton value="Cancel" onclick="PF('restoreUserDialog').hide();" icon="pi pi-times" styleClass="custom-button2"/>
+            </div>
+
+        </p:outputPanel>
+        </p:dialog>
+    </h:form>
+
 </h:body>
 </html>
