@@ -366,7 +366,7 @@
          </div>
          <h2 class="cards-title">User Table</h2>
          <h:form id="searchForm">
-            <p:inputText id="searchInput" value="#{userBean.searchQuery}" styleClass="search-box"/>
+            <p:inputText id="searchInput" value="#{userBean.searchQuery}" placeholder="Search by Username, First Name or Last Name" styleClass="search-box"/>
             <h:commandButton value="Search"
                              action="#{userBean.searchUser}"
                              styleClass="search-button">

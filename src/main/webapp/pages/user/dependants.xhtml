@@ -387,7 +387,7 @@
             <h2 class="cards-title">Dependants Table</h2>
             <div class="forms-container">
             <h:form id="searchForm" styleClass="inline-form">
-                <p:inputText id="searchInput" value="#{CurrentUserBean.searchQuery}" styleClass="search-box"/>
+                <p:inputText id="searchInput" value="#{CurrentUserBean.searchQuery}" placeholder="Search by Username, First Name or Last Name" styleClass="search-box"/>
                 <h:commandButton value="Search"
                                  action="#{CurrentUserBean.searchDependent}"
                                  styleClass="search-button">
