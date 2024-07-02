@@ -306,6 +306,19 @@
             background-color: #1A47CC;
         }
     </style>
+    <script type="text/javascript">
+        const timeoutWarning = 25 * 60 * 1000; // 25 minutes in milliseconds
+        const sessionTimeout = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+        setTimeout(function() {
+            alert('Your session will expire in 5 minutes. Please save your work.');
+        }, timeoutWarning);
+
+        setTimeout(function() {
+            window.location.href = 'pages/login/login.xhtml';
+        }, sessionTimeout);
+
+    </script>
 </h:head>
 <h:body>
     <div class="side-menu">
