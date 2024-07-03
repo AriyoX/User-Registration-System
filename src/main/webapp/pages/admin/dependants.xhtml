@@ -252,6 +252,17 @@
             background: #E1E1E1;
             height: 60px;
             display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-format .detail-rectangle .buttons-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .forms-container {
+            display: flex;
         }
 
         .table-format .detail-rectangle .box {
@@ -260,14 +271,13 @@
             margin-bottom: 16px;
             font-size: 16px;
             margin-left: 20px;
+            flex-grow: 1;
         }
 
         .table-format .detail-rectangle .table-button1 {
             width: 100px;
-            margin-left: 720px;
             height: 40px;
-            margin-top: 10px;
-            margin-bottom: 10px;
+            margin: 0 10px;
             font-size: 12px;
             background-color: #1814F3 !important;
             border: #1814F3 !important;
@@ -276,7 +286,7 @@
         .table-format .detail-rectangle .table-button2 {
             width: 100px;
             height: 40px;
-            margin: 10px 30px 10px 10px;
+            margin: 0 10px;
             font-size: 12px;
             background-color: #EC1212 !important;
             border: #EC1212 !important;
@@ -299,9 +309,6 @@
             border: #EC1212 !important;
         }
 
-        .dialog-button {
-            margin: 20px;
-        }
 
         .inline-form {
             margin-top: 15px;
@@ -312,6 +319,17 @@
 
     </style>
     <script type="text/javascript">
+        const timeoutWarning = 25 * 60 * 1000; // 25 minutes in milliseconds
+        const sessionTimeout = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+        setTimeout(function() {
+            alert('Your session will expire in 5 minutes. Please save your work.');
+        }, timeoutWarning);
+
+        setTimeout(function() {
+            window.location.href = 'pages/login/login.xhtml';
+        }, sessionTimeout);
+
         function handleSaveCompleteUpdate(xhr, status, args) {
             if (!args.validationFailed) {
                 PF('updateUserDialog').hide();
@@ -338,7 +356,7 @@
             <h:column>
                 <ul>
                     <li>
-                        <h:link outcome="#{item.outcome}" value="#{item.label}" style="text-decoration: none !important; color: #B1B1B1 !important;"/>
+                        <h:link outcome="#{item.outcome}"  onmouseover="this.style.color='#228BE6'" onmouseout="this.style.color='#B1B1B1'" value="#{item.label}" style="text-decoration: none !important; color: #B1B1B1 !important;"/>
                     </li>
                 </ul>
             </h:column>
@@ -346,7 +364,7 @@
         <ul>
             <li>
                 <h:form>
-                    <h:commandLink action="#{loginBean.logout()}" value="Logout" style="text-decoration: none !important; color: #B1B1B1 !important; margin-left: 2px"/>
+                    <h:commandLink onmouseover="this.style.color='#EC1212'" onmouseout="this.style.color='#B1B1B1'" action="#{loginBean.logout()}" value="Logout" style="text-decoration: none !important; color: #B1B1B1 !important; margin-left: 2px"/>
                 </h:form>
             </li>
         </ul>
@@ -388,8 +406,9 @@
                 </div>
             </div>
             <h2 class="cards-title">Dependants Table</h2>
+            <div class="forms-container">
             <h:form id="searchForm" styleClass="inline-form">
-                <p:inputText id="searchInput" value="#{adminBean.searchQuery}" styleClass="search-box"/>
+                <p:inputText id="searchInput" value="#{adminBean.searchQuery}" placeholder="Search by Username, First Name or Last Name" styleClass="search-box"/>
                 <h:commandButton value="Search"
                                  action="#{adminBean.searchDependent}"
                                  styleClass="search-button">
@@ -399,16 +418,18 @@
                 <p:selectOneMenu id="genderFilter" value="#{adminBean.selectedGender}" styleClass="gender-filter">
                     <f:selectItem itemLabel="ALL" itemValue="" />
                     <f:selectItems value="#{adminBean.genderValues}" var="gender" itemLabel="#{gender}" itemValue="#{gender}" />
+                    <p:ajax update="dependantTablePanel" listener="#{adminBean.filterDependantsByGender}"/>
                 </p:selectOneMenu>
-                <h:commandButton value="Filter" action="#{adminBean.filterDependantsByGender}" styleClass="filter-button" />
-            </h:form>
 
+            </h:form>
+            </div>
 
             <div class="table-format">
                 <div class="detail-rectangle">
                     <div class="box">
                         <p><h:outputText id="card4" value="#{AdminBean.dependantCount()}"/> Dependants</p>
                     </div>
+                    <div class="buttons-container">
                     <h:form>
                         <p:commandButton value="Add New"
                                          icon="pi pi-plus"
@@ -428,6 +449,7 @@
                                        icon="pi pi-exclamation-triangle" />
                         </p:commandButton>
                     </h:form>
+                    </div>
                 </div>
 
                 <h:panelGroup id="dependantTablePanel">
@@ -509,11 +531,11 @@
                 <p:panelGrid columns="2" styleClass="custom-grid" >
 
                     <p:outputLabel for="username" value="User's Username:" styleClass="custom-label" />
-                    <p:inputText id="username" value="#{AdminBean.username}" required="true" validatorMessage="User name is required" styleClass="custom-input">
+                    <p:autoComplete id="username" value="#{AdminBean.username}" completeMethod="#{AdminBean.userList}" required="true" validatorMessage="User name is required" styleClass="custom-input">
                         <f:validateRegex pattern="[a-zA-Z0-9_]*"/>
                         <f:validateLength minimum="3" maximum="16"/>
                         <f:validateRequired/>
-                    </p:inputText>
+                    </p:autoComplete>
 
                     <p:outputLabel for="dependantusername" value="Username:" styleClass="custom-label" />
                     <p:inputText id="dependantusername" value="#{AdminBean.dependant.username}" required="true" validatorMessage="User name is required" styleClass="custom-input">
@@ -541,7 +563,7 @@
 
                     <p:outputLabel for="dependantGender" value="Gender:" styleClass="custom-label" />
                     <p:selectOneMenu id="dependantGender" value="#{AdminBean.dependant.gender}" required="true" styleClass="custom-input">
-                        <f:selectItems value="#{currentUserBean.genderValues}" var="gender" itemLabel="#{gender}" itemValue="#{gender}"/>
+                        <f:selectItems value="#{AdminBean.genderValues}" var="gender" itemLabel="#{gender}" itemValue="#{gender}"/>
                     </p:selectOneMenu>
 
                 </p:panelGrid>

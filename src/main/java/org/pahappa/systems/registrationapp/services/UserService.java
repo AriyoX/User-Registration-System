@@ -8,7 +8,6 @@ import org.pahappa.systems.registrationapp.util.MailService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +42,10 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userDAO.getAllUsers();
+    }
+
+    public List<User> getAdminUsers() {
+        return userDAO.getAdminUsers();
     }
 
     public User getUser(String username) {
@@ -97,6 +100,18 @@ public class UserService {
 
     public List<User> searchUsers(String query) {
         List<User> users = userDAO.getAllUsers();
+        if (query == null || query.trim().isEmpty()) {
+            return users;
+        }
+        return users.stream()
+                .filter(user -> user.getUsername().toLowerCase().contains(query.toLowerCase()) ||
+                        user.getFirstname().toLowerCase().contains(query.toLowerCase()) ||
+                        user.getLastname().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public List<User> searchDeletedUsers(String query) {
+        List<User> users = userDAO.getDeletedUsers();
         if (query == null || query.trim().isEmpty()) {
             return users;
         }
@@ -257,4 +272,13 @@ public class UserService {
             throw new WrongValidationException("Invalid email address. Please try again.");
         }
     }
+
+    public void restoreDeletedUser(String username) throws WrongValidationException {
+        User user = userDAO.getDeletedUserByUsername(username);
+        if (user == null){
+            throw new WrongValidationException("User not found. Please try again.");
+        }
+        userDAO.restoreDeletedUser(username);
+    }
+
 }

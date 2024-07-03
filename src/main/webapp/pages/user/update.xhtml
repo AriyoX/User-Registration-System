@@ -250,6 +250,19 @@
         }
 
     </style>
+    <script type="text/javascript">
+        const timeoutWarning = 25 * 60 * 1000; // 25 minutes in milliseconds
+        const sessionTimeout = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+        setTimeout(function() {
+            alert('Your session will expire in 5 minutes. Please save your work.');
+        }, timeoutWarning);
+
+        setTimeout(function() {
+            window.location.href = 'pages/login/login.xhtml';
+        }, sessionTimeout);
+
+    </script>
 </h:head>
 <h:body>
     <div class="side-menu">
@@ -260,7 +273,7 @@
             <h:column>
                 <ul>
                     <li>
-                        <h:link outcome="#{item.outcome}" value="#{item.label}" style="text-decoration: none !important; color: #B1B1B1 !important;"/>
+                        <h:link outcome="#{item.outcome}" onmouseover="this.style.color='#228BE6'" onmouseout="this.style.color='#B1B1B1'" value="#{item.label}" style="text-decoration: none !important; color: #B1B1B1 !important;"/>
                     </li>
                 </ul>
             </h:column>
@@ -268,7 +281,7 @@
         <ul>
             <li>
                 <h:form>
-                    <h:commandLink action="#{loginBean.logout()}" value="Logout" style="text-decoration: none !important; color: #B1B1B1 !important; margin-left: 2px"/>
+                    <h:commandLink action="#{loginBean.logout()}" onmouseover="this.style.color='#EC1212'" onmouseout="this.style.color='#B1B1B1'" value="Logout" style="text-decoration: none !important; color: #B1B1B1 !important; margin-left: 2px"/>
                 </h:form>
             </li>
         </ul>

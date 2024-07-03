@@ -27,6 +27,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ManagedBean(name = "adminBean")
@@ -49,7 +50,8 @@ public class AdminBean implements Serializable {
     private Dependant selectedDependant;
     private PieChartModel pieModel;
     private BarChartModel barModel;
-
+    private User admin = new User();
+    private List<User> admins;
 
     @PostConstruct
     public void init() {
@@ -69,6 +71,15 @@ public class AdminBean implements Serializable {
         genderValues = Dependant.Gender.values();
         dependants = dependantService.getAllDependants();
         selectedDependant = new Dependant();
+        admins = userService.getAdminUsers();
+    }
+
+    public User getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(User admin) {
+        this.admin = admin;
     }
 
     public Dependant getSelectedDependant() {
@@ -447,4 +458,58 @@ public class AdminBean implements Serializable {
     public BarChartModel getBarModel() {
         return barModel;
     }
+
+    public List<User> userList(String query){
+        return userService.searchUsers(query);
+    }
+
+    public void registerAdmin(){
+        try {
+            if (admin.getFirstname().isBlank() || admin.getLastname().isBlank() || admin.getUsername().isBlank()){
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Names cannot be blank", null));
+                return;
+            }
+            if (admins.size() > 5){
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "There cannot be more than 5 admins in the system.", null));
+                return;
+            }
+            admin.setFirstname(admin.getFirstname().trim());
+            admin.setLastname(admin.getLastname().trim());
+            admin.setUsername(admin.getUsername().trim());
+            admin.setDateOfBirth(new Date());
+            admin.setPassword("@dmin");
+            admin.setRole("ADMIN");
+            admin.setEmail(admin.getEmail().trim());
+            userService.registerUser(admin);
+            admins.add(admin);
+            admin = new User();
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", null));
+        } catch (Exception e){
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+        }
+    }
+
+    public int adminsCount(){
+        return admins.size();
+    }
+
+    public void restoreUser(){
+        try {
+            userService.restoreDeletedUser(username.trim());
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Success.", null));
+        } catch (Exception e){
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null));
+        }
+    }
+
+    public List<User> deletedUserList(String query){
+        return userService.searchDeletedUsers(query);
+    }
+
 }
