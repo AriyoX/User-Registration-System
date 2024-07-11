@@ -20,26 +20,26 @@ public class DependantDAO {
         this.sessionFactory = SessionConfiguration.getSessionFactory();
     }
 
-    public boolean isDatabaseConnected(){
-        Transaction transaction = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            session.createSQLQuery("SELECT 1 FROM Dependants").uniqueResult();
-            transaction.commit();
-            return true;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            return false;
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-    }
+//    public boolean isDatabaseConnected(){
+//        Transaction transaction = null;
+//        Session session = null;
+//        try {
+//            session = sessionFactory.openSession();
+//            transaction = session.beginTransaction();
+//            session.createSQLQuery("SELECT 1 FROM Dependants").uniqueResult();
+//            transaction.commit();
+//            return true;
+//        } catch (Exception e) {
+//            if (transaction != null) {
+//                transaction.rollback();
+//            }
+//            return false;
+//        } finally {
+//            if (session != null) {
+//                session.close();
+//            }
+//        }
+//    }
 
     public void addDependantToUser(User user, Dependant dependant){
         Transaction transaction = null;

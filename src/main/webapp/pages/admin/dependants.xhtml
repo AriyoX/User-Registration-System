@@ -409,10 +409,8 @@
             <div class="forms-container">
             <h:form id="searchForm" styleClass="inline-form">
                 <p:inputText id="searchInput" value="#{adminBean.searchQuery}" placeholder="Search by Username, First Name or Last Name" styleClass="search-box"/>
-                <h:commandButton value="Search"
-                                 action="#{adminBean.searchDependent}"
-                                 styleClass="search-button">
-                </h:commandButton>
+                <p:ajax event="keyup" update="dependantTablePanel" listener="#{adminBean.searchDependent}"/>
+
             </h:form>
             <h:form id="filterForm" styleClass="inline-form">
                 <p:selectOneMenu id="genderFilter" value="#{adminBean.selectedGender}" styleClass="gender-filter">
@@ -569,7 +567,7 @@
                 </p:panelGrid>
 
                 <div class="button-group">
-                    <p:commandButton value="Register" update=":registerForm:registerPanel dependantTablePanel card1 card2 card3 card4" actionListener="#{AdminBean.registerDependant}" icon="pi pi-check" styleClass="custom-button1"/>
+                    <p:commandButton value="Register" update="dependantTablePanel :registerForm:registerPanel card1 card2 card3 card4" actionListener="#{AdminBean.registerDependant}" icon="pi pi-check" styleClass="custom-button1"/>
                     <p:commandButton value="Cancel" onclick="PF('registerDependantDialog').hide();" icon="pi pi-times" styleClass="custom-button2"/>
                 </div>
             </p:outputPanel>

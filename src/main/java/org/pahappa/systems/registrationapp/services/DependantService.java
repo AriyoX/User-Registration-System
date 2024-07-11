@@ -26,9 +26,9 @@ public class DependantService {
         this.simpleDateFormat.setLenient(false);
     }
 
-    public boolean isDatabaseConnected(){
-        return dependantDAO.isDatabaseConnected();
-    }
+//    public boolean isDatabaseConnected(){
+//        return dependantDAO.isDatabaseConnected();
+//    }
 
     public List<Dependant> getAllDependants(){
         return dependantDAO.getAllDependants();

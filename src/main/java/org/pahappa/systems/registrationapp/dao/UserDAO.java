@@ -17,26 +17,26 @@ public class UserDAO {
         this.sessionFactory = SessionConfiguration.getSessionFactory();
     }
 
-    public boolean isDatabaseConnected() {
-        Transaction transaction = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            session.createSQLQuery("SELECT 1 FROM Users").uniqueResult();
-            transaction.commit();
-            return true;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            return false;
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-    }
+//    public boolean isDatabaseConnected() {
+//        Transaction transaction = null;
+//        Session session = null;
+//        try {
+//            session = sessionFactory.openSession();
+//            transaction = session.beginTransaction();
+//            session.createSQLQuery("SELECT 1 FROM Users").uniqueResult();
+//            transaction.commit();
+//            return true;
+//        } catch (Exception e) {
+//            if (transaction != null) {
+//                transaction.rollback();
+//            }
+//            return false;
+//        } finally {
+//            if (session != null) {
+//                session.close();
+//            }
+//        }
+//    }
 
     public void add(User user) {
         Transaction transaction = null;

@@ -399,10 +399,8 @@
             <div class="forms-container">
             <h:form id="searchForm" styleClass="inline-form">
                 <p:inputText id="searchInput" value="#{CurrentUserBean.searchQuery}" placeholder="Search by Username, First Name or Last Name" styleClass="search-box"/>
-                <h:commandButton value="Search"
-                                 action="#{CurrentUserBean.searchDependent}"
-                                 styleClass="search-button">
-                </h:commandButton>
+                <p:ajax event="keyup" update="dependantTablePanel" listener="#{CurrentUserBean.searchDependent}"/>
+
             </h:form>
             <h:form id="filterForm" styleClass="inline-form">
                 <p:selectOneMenu id="genderFilter" value="#{CurrentUserBean.selectedGender}" styleClass="gender-filter">

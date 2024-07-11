@@ -28,10 +28,10 @@ public class UserView {
     public void displayMenu() {
         System.out.println("********* User Registration System *********");
         boolean running = true;
-        if (!userService.isDatabaseConnected() || !dependantService.isDatabaseConnected()) {
-            System.out.println("Database is not connected. Please connect to database and restart the program.");
-            running = false;
-        }
+//        if (!userService.isDatabaseConnected() || !dependantService.isDatabaseConnected()) {
+//            System.out.println("Database is not connected. Please connect to database and restart the program.");
+//            running = false;
+//        }
 
         while (running) {
             System.out.println("\nChoose an operation:");

@@ -228,9 +228,9 @@ public class UserService {
         }
     }
 
-    public boolean isDatabaseConnected(){
-        return userDAO.isDatabaseConnected();
-    }
+//    public boolean isDatabaseConnected(){
+//        return userDAO.isDatabaseConnected();
+//    }
 
     public void validateNewUser(User user) throws WrongValidationException {
         validateNewUsername(user.getUsername());

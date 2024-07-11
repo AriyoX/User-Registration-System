@@ -119,7 +119,7 @@ public class AdminBean implements Serializable {
     }
 
     public List<Dependant> getDependants() {
-        return dependants;
+        return dependantService.getAllDependants();
     }
 
     public Dependant.Gender[] getGenderValues() {
